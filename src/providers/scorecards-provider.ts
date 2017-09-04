@@ -62,13 +62,13 @@ export class ScorecardsProvider {
 
   private async getScorecardTemplate(week: number) {
 
-    return await this.http.get(`http://localhost:61670/api/scorecardtemplates/${week}`).map((res: Response) => res.json()).toPromise();
+    return await this.http.get(`http://xmasclubscorer.azurewebsites.net/api/scorecardtemplates/${week}`).map((res: Response) => res.json()).toPromise();
   }
 
   /** Loads all scorecards that have been submitted via email. */
   public async loadScorecardsFromEmail(week: number): Promise<Scorecard[]> {
 
-    let scorecards: Array<Scorecard> = await this.http.get(`http://localhost:61670/api/scorecards/${week}`).map((res: Response) => res.json()).toPromise();
+    let scorecards: Array<Scorecard> = await this.http.get(`http://xmasclubscorer.azurewebsites.net/api/scorecards/${week}`).map((res: Response) => res.json()).toPromise();
 
     let scorecardsFb = this.getScorecards(week);
     for (let scorecard of scorecards) {

@@ -101,7 +101,7 @@ export class XmasClubDataProvider {
   /** Returns the score cards for the specified week. */
   public async getGameResults(week: number): Promise<Array<GameResult>> {
 
-    return await this.http.get(`http://localhost:61670/api/gameresults/${week}`).map((res: Response) => res.json()).toPromise();
+    return await this.http.get(`http://xmasclubscorer.azurewebsites.net/api/gameresults/${week}`).map((res: Response) => res.json()).toPromise();
   }
 
   public async getScorecardResults(week: number): Promise<Scorecard[]> {

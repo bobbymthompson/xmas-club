@@ -67,13 +67,13 @@ let ScorecardsProvider = class ScorecardsProvider {
     }
     getScorecardTemplate(week) {
         return __awaiter(this, void 0, void 0, function* () {
-            return yield this.http.get(`http://localhost:61670/api/scorecardtemplates/${week}`).map((res) => res.json()).toPromise();
+            return yield this.http.get(`http://xmasclubscorer.azurewebsites.net/api/scorecardtemplates/${week}`).map((res) => res.json()).toPromise();
         });
     }
     /** Loads all scorecards that have been submitted via email. */
     loadScorecardsFromEmail(week) {
         return __awaiter(this, void 0, void 0, function* () {
-            let scorecards = yield this.http.get(`http://localhost:61670/api/scorecards/${week}`).map((res) => res.json()).toPromise();
+            let scorecards = yield this.http.get(`http://xmasclubscorer.azurewebsites.net/api/scorecards/${week}`).map((res) => res.json()).toPromise();
             let scorecardsFb = this.getScorecards(week);
             for (let scorecard of scorecards) {
                 scorecardsFb.push(scorecard);
@@ -372,7 +372,7 @@ let XmasClubDataProvider = class XmasClubDataProvider {
     /** Returns the score cards for the specified week. */
     getGameResults(week) {
         return __awaiter(this, void 0, void 0, function* () {
-            return yield this.http.get(`http://localhost:61670/api/gameresults/${week}`).map((res) => res.json()).toPromise();
+            return yield this.http.get(`http://xmasclubscorer.azurewebsites.net/api/gameresults/${week}`).map((res) => res.json()).toPromise();
         });
     }
     getScorecardResults(week) {

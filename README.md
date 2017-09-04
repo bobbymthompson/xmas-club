@@ -1,0 +1,1 @@
+# xmas-club: A weekly football pick'em

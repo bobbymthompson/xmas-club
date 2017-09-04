@@ -1,0 +1,263 @@
+{
+  "users": {
+    "fAsUqi9S57hHIeuheB2mN3Pm7hs2": {
+      "nickname": "Striker",
+      "favorites": ["Philby", "DPizzles", "superTD"]
+    },
+    "rDjADlWt1YgU11PfBxl5QU7AYg82": {
+      "nickname": "Philby",
+      "favorites": ["Striker", "DPizzles", "superTD"]
+    },
+    "fLAcmpKoyFgRd1P7h0UY8r5v1Ah1": {
+      "nickname": "DPizzles",
+      "favorites": ["Philby", "Striker"]
+    },
+    "mrUtfaGx9TbPcT5DktSIGvpLRei2": {
+      "nickname": "superTD",
+      "favorites": ["Striker"]
+    }
+  },
+  "weeks": {
+    "1": {
+      "week": 1,
+      "dueDate": "2017-08-12T12:00:00.000Z"
+    },
+    "2": {
+      "week": 2,
+      "dueDate": "2017-08-19T12:00:00.000Z"
+    },
+    "3": {
+      "week": 3,
+      "dueDate": "2017-08-26T12:00:00.000Z"
+    },
+    "4": {
+      "week": 4,
+      "dueDate": "2017-08-19T12:00:00.000Z"
+    },
+    "5": {
+      "week": 5,
+      "dueDate": "2017-08-19T12:00:00.000Z"
+    },
+    "6": {
+      "week": 6,
+      "dueDate": "2017-08-19T12:00:00.000Z"
+    },
+    "7": {
+      "week": 7,
+      "dueDate": "2017-08-19T12:00:00.000Z"
+    },
+    "8": {
+      "week": 8,
+      "dueDate": "2017-08-19T12:00:00.000Z"
+    },
+    "9": {
+      "week": 9,
+      "dueDate": "2017-08-19T12:00:00.000Z"
+    },
+    "10": {
+      "week": 10,
+      "dueDate": "2017-08-19T12:00:00.000Z"
+    },
+    "11": {
+      "week": 11,
+      "dueDate": "2017-08-26T12:00:00.000Z"
+    }
+  },
+  "scores": {
+    "Striker": {
+      "total": 145,
+      "weeklyScores": {
+        "fAsUqi9S57hHIeuheB2mN3Pm7xx1": {
+          "week": 1,
+          "score": 15
+        }, "fAsUqi9S57hHIeuheB2mN3Pm7xx2": {
+          "week": 2,
+          "score": 15
+        }, "fAsUqi9S57hHIeuheB2mN3Pm7xx3": {
+          "week": 3,
+          "score": 15
+        }, "fAsUqi9S57hHIeuheB2mN3Pm7xx4": {
+          "week": 4,
+          "score": 15
+        }, "fAsUqi9S57hHIeuheB2mN3Pm7xx5": {
+          "week": 5,
+          "score": 15
+        }, "fAsUqi9S57hHIeuheB2mN3Pm7xx6": {
+          "week": 6,
+          "score": 15
+        }, "fAsUqi9S57hHIeuheB2mN3Pm7xx7": {
+          "week": 7,
+          "score": 15
+        }, "fAsUqi9S57hHIeuheB2mN3Pm7xx8": {
+          "week": 8,
+          "score": 15
+        }, "fAsUqi9S57hHIeuheB2mN3Pm7xx9": {
+          "week": 9,
+          "score": 15
+        }, "fAsUqi9S57hHIeuheB2mN3Pm7xx10": {
+          "week": 10,
+          "score": 15
+        }
+      }
+    },
+    "Philby": {
+      "total": 143,
+      "weeklyScores": {
+        "fAsUqi9S57hHIeuheB2mN3Pm7xx1": {
+          "week": 1,
+          "score": 15
+        }, "fAsUqi9S57hHIeuheB2mN3Pm7xx2": {
+          "week": 2,
+          "score": 15
+        }, "fAsUqi9S57hHIeuheB2mN3Pm7xx3": {
+          "week": 3,
+          "score": 15
+        }, "fAsUqi9S57hHIeuheB2mN3Pm7xx4": {
+          "week": 4,
+          "score": 15
+        }, "fAsUqi9S57hHIeuheB2mN3Pm7xx5": {
+          "week": 5,
+          "score": 15
+        }, "fAsUqi9S57hHIeuheB2mN3Pm7xx6": {
+          "week": 6,
+          "score": 15
+        }, "fAsUqi9S57hHIeuheB2mN3Pm7xx7": {
+          "week": 7,
+          "score": 15
+        }, "fAsUqi9S57hHIeuheB2mN3Pm7xx8": {
+          "week": 8,
+          "score": 15
+        }, "fAsUqi9S57hHIeuheB2mN3Pm7xx9": {
+          "week": 9,
+          "score": 15
+        }, "fAsUqi9S57hHIeuheB2mN3Pm7xx10": {
+          "week": 10,
+          "score": 15
+        }
+      }
+    },
+    "DPizzles": {
+      "total": 142,
+      "weeklyScores": {
+        "fAsUqi9S57hHIeuheB2mN3Pm7xx1": {
+          "week": 1,
+          "score": 15
+        }, "fAsUqi9S57hHIeuheB2mN3Pm7xx2": {
+          "week": 2,
+          "score": 15
+        }, "fAsUqi9S57hHIeuheB2mN3Pm7xx3": {
+          "week": 3,
+          "score": 15
+        }, "fAsUqi9S57hHIeuheB2mN3Pm7xx4": {
+          "week": 4,
+          "score": 15
+        }, "fAsUqi9S57hHIeuheB2mN3Pm7xx5": {
+          "week": 5,
+          "score": 15
+        }, "fAsUqi9S57hHIeuheB2mN3Pm7xx6": {
+          "week": 6,
+          "score": 15
+        }, "fAsUqi9S57hHIeuheB2mN3Pm7xx7": {
+          "week": 7,
+          "score": 15
+        }, "fAsUqi9S57hHIeuheB2mN3Pm7xx8": {
+          "week": 8,
+          "score": 15
+        }, "fAsUqi9S57hHIeuheB2mN3Pm7xx9": {
+          "week": 9,
+          "score": 15
+        }, "fAsUqi9S57hHIeuheB2mN3Pm7xx10": {
+          "week": 10,
+          "score": 15
+        }
+      }
+    },
+    "superTD": {
+      "total": 140,
+      "weeklyScores": {
+        "fAsUqi9S57hHIeuheB2mN3Pm7xx1": {
+          "week": 1,
+          "score": 15
+        }, "fAsUqi9S57hHIeuheB2mN3Pm7xx2": {
+          "week": 2,
+          "score": 15
+        }, "fAsUqi9S57hHIeuheB2mN3Pm7xx3": {
+          "week": 3,
+          "score": 15
+        }, "fAsUqi9S57hHIeuheB2mN3Pm7xx4": {
+          "week": 4,
+          "score": 15
+        }, "fAsUqi9S57hHIeuheB2mN3Pm7xx5": {
+          "week": 5,
+          "score": 15
+        }, "fAsUqi9S57hHIeuheB2mN3Pm7xx6": {
+          "week": 6,
+          "score": 15
+        }, "fAsUqi9S57hHIeuheB2mN3Pm7xx7": {
+          "week": 7,
+          "score": 15
+        }, "fAsUqi9S57hHIeuheB2mN3Pm7xx8": {
+          "week": 8,
+          "score": 15
+        }, "fAsUqi9S57hHIeuheB2mN3Pm7xx9": {
+          "week": 9,
+          "score": 15
+        }, "fAsUqi9S57hHIeuheB2mN3Pm7xx10": {
+          "week": 10,
+          "score": 15
+        }
+      }
+    }
+  },
+  "scorecards": {
+    "1": [{
+      "nickname": "Philby",
+      "tieBreakerScore": 44,
+      "picks": [{
+        "team1": "PITT",
+        "team2": "PENN ST.",
+        "spread": "-1.5",
+        "selectedPick": "",
+        "pickType": "NFL",
+        "isOverUnder": false,
+        "homeTeam": "PITT"
+      }]
+    }, {
+      "nickname": "Striker",
+      "tieBreakerScore": 52,
+      "picks": [{
+        "team1": "PITT",
+        "team2": "PENN ST.",
+        "spread": "-1.5",
+        "selectedPick": "Team1",
+        "pickType": "NFL",
+        "isOverUnder": false,
+        "homeTeam": "PITT"
+      }]
+    }, {
+      "nickname": "DPizzles",
+      "tieBreakerScore": 55,
+      "picks": [{
+        "team1": "PITT",
+        "team2": "PENN ST.",
+        "spread": "-1.5",
+        "selectedPick": "Team2",
+        "pickType": "NFL",
+        "isOverUnder": false,
+        "homeTeam": "PITT"
+      }]
+    }, {
+      "nickname": "superTD",
+      "tieBreakerScore": 51,
+      "picks": [{
+        "team1": "PITT",
+        "team2": "PENN ST.",
+        "spread": "-1.5",
+        "selectedPick": "Team1",
+        "pickType": "NFL",
+        "isOverUnder": false,
+        "homeTeam": "PITT"
+      }]
+    }]
+  }
+}

@@ -1,0 +1,62 @@
+{
+  "name": "xmas-club",
+  "description": "xmas-club: A weekly football pick'em",
+  "version": "0.1.0",
+  "author": "Bobby Thompson",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/striker8118/xmas-club.git"
+  },
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon -i \"*.test.js\" server.js",
+    "build": "ionic-app-scripts build",
+    "ionic:serve": "ionic-app-scripts serve",
+    "ionic:watch": "ionic-app-scripts watch"
+  },
+  "dependencies": {
+    "angularfire2": "^4.0.0-rc.1",
+    "body-parser": "^1.17.2",
+    "cors": "^2.8.4",
+    "del": "^2.2.0",
+    "express": "^4.15.3",
+    "firebase": "^3.4.0",
+    "ionic-angular": "3.0.1",
+    "method-override": "^2.3.9",
+    "morgan": "^1.8.2",
+    "underscore": "^1.8.3"
+  },
+  "devDependencies": {
+    "@angular/common": "4.0.0",
+    "@angular/compiler": "4.0.0",
+    "@angular/compiler-cli": "4.0.0",
+    "@angular/core": "4.0.0",
+    "@angular/forms": "4.0.0",
+    "@angular/http": "4.0.0",
+    "@angular/platform-browser": "4.0.0",
+    "@angular/platform-browser-dynamic": "4.0.0",
+    "@ionic-native/core": "3.4.2",
+    "@ionic-native/splash-screen": "3.4.2",
+    "@ionic-native/status-bar": "3.4.2",
+    "@ionic/app-scripts": "^2.1.4",
+    "@ionic/storage": "2.0.1",
+    "@types/angular": "^1.6.28",
+    "@types/angularfire": "^0.8.31",
+    "@types/express": "^4.0.36",
+    "@types/firebase": "^2.4.31",
+    "@types/ionic": "0.0.34",
+    "@types/rx-dom": "^7.0.0",
+    "@types/underscore": "^1.8.1",
+    "ionic-native": "^2.9.0",
+    "ionicons": "3.0.0",
+    "moment": "^2.18.1",
+    "nodemon": "^1.10.2",
+    "rxjs": "5.1.1",
+    "sw-toolbox": "3.4.0",
+    "typescript": "~2.2.1",
+    "zone.js": "^0.8.4"
+  },
+  "config": {
+    "ionic_build_to_es5": false
+  }
+}

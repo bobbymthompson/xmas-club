@@ -1,0 +1,15 @@
+.ios,
+.md {
+  page-leaderboard {
+    .leaderboard-scroll .scroll-content {
+      padding: 0px !important;
+    }
+    ion-content {
+      background-color: color($colors, background);
+    }
+
+    .altRowColor {
+      color: color($colors, primary);
+    }
+  }
+}

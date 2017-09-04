@@ -1,0 +1,66 @@
+<ion-header>
+
+  <ion-navbar color="header">
+    <ion-title>Week {{week?.week}}</ion-title>
+
+    <ion-buttons end>
+      <button ion-button icon-only (click)="createScorecard()" *ngIf="canCreateScorecard()">
+        <ion-icon name="md-create"></ion-icon>
+      </button>
+      <button ion-button icon-only (click)="login()" *ngIf="!authProvider.isAuthenticated">
+        <ion-icon name="person"></ion-icon>
+      </button>
+    </ion-buttons>
+
+  </ion-navbar>
+
+</ion-header>
+
+<ion-content>
+
+  <ion-card *ngIf="favorites.length > 0">
+    <ion-card-header>
+      <ion-item>
+        Favorites
+        <!-- <button ion-button icon-only item-right clear (click)="viewFavoriteScorecards()">
+          <ion-icon name="grid"></ion-icon>
+        </button> -->
+      </ion-item>
+    </ion-card-header>
+
+    <ion-list>
+      <ion-item *ngFor="let scorecard of favorites" (click)="viewScorecard(scorecard)" detail-push>
+        <ion-grid>
+          <ion-row style="text-align:center">
+            <ion-col col-6 style="text-align:left">{{scorecard.rank}}) {{scorecard.nickname}} ({{scorecard.tieBreakerScore}})</ion-col>
+            <ion-col style="min-width:50px">{{scorecard.score}} of {{week.totalNumberOfPicks}}</ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-item>
+    </ion-list>
+  </ion-card>
+
+  <ion-card>
+   <ion-card-header>
+      <ion-item>
+        Leaderboard
+        <!-- <button ion-button icon-only item-right clear (click)="viewAllScorecards()">
+          <ion-icon name="grid"></ion-icon>
+        </button> -->
+      </ion-item>
+    </ion-card-header>
+
+    <ion-list>
+      <ion-item *ngFor="let scorecard of scorecards" (click)="viewScorecard(scorecard)" detail-push>
+        <ion-grid>
+          <ion-row style="text-align:center">
+            <ion-col col-6 style="text-align:left">{{scorecard.rank}}) {{scorecard.nickname}} ({{scorecard.tieBreakerScore}})</ion-col>
+            <ion-col style="min-width:50px">{{scorecard.score}} of 24</ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-item>
+    </ion-list>
+
+  </ion-card>
+
+</ion-content>

@@ -1,0 +1,436 @@
+{
+  "weeks": [{
+    "week": 1,
+    "dueDate": "2017-08-12T12:00:00.000Z"
+  }, {
+    "week": 2,
+    "dueDate": "2017-08-19T12:00:00.000Z"
+  }, {
+    "week": 3,
+    "dueDate": "2017-08-19T12:00:00.000Z"
+  }, {
+    "week": 4,
+    "dueDate": "2017-08-19T12:00:00.000Z"
+  }, {
+    "week": 5,
+    "dueDate": "2017-08-19T12:00:00.000Z"
+  }, {
+    "week": 6,
+    "dueDate": "2017-08-19T12:00:00.000Z"
+  }, {
+    "week": 7,
+    "dueDate": "2017-08-19T12:00:00.000Z"
+  }, {
+    "week": 8,
+    "dueDate": "2017-08-19T12:00:00.000Z"
+  }, {
+    "week": 9,
+    "dueDate": "2017-08-19T12:00:00.000Z"
+  }, {
+    "week": 10,
+    "dueDate": "2017-08-19T12:00:00.000Z"
+  }, {
+    "week": 11,
+    "dueDate": "2017-08-19T12:00:00.000Z"
+  }],
+  "users": [{
+    "id": 1,
+    "nickname": "Striker",
+    "name": "Bobby Thompson",
+    "email": "bobby.m.thompson@gmail.com",
+    "favorites": [ "Philby", "DPizzles", "superTD" ]
+  }, {
+    "id": 2,
+    "nickname": "Philby",
+    "name": "Anythony Tynan",
+    "email": "",
+    "favorites": [ "Striker", "DPizzles" ]
+  }, {
+    "id": 3,
+    "nickname": "DPizzles",
+    "name": "Dave Patrick",
+    "email": "",
+    "favorites": [ "Striker", "Philby" ]
+  }, {
+    "id": 4,
+    "nickname": "superTD",
+    "name": "Don Thompson",
+    "email": "",
+    "favorites": [ "Striker" ]
+  }],
+
+  "scores": [{
+    "user": "Striker",
+    "total": 145,
+    "weeklyScores": [15, 16, 12, 15, 9, 11, 8, 8, 10, 10, 10]
+  }, {
+    "user": "Philby",
+    "total": 143,
+    "weeklyScores": [15, 16, 12, 6, 9, 11, 10, 8, 10, 10, 10]
+  }, {
+    "user": "DPizzles",
+    "total": 142,
+    "weeklyScores": [15, 16, 12, 15, 9, 11, 10, 8, 10, 10, 10]
+  }, {
+    "user": "SuperTD",
+    "total": 140,
+    "weeklyScores": [15, 16, 12, 15, 9, 11, 9, 8, 10, 10, 10]
+  }],
+
+  "scoreCards": [{
+    "week": 1,
+    "nickname": "Philby",
+    "tieBreakerScore": 44,
+    "picks": [{
+      "team1": "PITT",
+      "team2": "PENN ST.",
+      "spread": "-1.5",
+      "selectedPick": "",
+      "pickType": "NFL",
+      "isOverUnder": false,
+      "homeTeam": "PITT"
+    }]
+  }, {
+    "week": 1,
+    "nickname": "Striker",
+    "tieBreakerScore": 52,
+    "picks": [{
+      "team1": "PITT",
+      "team2": "PENN ST.",
+      "spread": "-1.5",
+      "selectedPick": "Team1",
+      "pickType": "NFL",
+      "isOverUnder": false,
+      "homeTeam": "PITT"
+    }]
+  }, {
+    "week": 1,
+    "nickname": "DPizzles",
+    "tieBreakerScore": 55,
+    "picks": [{
+      "team1": "PITT",
+      "team2": "PENN ST.",
+      "spread": "-1.5",
+      "selectedPick": "Team2",
+      "pickType": "NFL",
+      "isOverUnder": false,
+      "homeTeam": "PITT"
+    }]
+  }, {
+    "week": 1,
+    "nickname": "superTD",
+    "tieBreakerScore": 51,
+    "picks": [{
+      "team1": "PITT",
+      "team2": "PENN ST.",
+      "spread": "-1.5",
+      "selectedPick": "Team1",
+      "pickType": "NFL",
+      "isOverUnder": false,
+      "homeTeam": "PITT"
+    }]
+  }, {
+    "week": 11,
+    "nickname": "superTD",
+    "tieBreakerScore": 51,
+    "picks": [{
+      "team1": "PITT",
+      "team2": "PENN ST.",
+      "spread": "-1.5",
+      "selectedPick": "Team1",
+      "pickType": "NFL",
+      "isOverUnder": false,
+      "homeTeam": "PITT"
+    }]
+  }],
+
+  "week1Results": [{
+      "status": "Complete",
+      "team1": {
+        "score": 42,
+        "name": "PITT"
+      },
+      "team2": {
+        "score": 39,
+        "name": "PENN ST."
+      },
+      "winner": "Team1"
+    },
+    {
+      "status": "Complete",
+      "team1": {
+        "score": 51,
+        "name": "MICHIGAN"
+      },
+      "team2": {
+        "score": 14,
+        "name": "CENTRAL FLORIDA"
+      },
+      "winner": "Team1"
+    },
+    {
+      "status": "Complete",
+      "team1": {
+        "score": 39,
+        "name": "NOTRE DAME"
+      },
+      "team2": {
+        "score": 10,
+        "name": "NEVADA"
+      },
+      "winner": "Team1"
+    },
+    {
+      "status": "Complete",
+      "team1": {
+        "score": 48,
+        "name": "OSU"
+      },
+      "team2": {
+        "score": 3,
+        "name": "TULSA"
+      },
+      "winner": "Team1"
+    },
+    {
+      "status": "Complete",
+      "team1": {
+        "score": 38,
+        "name": "TCU"
+      },
+      "team2": {
+        "score": 41,
+        "name": "ARKANSAS"
+      },
+      "winner": "Team2"
+    },
+    {
+      "status": "Complete",
+      "team1": {
+        "score": 20,
+        "name": "UTAH"
+      },
+      "team2": {
+        "score": 19,
+        "name": "BYU"
+      },
+      "winner": "Team1"
+    },
+    {
+      "status": "Complete",
+      "team1": {
+        "score": 42,
+        "name": "IOWA"
+      },
+      "team2": {
+        "score": 3,
+        "name": "IOWA ST."
+      },
+      "winner": "Team1"
+    },
+    {
+      "status": "Complete",
+      "team1": {
+        "score": 48,
+        "name": "NORTH CAROLINA"
+      },
+      "team2": {
+        "score": 23,
+        "name": "ILLINOIS"
+      },
+      "winner": "Team1"
+    },
+    {
+      "status": "Complete",
+      "team1": {
+        "score": 45,
+        "name": "TENNESSEE"
+      },
+      "team2": {
+        "score": 24,
+        "name": "VIRGINIA TECH"
+      },
+      "winner": "Team1"
+    },
+    {
+      "status": "Complete",
+      "team1": {
+        "score": 29,
+        "name": "PHILADELPHIA"
+      },
+      "team2": {
+        "score": 10,
+        "name": "CLEVELAND"
+      },
+      "winner": "Team1"
+    },
+    {
+      "status": "Complete",
+      "team1": {
+        "score": 24,
+        "name": "ATLANTA"
+      },
+      "team2": {
+        "score": 31,
+        "name": "TAMPA BAY"
+      },
+      "winner": "Team2"
+    },
+    {
+      "status": "Complete",
+      "team1": {
+        "score": 23,
+        "name": "CINCINNATI"
+      },
+      "team2": {
+        "score": 22,
+        "name": "NY JETS"
+      },
+      "winner": "Team1"
+    },
+    {
+      "status": "Complete",
+      "team1": {
+        "score": 23,
+        "name": "HOUSTON"
+      },
+      "team2": {
+        "score": 14,
+        "name": "CHICAGO"
+      },
+      "winner": "Team1"
+    },
+    {
+      "status": "Complete",
+      "team1": {
+        "score": 25,
+        "name": "MINNESOTA"
+      },
+      "team2": {
+        "score": 16,
+        "name": "TENNESSEE"
+      },
+      "winner": "Team1"
+    },
+    {
+      "status": "Complete",
+      "team1": {
+        "score": 13,
+        "name": "BALTIMORE"
+      },
+      "team2": {
+        "score": 7,
+        "name": "BUFFALO"
+      },
+      "winner": "Team1"
+    },
+    {
+      "status": "Complete",
+      "team1": {
+        "score": 27,
+        "name": "GREEN BAY"
+      },
+      "team2": {
+        "score": 23,
+        "name": "JACKSONVILLE"
+      },
+      "winner": "Team1"
+    },
+    {
+      "status": "NotStarted",
+      "team1": {
+        "score": 33,
+        "name": "KANSAS CITY"
+      },
+      "team2": {
+        "score": 27,
+        "name": "SAN DIEGO"
+      },
+      "winner": "Team1"
+    },
+    {
+      "status": "Complete",
+      "team1": {
+        "score": 34,
+        "name": "NEW ORLEANS"
+      },
+      "team2": {
+        "score": 35,
+        "name": "OAKLAND"
+      },
+      "winner": "Team2"
+    },
+    {
+      "status": "Complete",
+      "team1": {
+        "score": 12,
+        "name": "SEATTLE"
+      },
+      "team2": {
+        "score": 10,
+        "name": "MIAMI"
+      },
+      "winner": "Team1"
+    },
+    {
+      "status": "Complete",
+      "team1": {
+        "score": 35,
+        "name": "INDIANAPOLIS"
+      },
+      "team2": {
+        "score": 39,
+        "name": "DETROIT"
+      },
+      "winner": "Team2"
+    },
+    {
+      "status": "Complete",
+      "team1": {
+        "score": 20,
+        "name": "NY GIANTS"
+      },
+      "team2": {
+        "score": 19,
+        "name": "DALLAS"
+      },
+      "winner": "Team1"
+    },
+    {
+      "status": "Complete",
+      "team1": {
+        "score": 21,
+        "name": "ARIZONA"
+      },
+      "team2": {
+        "Score": 23,
+        "name": "NEW ENGLAND"
+      },
+      "winner": "Team2"
+    },
+    {
+      "status": "Complete",
+      "team1": {
+        "Score": 38,
+        "name": "PITTSBURGH"
+      },
+      "team2": {
+        "Score": 16,
+        "name": "WASHINGTON"
+      },
+      "winner": "Team1"
+    },
+    {
+      "status": "Complete",
+      "team1": {
+        "Score": 0,
+        "name": "LOS ANGELES"
+      },
+      "team2": {
+        "Score": 28,
+        "name": "SAN FRANCISCO"
+      },
+      "winner": "Team2"
+    }
+  ]
+}

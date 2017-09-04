@@ -1,0 +1,11 @@
+.ios,
+.md {
+  page-weeks {
+    .item[no-lines].bottom-border {
+      border-bottom: 1px solid grey;
+    }
+    ion-content {
+      background-color: color($colors, background);
+    }
+  }
+}

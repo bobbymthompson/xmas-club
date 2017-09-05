@@ -3,7 +3,7 @@ import { LoginPage } from '../pages/login/login';
 import { PageInterface } from '../models/page-interface';
 import { Component, ViewChild } from '@angular/core';
 import { Events, MenuController, Nav, Platform } from 'ionic-angular';
-import { Splashscreen } from 'ionic-native';
+import { Splashscreen, StatusBar } from 'ionic-native';
 import { Storage } from '@ionic/storage';
 
 import { TabsPage } from '../pages/tabs/tabs';
@@ -36,6 +36,7 @@ export class XmasClubApp {
     // Call any initial plugins when ready
     this.platform.ready().then(() => {
       Splashscreen.hide();
+      StatusBar.backgroundColorByHexString('#3EB29A');
     });
 
     /* Load any initial configuration that is needed */

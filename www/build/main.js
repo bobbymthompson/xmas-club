@@ -969,6 +969,7 @@ let XmasClubApp = class XmasClubApp {
         // Call any initial plugins when ready
         this.platform.ready().then(() => {
             ionic_native_1.Splashscreen.hide();
+            ionic_native_1.StatusBar.backgroundColorByHexString('#3EB29A');
         });
         /* Load any initial configuration that is needed */
     }

@@ -66,16 +66,18 @@ const _ = __webpack_require__(451);
 const login_1 = __webpack_require__(452);
 const auth_provider_1 = __webpack_require__(63);
 let WeekPage = class WeekPage {
-    constructor(navCtrl, navParams, authProvider, scorecardsProvider, dataProvider) {
+    constructor(navCtrl, navParams, authProvider, scorecardsProvider, dataProvider, loadingCtrl) {
         this.navCtrl = navCtrl;
         this.navParams = navParams;
         this.authProvider = authProvider;
         this.scorecardsProvider = scorecardsProvider;
         this.dataProvider = dataProvider;
+        this.loadingCtrl = loadingCtrl;
         this.favorites = [];
     }
     ionViewDidEnter() {
         return __awaiter(this, void 0, void 0, function* () {
+            this.showLoading();
             if (this.navParams.get('week')) {
                 this.week = yield this.dataProvider.getWeek(parseInt(this.navParams.get('week')));
             }
@@ -83,6 +85,7 @@ let WeekPage = class WeekPage {
                 this.week = yield this.dataProvider.currentWeek();
             }
             this.loadScorecards();
+            this.loading.dismiss();
         });
     }
     login() {
@@ -130,6 +133,7 @@ let WeekPage = class WeekPage {
             console.log('Creating scorecard');
             /* Create a new scorecard. */
             if (this.authProvider.isAuthenticated && this.authProvider.user != null) {
+                this.showLoading();
                 let scorecard = yield this.scorecardsProvider.createScorecard(this.week.week, this.authProvider.user.nickname);
                 console.log('Scorecard created.');
                 this.navCtrl.push('ScorecardPage', { enableEditMode: true, week: this.week.week, nickname: this.authProvider.user.nickname });
@@ -163,6 +167,13 @@ let WeekPage = class WeekPage {
             this.scorecards = scorecards;
         });
     }
+    showLoading() {
+        this.loading = this.loadingCtrl.create({
+            content: 'Please wait...',
+            dismissOnPageChange: true
+        });
+        this.loading.present();
+    }
 };
 WeekPage = __decorate([
     ionic_angular_1.IonicPage({
@@ -175,7 +186,8 @@ WeekPage = __decorate([
         ionic_angular_1.NavParams,
         auth_provider_1.AuthProvider,
         scorecards_provider_1.ScorecardsProvider,
-        xmas_club_provider_1.XmasClubDataProvider])
+        xmas_club_provider_1.XmasClubDataProvider,
+        ionic_angular_1.LoadingController])
 ], WeekPage);
 exports.WeekPage = WeekPage;
 //# sourceMappingURL=week.js.map

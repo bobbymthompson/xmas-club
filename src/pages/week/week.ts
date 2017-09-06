@@ -4,7 +4,7 @@ import { cordovaWarn } from 'ionic-native/dist/esm';
 import { GameResult } from '../../models/game-result';
 import { Scorecard, Pick } from '../../models/scorecard';
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, Loading, LoadingController, NavController, NavParams } from 'ionic-angular';
 import { ScorecardsProvider } from '../../providers/scorecards-provider';
 import { User } from '../../models/user';
 import * as _ from 'underscore';
@@ -27,18 +27,22 @@ export class WeekPage {
   scorecards: Scorecard[];
   favorites: Scorecard[];
   currentUserScorecard: Scorecard;
+  loading: Loading;
 
 
   constructor(public navCtrl: NavController,
     public navParams: NavParams,
     private authProvider: AuthProvider,
     private scorecardsProvider: ScorecardsProvider,
-    private dataProvider: XmasClubDataProvider) {
+    private dataProvider: XmasClubDataProvider,
+    private loadingCtrl: LoadingController) {
 
     this.favorites = [];
   }
 
   async ionViewDidEnter() {
+
+    this.showLoading();
 
     if (this.navParams.get('week')) {
       this.week = await this.dataProvider.getWeek(parseInt(this.navParams.get('week')));
@@ -47,6 +51,8 @@ export class WeekPage {
     }
 
     this.loadScorecards();
+
+    this.loading.dismiss();
   }
 
   public login() {
@@ -106,9 +112,11 @@ export class WeekPage {
   public async createScorecard() {
 
     console.log('Creating scorecard');
-
+    
     /* Create a new scorecard. */
     if (this.authProvider.isAuthenticated && this.authProvider.user != null) {
+
+      this.showLoading();
 
       let scorecard = await this.scorecardsProvider.createScorecard(this.week.week, this.authProvider.user.nickname);
       console.log('Scorecard created.');
@@ -154,5 +162,13 @@ export class WeekPage {
     //this.favorites = _.sortBy(favorites, 'score').reverse();
 
     this.scorecards = scorecards;
+  }
+
+  showLoading() {
+    this.loading = this.loadingCtrl.create({
+      content: 'Please wait...',
+      dismissOnPageChange: true
+    });
+    this.loading.present();
   }
 }

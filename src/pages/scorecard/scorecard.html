@@ -20,7 +20,7 @@
   <ion-grid *ngIf="isScorecardViewable()" no-padding>
     <ion-row *ngFor="let pick of (scorecard)?.picks">
       <ion-col col-1>
-        <ion-toggle [disabled]="!inEditMode" [(ngModel)]="pick.team1Selected" (ionChange)="updateSelectedPick(pick, 'Team1')"></ion-toggle>
+        <ion-toggle class="team1Toggle" [disabled]="!inEditMode" [(ngModel)]="pick.team1Selected" (ionChange)="updateSelectedPick(pick, 'Team1')"></ion-toggle>
       </ion-col>
       <ion-col col-10 style="padding:0px 18px 0px 18px;line-height:2.7;font-size:9px;">
         <ion-row style="text-align: center; padding-bottom: 16px">
@@ -39,5 +39,6 @@
       <ion-input type="number" style="border: black 1px solid;" [(ngModel)]="tieBreakerScore" [disabled]="!inEditMode"></ion-input>
     </ion-row>
   </ion-grid>
+  <h4 *ngIf="!isScorecardViewable()">Viewing a scorecard is disabled until after noon on Saturday</h4>
 
 </ion-content>

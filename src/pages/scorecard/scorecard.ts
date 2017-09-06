@@ -1,5 +1,5 @@
 import { ScorecardsProvider } from '../../providers/scorecards-provider';
-import { Component } from '@angular/core';
+import { Component, ElementRef } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { Scorecard, Pick } from "../../models/scorecard";
 import { XmasClubDataProvider } from '../../providers/xmas-club.provider';
@@ -27,7 +27,8 @@ export class ScorecardPage {
     public navParams: NavParams,
     private scorecardsProvider: ScorecardsProvider,
     private dataProvider: XmasClubDataProvider,
-    private authProvider: AuthProvider) {
+    private authProvider: AuthProvider,
+    private elementRef: ElementRef) {
 
     this.week = this.navParams.get('week');
     this._scorecard = this.scorecardsProvider.getScorecard(this.week, this.navParams.get('nickname'));
@@ -90,6 +91,8 @@ export class ScorecardPage {
 
   public updateSelectedPick(pick: EditablePick, selectedTeam: string) {
 
+    console.log('update pick');
+
     if (selectedTeam == 'Team1') {
 
       if (pick.team1Selected) {
@@ -113,8 +116,6 @@ export class ScorecardPage {
   }
 
   public editScorecard() {
-    console.log(this._scorecard);
-
     this.inEditMode = true;
   }
 

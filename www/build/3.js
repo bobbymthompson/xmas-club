@@ -64,12 +64,13 @@ const ionic_angular_1 = __webpack_require__(52);
 const xmas_club_provider_1 = __webpack_require__(450);
 const auth_provider_1 = __webpack_require__(63);
 let ScorecardPage = class ScorecardPage {
-    constructor(navCtrl, navParams, scorecardsProvider, dataProvider, authProvider) {
+    constructor(navCtrl, navParams, scorecardsProvider, dataProvider, authProvider, elementRef) {
         this.navCtrl = navCtrl;
         this.navParams = navParams;
         this.scorecardsProvider = scorecardsProvider;
         this.dataProvider = dataProvider;
         this.authProvider = authProvider;
+        this.elementRef = elementRef;
         this.week = this.navParams.get('week');
         this._scorecard = this.scorecardsProvider.getScorecard(this.week, this.navParams.get('nickname'));
         this._scorecard.subscribe((scorecard) => __awaiter(this, void 0, void 0, function* () {
@@ -115,6 +116,7 @@ let ScorecardPage = class ScorecardPage {
         return true;
     }
     updateSelectedPick(pick, selectedTeam) {
+        console.log('update pick');
         if (selectedTeam == 'Team1') {
             if (pick.team1Selected) {
                 pick.team2Selected = false;
@@ -137,7 +139,6 @@ let ScorecardPage = class ScorecardPage {
         }
     }
     editScorecard() {
-        console.log(this._scorecard);
         this.inEditMode = true;
     }
     saveScorecard() {
@@ -149,13 +150,14 @@ let ScorecardPage = class ScorecardPage {
 ScorecardPage = __decorate([
     ionic_angular_1.IonicPage(),
     core_1.Component({
-        selector: 'page-scorecard',template:/*ion-inline-start:"C:\Users\bobby\Source\xmas-club\xmas-club\src\pages\scorecard\scorecard.html"*/'<ion-header>\n\n  <ion-navbar color="header">\n    <ion-title>Week {{week}} - {{scorecard?.nickname}}</ion-title>\n\n    <ion-buttons end>\n      <button ion-button icon-only (click)="editScorecard()" *ngIf="canEditScorecard()">\n        <ion-icon name="md-create"></ion-icon>\n      </button>\n      <button ion-button icon-only (click)="saveScorecard()" *ngIf="inEditMode">\n        <ion-icon name="md-checkmark"></ion-icon>\n      </button>\n    </ion-buttons>\n  </ion-navbar>\n\n</ion-header>\n\n<ion-content>\n\n  <ion-grid *ngIf="isScorecardViewable()" no-padding>\n    <ion-row *ngFor="let pick of (scorecard)?.picks">\n      <ion-col col-1>\n        <ion-toggle [disabled]="!inEditMode" [(ngModel)]="pick.team1Selected" (ionChange)="updateSelectedPick(pick, \'Team1\')"></ion-toggle>\n      </ion-col>\n      <ion-col col-10 style="padding:0px 18px 0px 18px;line-height:2.7;font-size:9px;">\n        <ion-row style="text-align: center; padding-bottom: 16px">\n          <ion-col col-4><span [style.font-weight]="pick.homeTeam == pick.team1 ? \'bold\' : \'\'">{{pick.team1}}</span></ion-col>\n          <ion-col col-2><span>vs.</span></ion-col>\n          <ion-col col-4><span [style.font-weight]="pick.homeTeam == pick.team2 ? \'bold\' : \'\'">{{pick.team2}}</span></ion-col>\n          <ion-col col-2><span>{{pick.spread}}</span></ion-col>\n        </ion-row>\n      </ion-col>\n      <ion-col col-1>\n        <ion-toggle [disabled]="!inEditMode" [(ngModel)]="pick.team2Selected" (ionChange)="updateSelectedPick(pick, \'Team2\')" style="float:right"></ion-toggle>\n      </ion-col>\n    </ion-row>\n    <ion-row>\n      <ion-label style="text-align: right">Total Score:</ion-label>\n      <ion-input type="number" style="border: black 1px solid;" [(ngModel)]="tieBreakerScore" [disabled]="!inEditMode"></ion-input>\n    </ion-row>\n  </ion-grid>\n\n</ion-content>\n'/*ion-inline-end:"C:\Users\bobby\Source\xmas-club\xmas-club\src\pages\scorecard\scorecard.html"*/,
+        selector: 'page-scorecard',template:/*ion-inline-start:"C:\Users\bobby\Source\xmas-club\xmas-club\src\pages\scorecard\scorecard.html"*/'<ion-header>\n\n  <ion-navbar color="header">\n    <ion-title>Week {{week}} - {{scorecard?.nickname}}</ion-title>\n\n    <ion-buttons end>\n      <button ion-button icon-only (click)="editScorecard()" *ngIf="canEditScorecard()">\n        <ion-icon name="md-create"></ion-icon>\n      </button>\n      <button ion-button icon-only (click)="saveScorecard()" *ngIf="inEditMode">\n        <ion-icon name="md-checkmark"></ion-icon>\n      </button>\n    </ion-buttons>\n  </ion-navbar>\n\n</ion-header>\n\n<ion-content>\n\n  <ion-grid *ngIf="isScorecardViewable()" no-padding>\n    <ion-row *ngFor="let pick of (scorecard)?.picks">\n      <ion-col col-1>\n        <ion-toggle class="team1Toggle" [disabled]="!inEditMode" [(ngModel)]="pick.team1Selected" (ionChange)="updateSelectedPick(pick, \'Team1\')"></ion-toggle>\n      </ion-col>\n      <ion-col col-10 style="padding:0px 18px 0px 18px;line-height:2.7;font-size:9px;">\n        <ion-row style="text-align: center; padding-bottom: 16px">\n          <ion-col col-4><span [style.font-weight]="pick.homeTeam == pick.team1 ? \'bold\' : \'\'">{{pick.team1}}</span></ion-col>\n          <ion-col col-2><span>vs.</span></ion-col>\n          <ion-col col-4><span [style.font-weight]="pick.homeTeam == pick.team2 ? \'bold\' : \'\'">{{pick.team2}}</span></ion-col>\n          <ion-col col-2><span>{{pick.spread}}</span></ion-col>\n        </ion-row>\n      </ion-col>\n      <ion-col col-1>\n        <ion-toggle [disabled]="!inEditMode" [(ngModel)]="pick.team2Selected" (ionChange)="updateSelectedPick(pick, \'Team2\')" style="float:right"></ion-toggle>\n      </ion-col>\n    </ion-row>\n    <ion-row>\n      <ion-label style="text-align: right">Total Score:</ion-label>\n      <ion-input type="number" style="border: black 1px solid;" [(ngModel)]="tieBreakerScore" [disabled]="!inEditMode"></ion-input>\n    </ion-row>\n  </ion-grid>\n  <h4 *ngIf="!isScorecardViewable()">Viewing a scorecard is disabled until after noon on Saturday</h4>\n\n</ion-content>\n'/*ion-inline-end:"C:\Users\bobby\Source\xmas-club\xmas-club\src\pages\scorecard\scorecard.html"*/,
     }),
     __metadata("design:paramtypes", [ionic_angular_1.NavController,
         ionic_angular_1.NavParams,
         scorecards_provider_1.ScorecardsProvider,
         xmas_club_provider_1.XmasClubDataProvider,
-        auth_provider_1.AuthProvider])
+        auth_provider_1.AuthProvider,
+        core_1.ElementRef])
 ], ScorecardPage);
 exports.ScorecardPage = ScorecardPage;
 //# sourceMappingURL=scorecard.js.map

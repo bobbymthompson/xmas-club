@@ -91,6 +91,7 @@ export class XmasClubDataProvider {
       });
     } else {
 
+      console.log('Inserting score to the weekly scores');
       this.firebase.list(`/scores/${nickname}/weeklyScores`).push({
         week: week,
         score: score

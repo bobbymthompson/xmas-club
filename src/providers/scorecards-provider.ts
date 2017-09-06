@@ -1,4 +1,4 @@
-import { Score } from '../models/score';
+import { Score, WeeklyScore } from '../models/score';
 import { Subscription } from 'rxjs/Rx';
 import { Injectable } from '@angular/core';
 import { Http, Response } from '@angular/http';
@@ -49,15 +49,26 @@ export class ScorecardsProvider {
     return this.firebase.list(this.SCORECARD_PATH(week)).push(scorecard);
   }
 
-  public update(scorecard: Scorecard) {
+  public async update(scorecard: Scorecard) {
 
-    console.log('Updating scorecard:');
     console.log(scorecard);
 
     this.firebase.list(this.SCORECARD_PATH(scorecard.week)).update((scorecard as any).$key, {
       tieBreakerScore: scorecard.tieBreakerScore,
       picks: scorecard.picks
     });
+
+    let weeklyScores: WeeklyScore[] = await this.firebase.list(`/scores/${scorecard.nickname}/weeklyScores`).first().toPromise();
+
+    let foundScore = _.find(weeklyScores, score => score.week === scorecard.week);
+    if (!foundScore) {
+
+      /* Insert a record into the scores array for this user. */
+      this.firebase.list(`/scores/${scorecard.nickname}/weeklyScores`).push({
+        week: scorecard.week,
+        score: 0
+      });
+    }
   }
 
   private async getScorecardTemplate(week: number) {

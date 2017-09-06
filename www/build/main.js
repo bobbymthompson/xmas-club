@@ -1,6 +1,6 @@
 webpackJsonp([5],{
 
-/***/ 146:
+/***/ 147:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -26,7 +26,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const core_1 = __webpack_require__(0);
 const http_1 = __webpack_require__(99);
 __webpack_require__(103);
-__webpack_require__(185);
+__webpack_require__(186);
+const _ = __webpack_require__(146);
 const auth_1 = __webpack_require__(73);
 const database_1 = __webpack_require__(76);
 let ScorecardsProvider = class ScorecardsProvider {
@@ -58,11 +59,21 @@ let ScorecardsProvider = class ScorecardsProvider {
         });
     }
     update(scorecard) {
-        console.log('Updating scorecard:');
-        console.log(scorecard);
-        this.firebase.list(this.SCORECARD_PATH(scorecard.week)).update(scorecard.$key, {
-            tieBreakerScore: scorecard.tieBreakerScore,
-            picks: scorecard.picks
+        return __awaiter(this, void 0, void 0, function* () {
+            console.log(scorecard);
+            this.firebase.list(this.SCORECARD_PATH(scorecard.week)).update(scorecard.$key, {
+                tieBreakerScore: scorecard.tieBreakerScore,
+                picks: scorecard.picks
+            });
+            let weeklyScores = yield this.firebase.list(`/scores/${scorecard.nickname}/weeklyScores`).first().toPromise();
+            let foundScore = _.find(weeklyScores, score => score.week === scorecard.week);
+            if (!foundScore) {
+                /* Insert a record into the scores array for this user. */
+                this.firebase.list(`/scores/${scorecard.nickname}/weeklyScores`).push({
+                    week: scorecard.week,
+                    score: 0
+                });
+            }
         });
     }
     getScorecardTemplate(week) {
@@ -93,7 +104,7 @@ exports.ScorecardsProvider = ScorecardsProvider;
 
 /***/ }),
 
-/***/ 155:
+/***/ 156:
 /***/ (function(module, exports) {
 
 function webpackEmptyAsyncContext(req) {
@@ -106,11 +117,11 @@ function webpackEmptyAsyncContext(req) {
 webpackEmptyAsyncContext.keys = function() { return []; };
 webpackEmptyAsyncContext.resolve = webpackEmptyAsyncContext;
 module.exports = webpackEmptyAsyncContext;
-webpackEmptyAsyncContext.id = 155;
+webpackEmptyAsyncContext.id = 156;
 
 /***/ }),
 
-/***/ 171:
+/***/ 172:
 /***/ (function(module, exports, __webpack_require__) {
 
 var map = {
@@ -146,12 +157,12 @@ function webpackAsyncContext(req) {
 webpackAsyncContext.keys = function webpackAsyncContextKeys() {
 	return Object.keys(map);
 };
-webpackAsyncContext.id = 171;
+webpackAsyncContext.id = 172;
 module.exports = webpackAsyncContext;
 
 /***/ }),
 
-/***/ 316:
+/***/ 317:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -227,7 +238,7 @@ exports.RegisterPage = RegisterPage;
 
 /***/ }),
 
-/***/ 449:
+/***/ 450:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -266,7 +277,7 @@ exports.TabsPage = TabsPage;
 
 /***/ }),
 
-/***/ 450:
+/***/ 451:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -293,11 +304,11 @@ const core_1 = __webpack_require__(0);
 const http_1 = __webpack_require__(99);
 const auth_1 = __webpack_require__(73);
 const database_1 = __webpack_require__(76);
-const _ = __webpack_require__(451);
+const _ = __webpack_require__(146);
 __webpack_require__(103);
-__webpack_require__(183);
 __webpack_require__(184);
-const scorecards_provider_1 = __webpack_require__(146);
+__webpack_require__(185);
+const scorecards_provider_1 = __webpack_require__(147);
 let XmasClubDataProvider = class XmasClubDataProvider {
     constructor(http, firebase, firebaseAuth, scorecardsProvider) {
         this.http = http;
@@ -362,6 +373,7 @@ let XmasClubDataProvider = class XmasClubDataProvider {
                 });
             }
             else {
+                console.log('Inserting score to the weekly scores');
                 this.firebase.list(`/scores/${nickname}/weeklyScores`).push({
                     week: week,
                     score: score
@@ -490,7 +502,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const core_1 = __webpack_require__(0);
 const ionic_angular_1 = __webpack_require__(52);
 const auth_provider_1 = __webpack_require__(63);
-const register_1 = __webpack_require__(316);
+const register_1 = __webpack_require__(317);
 let LoginPage = class LoginPage {
     constructor(navCtrl, authProvider, alertCtrl, loadingCtrl) {
         this.navCtrl = navCtrl;
@@ -630,15 +642,15 @@ const ionic_angular_1 = __webpack_require__(52);
 const storage_1 = __webpack_require__(69);
 const settings_1 = __webpack_require__(762);
 const app_component_1 = __webpack_require__(763);
-const tabs_1 = __webpack_require__(449);
-const xmas_club_provider_1 = __webpack_require__(450);
-const scorecards_provider_1 = __webpack_require__(146);
+const tabs_1 = __webpack_require__(450);
+const xmas_club_provider_1 = __webpack_require__(451);
+const scorecards_provider_1 = __webpack_require__(147);
 const angularfire2_1 = __webpack_require__(767);
 const database_1 = __webpack_require__(76);
 const auth_1 = __webpack_require__(73);
 const auth_provider_1 = __webpack_require__(63);
 const reverse_array_1 = __webpack_require__(453);
-const register_1 = __webpack_require__(316);
+const register_1 = __webpack_require__(317);
 exports.firebaseConfig = {
     apiKey: "AIzaSyDgh6wIiKbNUFhqgtmRuPHw6bGJ8KrIqg0",
     authDomain: "xmas-club.firebaseapp.com",
@@ -748,7 +760,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const Rx_1 = __webpack_require__(186);
+const Rx_1 = __webpack_require__(187);
 const core_1 = __webpack_require__(0);
 const auth_1 = __webpack_require__(73);
 const database_1 = __webpack_require__(76);
@@ -787,6 +799,10 @@ let AuthProvider = class AuthProvider {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 let newUser = yield this.firebaseAuth.auth.createUserWithEmailAndPassword(email, password);
+                this.firebase.object(`/users/${newUser.uid}/`).set({
+                    favorites: [],
+                    nickname: nickname
+                });
                 let user = yield this.firebaseAuth.auth.signInWithEmailAndPassword(email, password);
                 return new Promise((resolve, reject) => {
                     resolve({
@@ -952,7 +968,7 @@ const core_1 = __webpack_require__(0);
 const ionic_angular_1 = __webpack_require__(52);
 const ionic_native_1 = __webpack_require__(764);
 const storage_1 = __webpack_require__(69);
-const tabs_1 = __webpack_require__(449);
+const tabs_1 = __webpack_require__(450);
 let XmasClubApp = class XmasClubApp {
     constructor(events, menu, platform, storage) {
         this.events = events;

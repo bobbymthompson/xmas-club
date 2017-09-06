@@ -58,11 +58,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const xmas_club_provider_1 = __webpack_require__(450);
-const scorecards_provider_1 = __webpack_require__(146);
+const xmas_club_provider_1 = __webpack_require__(451);
+const scorecards_provider_1 = __webpack_require__(147);
 const core_1 = __webpack_require__(0);
 const ionic_angular_1 = __webpack_require__(52);
-const _ = __webpack_require__(451);
+const _ = __webpack_require__(146);
 let AdminPage = class AdminPage {
     constructor(navCtrl, scorecardsProvider, dataProvider) {
         this.navCtrl = navCtrl;

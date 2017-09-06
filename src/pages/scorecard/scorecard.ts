@@ -64,6 +64,10 @@ export class ScorecardPage {
       return true;
     }
 
+    if (this.scorecard && this.scorecard.nickname === this.authProvider.user.nickname) {
+      return true;
+    }
+    
     if (this.authProvider.isAdministrator) {
       return true;
     }

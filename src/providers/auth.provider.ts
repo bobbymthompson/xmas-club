@@ -53,6 +53,11 @@ export class AuthProvider {
 
       let newUser = await this.firebaseAuth.auth.createUserWithEmailAndPassword(email, password);
 
+      this.firebase.object(`/users/${newUser.uid}/`).set({
+        favorites: [],
+        nickname: nickname
+      });
+
       let user = await this.firebaseAuth.auth.signInWithEmailAndPassword(email, password);
 
       return new Promise<any>((resolve, reject) => {

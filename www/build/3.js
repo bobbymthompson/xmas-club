@@ -58,10 +58,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const scorecards_provider_1 = __webpack_require__(146);
+const scorecards_provider_1 = __webpack_require__(147);
 const core_1 = __webpack_require__(0);
 const ionic_angular_1 = __webpack_require__(52);
-const xmas_club_provider_1 = __webpack_require__(450);
+const xmas_club_provider_1 = __webpack_require__(451);
 const auth_provider_1 = __webpack_require__(63);
 let ScorecardPage = class ScorecardPage {
     constructor(navCtrl, navParams, scorecardsProvider, dataProvider, authProvider, elementRef) {
@@ -93,6 +93,9 @@ let ScorecardPage = class ScorecardPage {
             return true;
         /* Only allow the user to view this scorecard if it is after the due date */
         if (new Date() >= this.dueDate) {
+            return true;
+        }
+        if (this.scorecard && this.scorecard.nickname === this.authProvider.user.nickname) {
             return true;
         }
         if (this.authProvider.isAdministrator) {

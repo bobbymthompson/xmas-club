@@ -524,8 +524,11 @@ let LoginPage = class LoginPage {
         return __awaiter(this, void 0, void 0, function* () {
             if (this.credentials.email && this.credentials.password) {
                 this.showLoading();
-                let success = yield this.authProvider.loginUser(this.credentials.email, this.credentials.password);
-                this.navCtrl.pop();
+                this.authProvider.loginUser(this.credentials.email, this.credentials.password).then(() => {
+                    this.navCtrl.pop();
+                }).catch((error) => {
+                    this.showError('Invalid email or password.');
+                });
             }
         });
     }
@@ -550,7 +553,7 @@ let LoginPage = class LoginPage {
     showError(text) {
         this.loading.dismiss();
         let alert = this.alertCtrl.create({
-            title: 'Fail',
+            title: 'Error',
             subTitle: text,
             buttons: ['OK']
         });

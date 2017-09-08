@@ -30,9 +30,13 @@ export class LoginPage {
 
       this.showLoading()
 
-      let success = await this.authProvider.loginUser(this.credentials.email, this.credentials.password);
+      this.authProvider.loginUser(this.credentials.email, this.credentials.password).then(() => {
 
-      this.navCtrl.pop();
+        this.navCtrl.pop();
+      }).catch((error) => {
+        
+        this.showError('Invalid email or password.')
+      });
     }
   }
 
@@ -58,7 +62,7 @@ export class LoginPage {
     this.loading.dismiss();
 
     let alert = this.alertCtrl.create({
-      title: 'Fail',
+      title: 'Error',
       subTitle: text,
       buttons: ['OK']
     });

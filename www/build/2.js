@@ -61,8 +61,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const xmas_club_provider_1 = __webpack_require__(451);
 const core_1 = __webpack_require__(0);
 const ionic_angular_1 = __webpack_require__(52);
-const scorecards_provider_1 = __webpack_require__(147);
-const _ = __webpack_require__(146);
+const scorecards_provider_1 = __webpack_require__(146);
+const _ = __webpack_require__(147);
 const login_1 = __webpack_require__(452);
 const auth_provider_1 = __webpack_require__(63);
 let WeekPage = class WeekPage {

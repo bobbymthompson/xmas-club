@@ -58,7 +58,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const scorecards_provider_1 = __webpack_require__(147);
+const scorecards_provider_1 = __webpack_require__(146);
 const core_1 = __webpack_require__(0);
 const ionic_angular_1 = __webpack_require__(52);
 const xmas_club_provider_1 = __webpack_require__(451);
@@ -119,7 +119,6 @@ let ScorecardPage = class ScorecardPage {
         return true;
     }
     updateSelectedPick(pick, selectedTeam) {
-        console.log('update pick');
         if (selectedTeam == 'Team1') {
             if (pick.team1Selected) {
                 pick.team2Selected = false;

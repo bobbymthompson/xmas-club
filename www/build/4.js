@@ -59,10 +59,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const xmas_club_provider_1 = __webpack_require__(451);
-const scorecards_provider_1 = __webpack_require__(147);
+const scorecards_provider_1 = __webpack_require__(146);
 const core_1 = __webpack_require__(0);
 const ionic_angular_1 = __webpack_require__(52);
-const _ = __webpack_require__(146);
 let AdminPage = class AdminPage {
     constructor(navCtrl, scorecardsProvider, dataProvider) {
         this.navCtrl = navCtrl;
@@ -78,15 +77,9 @@ let AdminPage = class AdminPage {
     populateScoresFromScorecards() {
         return __awaiter(this, void 0, void 0, function* () {
             let currentWeek = yield this.dataProvider.currentWeek();
-            let scores = yield this.dataProvider.scores.first().toPromise();
-            let results = yield this.dataProvider.getScorecardResults(currentWeek.week);
-            scores.forEach(score => {
-                let weeklyScore = 0;
-                let scorecard = _.find(results, scorecard => scorecard.nickname === score.$key);
-                if (scorecard) {
-                    weeklyScore = scorecard.score;
-                }
-                this.dataProvider.addScoreForUser(score.$key, currentWeek.week, weeklyScore);
+            let scorecards = yield this.dataProvider.getScorecardResults(currentWeek.week);
+            scorecards.forEach(scorecard => {
+                this.scorecardsProvider.insertWeeklyScore(scorecard);
             });
         });
     }

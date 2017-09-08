@@ -28,20 +28,11 @@ export class AdminPage {
 
     let currentWeek = await this.dataProvider.currentWeek();
 
-    let scores: Score[] = await this.dataProvider.scores.first().toPromise();
+    let scorecards = await this.dataProvider.getScorecardResults(currentWeek.week);
 
-    let results = await this.dataProvider.getScorecardResults(currentWeek.week);
+    scorecards.forEach(scorecard => {
 
-    scores.forEach(score => {
-
-      let weeklyScore = 0;
-
-      let scorecard = _.find(results, scorecard => scorecard.nickname === score.$key);
-      if (scorecard) {
-        weeklyScore = scorecard.score;
-      }
-
-      this.dataProvider.addScoreForUser(score.$key, currentWeek.week, weeklyScore);
+      this.scorecardsProvider.insertWeeklyScore(scorecard);
     });
   }
 

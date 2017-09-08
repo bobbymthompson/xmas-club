@@ -95,8 +95,6 @@ export class ScorecardPage {
 
   public updateSelectedPick(pick: EditablePick, selectedTeam: string) {
 
-    console.log('update pick');
-
     if (selectedTeam == 'Team1') {
 
       if (pick.team1Selected) {

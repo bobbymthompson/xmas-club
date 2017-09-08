@@ -1,6 +1,6 @@
 webpackJsonp([5],{
 
-/***/ 147:
+/***/ 146:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -27,7 +27,7 @@ const core_1 = __webpack_require__(0);
 const http_1 = __webpack_require__(99);
 __webpack_require__(103);
 __webpack_require__(186);
-const _ = __webpack_require__(146);
+const _ = __webpack_require__(147);
 const auth_1 = __webpack_require__(73);
 const database_1 = __webpack_require__(76);
 let ScorecardsProvider = class ScorecardsProvider {
@@ -65,15 +65,7 @@ let ScorecardsProvider = class ScorecardsProvider {
                 tieBreakerScore: scorecard.tieBreakerScore,
                 picks: scorecard.picks
             });
-            let weeklyScores = yield this.firebase.list(`/scores/${scorecard.nickname}/weeklyScores`).first().toPromise();
-            let foundScore = _.find(weeklyScores, score => score.week === scorecard.week);
-            if (!foundScore) {
-                /* Insert a record into the scores array for this user. */
-                this.firebase.list(`/scores/${scorecard.nickname}/weeklyScores`).push({
-                    week: scorecard.week,
-                    score: 0
-                });
-            }
+            this.insertWeeklyScore(scorecard);
         });
     }
     getScorecardTemplate(week) {
@@ -88,8 +80,22 @@ let ScorecardsProvider = class ScorecardsProvider {
             let scorecardsFb = this.getScorecards(week);
             for (let scorecard of scorecards) {
                 scorecardsFb.push(scorecard);
+                this.insertWeeklyScore(scorecard);
             }
             return scorecards;
+        });
+    }
+    insertWeeklyScore(scorecard) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let weeklyScores = yield this.firebase.list(`/scores/${scorecard.nickname}/weeklyScores`).first().toPromise();
+            let foundScore = _.find(weeklyScores, score => score.week === scorecard.week);
+            if (!foundScore) {
+                /* Insert a record into the scores array for this user. */
+                this.firebase.list(`/scores/${scorecard.nickname}/weeklyScores`).push({
+                    week: scorecard.week,
+                    score: 0
+                });
+            }
         });
     }
 };
@@ -304,11 +310,11 @@ const core_1 = __webpack_require__(0);
 const http_1 = __webpack_require__(99);
 const auth_1 = __webpack_require__(73);
 const database_1 = __webpack_require__(76);
-const _ = __webpack_require__(146);
+const _ = __webpack_require__(147);
 __webpack_require__(103);
 __webpack_require__(184);
 __webpack_require__(185);
-const scorecards_provider_1 = __webpack_require__(147);
+const scorecards_provider_1 = __webpack_require__(146);
 let XmasClubDataProvider = class XmasClubDataProvider {
     constructor(http, firebase, firebaseAuth, scorecardsProvider) {
         this.http = http;
@@ -644,7 +650,7 @@ const settings_1 = __webpack_require__(762);
 const app_component_1 = __webpack_require__(763);
 const tabs_1 = __webpack_require__(450);
 const xmas_club_provider_1 = __webpack_require__(451);
-const scorecards_provider_1 = __webpack_require__(147);
+const scorecards_provider_1 = __webpack_require__(146);
 const angularfire2_1 = __webpack_require__(767);
 const database_1 = __webpack_require__(76);
 const auth_1 = __webpack_require__(73);

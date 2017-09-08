@@ -58,17 +58,7 @@ export class ScorecardsProvider {
       picks: scorecard.picks
     });
 
-    let weeklyScores: WeeklyScore[] = await this.firebase.list(`/scores/${scorecard.nickname}/weeklyScores`).first().toPromise();
-
-    let foundScore = _.find(weeklyScores, score => score.week === scorecard.week);
-    if (!foundScore) {
-
-      /* Insert a record into the scores array for this user. */
-      this.firebase.list(`/scores/${scorecard.nickname}/weeklyScores`).push({
-        week: scorecard.week,
-        score: 0
-      });
-    }
+    this.insertWeeklyScore(scorecard);
   }
 
   private async getScorecardTemplate(week: number) {
@@ -85,8 +75,25 @@ export class ScorecardsProvider {
     for (let scorecard of scorecards) {
 
       scorecardsFb.push(scorecard);
+
+      this.insertWeeklyScore(scorecard);
     }
 
     return scorecards;
+  }
+
+  public async insertWeeklyScore(scorecard: Scorecard) {
+
+    let weeklyScores: WeeklyScore[] = await this.firebase.list(`/scores/${scorecard.nickname}/weeklyScores`).first().toPromise();
+
+    let foundScore = _.find(weeklyScores, score => score.week === scorecard.week);
+    if (!foundScore) {
+
+      /* Insert a record into the scores array for this user. */
+      this.firebase.list(`/scores/${scorecard.nickname}/weeklyScores`).push({
+        week: scorecard.week,
+        score: 0
+      });
+    }
   }
 }

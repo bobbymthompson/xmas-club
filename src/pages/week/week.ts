@@ -75,7 +75,7 @@ export class WeekPage {
     if (this.doesCurrentUserHaveScorecardAlready()) return false;
 
     /* Only if it is before the due date. */
-    //if (new Date() >= new Date(this.week.dueDate)) return false;
+    if (new Date() >= new Date(this.week.dueDate)) return false;
 
     return true;
   }

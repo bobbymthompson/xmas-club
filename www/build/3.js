@@ -115,7 +115,8 @@ let ScorecardPage = class ScorecardPage {
         if (!this.scorecard || this.authProvider.user.nickname != this.scorecard.nickname)
             return false;
         /* Only if it is before the due date. */
-        //if (!this.dueDate || new Date() >= this.dueDate) return false;
+        if (!this.dueDate || new Date() >= this.dueDate)
+            return false;
         return true;
     }
     updateSelectedPick(pick, selectedTeam) {

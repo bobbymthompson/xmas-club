@@ -12,11 +12,11 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const sort_array_desc_1 = __webpack_require__(775);
+const sort_array_desc_1 = __webpack_require__(776);
 const reverse_array_1 = __webpack_require__(453);
 const core_1 = __webpack_require__(0);
 const ionic_angular_1 = __webpack_require__(52);
-const leaderboard_1 = __webpack_require__(776);
+const leaderboard_1 = __webpack_require__(777);
 let LeaderboardModule = class LeaderboardModule {
 };
 LeaderboardModule = __decorate([
@@ -39,7 +39,7 @@ exports.LeaderboardModule = LeaderboardModule;
 
 /***/ }),
 
-/***/ 775:
+/***/ 776:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -72,7 +72,7 @@ exports.SortArrayDescPipe = SortArrayDescPipe;
 
 /***/ }),
 
-/***/ 776:
+/***/ 777:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";

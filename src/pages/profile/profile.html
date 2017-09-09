@@ -1,0 +1,17 @@
+
+<ion-header>
+
+  <ion-navbar color="header">
+    <ion-title>Profile</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+<ion-content>
+
+  <button *ngIf="!this.authProvider?.isAuthenticated" ion-button full outline (click)="login()">Please login to access your profile</button>
+
+  <button *ngIf="this.authProvider?.isAuthenticated" ion-button full outline (click)="logout()">Logout</button> 
+
+
+</ion-content>

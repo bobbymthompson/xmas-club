@@ -2,5 +2,6 @@
   <ion-tab [root]="tab1Root" tabTitle="This Week" tabIcon="home"></ion-tab>
   <ion-tab [root]="tab2Root" tabTitle="Weeks" tabIcon="calendar"></ion-tab>
   <ion-tab [root]="tab3Root" tabTitle="Leaderboard" tabIcon="list-box"></ion-tab>
-  <ion-tab [root]="tab4Root" tabTitle="Admin" tabIcon="cog" *ngIf="authProvider.isAdministrator"></ion-tab>
+  <ion-tab [root]="tab4Root" tabTitle="Profile" tabIcon="person"></ion-tab>
+  <ion-tab [root]="tab5Root" tabTitle="Admin" tabIcon="cog" *ngIf="authProvider.isAdministrator"></ion-tab>
 </ion-tabs>

@@ -1,4 +1,4 @@
-webpackJsonp([6],{
+webpackJsonp([7],{
 
 /***/ 146:
 /***/ (function(module, exports, __webpack_require__) {
@@ -147,7 +147,7 @@ webpackEmptyAsyncContext.id = 156;
 var map = {
 	"../pages/admin/admin.module": [
 		768,
-		5
+		6
 	],
 	"../pages/leaderboard/leaderboard.module": [
 		769,
@@ -155,18 +155,22 @@ var map = {
 	],
 	"../pages/list/list.module": [
 		770,
+		5
+	],
+	"../pages/profile/profile.module": [
+		771,
 		4
 	],
 	"../pages/scorecard/scorecard.module": [
-		771,
+		772,
 		3
 	],
 	"../pages/week/week.module": [
-		772,
+		773,
 		2
 	],
 	"../pages/weeks/weeks.module": [
-		773,
+		774,
 		1
 	]
 };
@@ -287,12 +291,13 @@ let TabsPage = class TabsPage {
         this.tab1Root = 'WeekPage';
         this.tab2Root = 'WeeksPage';
         this.tab3Root = 'LeaderboardPage';
-        this.tab4Root = 'AdminPage';
+        this.tab4Root = 'ProfilePage';
+        this.tab5Root = 'AdminPage';
         this.mySelectedIndex = navParams.data.tabIndex || 0;
     }
 };
 TabsPage = __decorate([
-    core_1.Component({template:/*ion-inline-start:"C:\Users\bobby\Source\xmas-club\xmas-club\src\pages\tabs\tabs.html"*/'<ion-tabs [selectedIndex]="mySelectedIndex" color="footer">\n  <ion-tab [root]="tab1Root" tabTitle="This Week" tabIcon="home"></ion-tab>\n  <ion-tab [root]="tab2Root" tabTitle="Weeks" tabIcon="calendar"></ion-tab>\n  <ion-tab [root]="tab3Root" tabTitle="Leaderboard" tabIcon="list-box"></ion-tab>\n  <ion-tab [root]="tab4Root" tabTitle="Admin" tabIcon="cog" *ngIf="authProvider.isAdministrator"></ion-tab>\n</ion-tabs>\n'/*ion-inline-end:"C:\Users\bobby\Source\xmas-club\xmas-club\src\pages\tabs\tabs.html"*/
+    core_1.Component({template:/*ion-inline-start:"C:\Users\bobby\Source\xmas-club\xmas-club\src\pages\tabs\tabs.html"*/'<ion-tabs [selectedIndex]="mySelectedIndex" color="footer">\n  <ion-tab [root]="tab1Root" tabTitle="This Week" tabIcon="home"></ion-tab>\n  <ion-tab [root]="tab2Root" tabTitle="Weeks" tabIcon="calendar"></ion-tab>\n  <ion-tab [root]="tab3Root" tabTitle="Leaderboard" tabIcon="list-box"></ion-tab>\n  <ion-tab [root]="tab4Root" tabTitle="Profile" tabIcon="person"></ion-tab>\n  <ion-tab [root]="tab5Root" tabTitle="Admin" tabIcon="cog" *ngIf="authProvider.isAdministrator"></ion-tab>\n</ion-tabs>\n'/*ion-inline-end:"C:\Users\bobby\Source\xmas-club\xmas-club\src\pages\tabs\tabs.html"*/
     }),
     __metadata("design:paramtypes", [ionic_angular_1.NavParams, auth_provider_1.AuthProvider])
 ], TabsPage);
@@ -541,8 +546,10 @@ const ionic_angular_1 = __webpack_require__(52);
 const auth_provider_1 = __webpack_require__(63);
 const register_1 = __webpack_require__(317);
 let LoginPage = class LoginPage {
-    constructor(navCtrl, authProvider, alertCtrl, loadingCtrl) {
+    constructor(navCtrl, navParams, _app, authProvider, alertCtrl, loadingCtrl) {
         this.navCtrl = navCtrl;
+        this.navParams = navParams;
+        this._app = _app;
         this.authProvider = authProvider;
         this.alertCtrl = alertCtrl;
         this.loadingCtrl = loadingCtrl;
@@ -556,6 +563,13 @@ let LoginPage = class LoginPage {
             if (this.credentials.email && this.credentials.password) {
                 this.showLoading();
                 this.authProvider.loginUser(this.credentials.email, this.credentials.password).then(() => {
+                    // let popToPage = this.navParams.get('popToPage');
+                    // console.log('Pop to page: ', popToPage);
+                    // if (popToPage) {
+                    //   this.navCtrl.pop(popToPage);
+                    // } else {
+                    //   this._app.getRootNav().popToRoot();
+                    // }
                     this.navCtrl.pop();
                 }).catch((error) => {
                     this.showError('Invalid email or password.');
@@ -573,6 +587,9 @@ let LoginPage = class LoginPage {
                 this.showPopup('Forgot password email sent', 'Please check your email inbox to complete your password reset');
             }
         });
+    }
+    close() {
+        this.navCtrl.pop();
     }
     showLoading() {
         this.loading = this.loadingCtrl.create({
@@ -605,9 +622,11 @@ let LoginPage = class LoginPage {
 };
 LoginPage = __decorate([
     core_1.Component({
-        selector: 'page-login',template:/*ion-inline-start:"C:\Users\bobby\Source\xmas-club\xmas-club\src\pages\login\login.html"*/'<ion-header>\n\n  <ion-navbar color="header">\n    <ion-title>Login</ion-title>\n  </ion-navbar>\n\n</ion-header>\n\n<ion-content class="login-content">\n  <ion-row class="logo-row">\n    <ion-col>\n      <img src="../../assets/img/logo-sm.png" style="height:175px" />\n    </ion-col>\n  </ion-row>\n  <div class="login-box">\n    <form (ngSubmit)="login()" #registerForm="ngForm">\n      <ion-row>\n        <ion-col>\n          <ion-list>\n\n            <ion-item>\n              <ion-input type="text" placeholder="Email" name="email" [(ngModel)]="credentials.email" required></ion-input>\n            </ion-item>\n\n            <ion-item>\n              <ion-input type="password" placeholder="Password" name="password" [(ngModel)]="credentials.password" required></ion-input>\n            </ion-item>\n\n          </ion-list>\n        </ion-col>\n      </ion-row>\n\n      <ion-row>\n        <ion-col class="signup-col">\n          <button ion-button class="submit-btn" full type="submit" [disabled]="!registerForm.form.valid">Login</button>\n        </ion-col>\n      </ion-row>\n\n    </form>\n\n    <ion-row>\n        <ion-col class="signup-col">\n          <button ion-button class="forgot-password-btn" block clear (click)="forgotPassword()">Forgot Password</button>\n          <button ion-button class="register-btn" block clear (click)="createAccount()">Create New Account</button>\n        </ion-col>\n      </ion-row>\n\n  </div>\n</ion-content>\n'/*ion-inline-end:"C:\Users\bobby\Source\xmas-club\xmas-club\src\pages\login\login.html"*/
+        selector: 'page-login',template:/*ion-inline-start:"C:\Users\bobby\Source\xmas-club\xmas-club\src\pages\login\login.html"*/'<ion-header>\n\n  <ion-navbar color="header" hideBackButton="true">\n    <ion-title>Login</ion-title>\n\n    <ion-buttons end>\n      <button ion-button icon-only (click)="close()">\n        <ion-icon name="close"></ion-icon>\n      </button>\n    </ion-buttons>\n  </ion-navbar>\n\n</ion-header>\n\n<ion-content class="login-content">\n  <ion-row class="logo-row">\n    <ion-col>\n      <img src="../../assets/img/logo-sm.png" style="height:175px" />\n    </ion-col>\n  </ion-row>\n  <div class="login-box">\n    <form (ngSubmit)="login()" #registerForm="ngForm">\n      <ion-row>\n        <ion-col>\n          <ion-list>\n\n            <ion-item>\n              <ion-input type="text" placeholder="Email" name="email" [(ngModel)]="credentials.email" required></ion-input>\n            </ion-item>\n\n            <ion-item>\n              <ion-input type="password" placeholder="Password" name="password" [(ngModel)]="credentials.password" required></ion-input>\n            </ion-item>\n\n          </ion-list>\n        </ion-col>\n      </ion-row>\n\n      <ion-row>\n        <ion-col class="signup-col">\n          <button ion-button class="submit-btn" full type="submit" [disabled]="!registerForm.form.valid">Login</button>\n        </ion-col>\n      </ion-row>\n\n    </form>\n\n    <ion-row>\n        <ion-col class="signup-col">\n          <button ion-button class="forgot-password-btn" block clear (click)="forgotPassword()">Forgot Password</button>\n          <button ion-button class="register-btn" block clear (click)="createAccount()">Create New Account</button>\n        </ion-col>\n      </ion-row>\n\n  </div>\n</ion-content>\n'/*ion-inline-end:"C:\Users\bobby\Source\xmas-club\xmas-club\src\pages\login\login.html"*/
     }),
     __metadata("design:paramtypes", [ionic_angular_1.NavController,
+        ionic_angular_1.NavParams,
+        ionic_angular_1.App,
         auth_provider_1.AuthProvider,
         ionic_angular_1.AlertController,
         ionic_angular_1.LoadingController])
@@ -758,6 +777,7 @@ XmasClubModule = __decorate([
                     { loadChildren: '../pages/admin/admin.module#AdminPageModule', name: 'AdminPage', segment: 'admin', priority: 'low', defaultHistory: [] },
                     { loadChildren: '../pages/leaderboard/leaderboard.module#LeaderboardModule', name: 'LeaderboardPage', segment: 'leaderboard', priority: 'low', defaultHistory: [] },
                     { loadChildren: '../pages/list/list.module#ListPageModule', name: 'ListPage', segment: 'list', priority: 'low', defaultHistory: [] },
+                    { loadChildren: '../pages/profile/profile.module#ProfilePageModule', name: 'ProfilePage', segment: 'profile', priority: 'low', defaultHistory: [] },
                     { loadChildren: '../pages/scorecard/scorecard.module#ScorecardPageModule', name: 'ScorecardPage', segment: 'scorecard', priority: 'low', defaultHistory: [] },
                     { loadChildren: '../pages/week/week.module#WeekModule', name: 'WeekPage', segment: 'week/:week', priority: 'low', defaultHistory: [] },
                     { loadChildren: '../pages/weeks/weeks.module#WeeksModule', name: 'WeeksPage', segment: 'weeks', priority: 'low', defaultHistory: [] }

@@ -1,6 +1,6 @@
 webpackJsonp([4],{
 
-/***/ 770:
+/***/ 771:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -14,28 +14,28 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 Object.defineProperty(exports, "__esModule", { value: true });
 const core_1 = __webpack_require__(0);
 const ionic_angular_1 = __webpack_require__(52);
-const list_1 = __webpack_require__(777);
-let ListPageModule = class ListPageModule {
+const profile_1 = __webpack_require__(779);
+let ProfilePageModule = class ProfilePageModule {
 };
-ListPageModule = __decorate([
+ProfilePageModule = __decorate([
     core_1.NgModule({
         declarations: [
-            list_1.ListPage,
+            profile_1.ProfilePage,
         ],
         imports: [
-            ionic_angular_1.IonicPageModule.forChild(list_1.ListPage),
+            ionic_angular_1.IonicPageModule.forChild(profile_1.ProfilePage),
         ],
         exports: [
-            list_1.ListPage
+            profile_1.ProfilePage
         ]
     })
-], ListPageModule);
-exports.ListPageModule = ListPageModule;
-//# sourceMappingURL=list.module.js.map
+], ProfilePageModule);
+exports.ProfilePageModule = ProfilePageModule;
+//# sourceMappingURL=profile.module.js.map
 
 /***/ }),
 
-/***/ 777:
+/***/ 779:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -52,23 +52,47 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const core_1 = __webpack_require__(0);
 const ionic_angular_1 = __webpack_require__(52);
-let ListPage = class ListPage {
-    constructor(navCtrl, navParams) {
+const scorecards_provider_1 = __webpack_require__(146);
+const xmas_club_provider_1 = __webpack_require__(451);
+const auth_provider_1 = __webpack_require__(63);
+const login_1 = __webpack_require__(452);
+let ProfilePage = class ProfilePage {
+    constructor(navCtrl, navParams, scorecardsProvider, dataProvider, authProvider) {
         this.navCtrl = navCtrl;
         this.navParams = navParams;
-        this.list = this.navParams.get('list');
-        this.title = this.navParams.get('title');
+        this.scorecardsProvider = scorecardsProvider;
+        this.dataProvider = dataProvider;
+        this.authProvider = authProvider;
+    }
+    ionViewDidLoad() {
+        if (!this.authProvider.isAuthenticated) {
+            this.navCtrl.push(login_1.LoginPage);
+        }
+        else {
+            console.log('Loading Profile page');
+        }
+    }
+    login() {
+        this.navCtrl.push(login_1.LoginPage);
+    }
+    logout() {
+        this.authProvider.logoutUser();
+        this.navCtrl.parent.select(1);
     }
 };
-ListPage = __decorate([
+ProfilePage = __decorate([
     ionic_angular_1.IonicPage(),
     core_1.Component({
-        selector: 'page-list',template:/*ion-inline-start:"C:\Users\bobby\Source\xmas-club\xmas-club\src\pages\list\list.html"*/'<ion-header>\n\n  <ion-navbar>\n    <ion-title>{{title}}</ion-title>\n  </ion-navbar>\n\n</ion-header>\n\n\n<ion-content>\n\n  <ion-list>\n    <ion-item no-lines class="bottom-border" *ngFor="let item of list">\n      <h2>{{item}}</h2>\n    </ion-item>\n  </ion-list>\n\n</ion-content>\n'/*ion-inline-end:"C:\Users\bobby\Source\xmas-club\xmas-club\src\pages\list\list.html"*/,
+        selector: 'page-profile',template:/*ion-inline-start:"C:\Users\bobby\Source\xmas-club\xmas-club\src\pages\profile\profile.html"*/'\n<ion-header>\n\n  <ion-navbar color="header">\n    <ion-title>Profile</ion-title>\n  </ion-navbar>\n\n</ion-header>\n\n<ion-content>\n\n  <button *ngIf="!this.authProvider?.isAuthenticated" ion-button full outline (click)="login()">Please login to access your profile</button>\n\n  <button *ngIf="this.authProvider?.isAuthenticated" ion-button full outline (click)="logout()">Logout</button> \n\n\n</ion-content>\n'/*ion-inline-end:"C:\Users\bobby\Source\xmas-club\xmas-club\src\pages\profile\profile.html"*/,
     }),
-    __metadata("design:paramtypes", [ionic_angular_1.NavController, ionic_angular_1.NavParams])
-], ListPage);
-exports.ListPage = ListPage;
-//# sourceMappingURL=list.js.map
+    __metadata("design:paramtypes", [ionic_angular_1.NavController,
+        ionic_angular_1.NavParams,
+        scorecards_provider_1.ScorecardsProvider,
+        xmas_club_provider_1.XmasClubDataProvider,
+        auth_provider_1.AuthProvider])
+], ProfilePage);
+exports.ProfilePage = ProfilePage;
+//# sourceMappingURL=profile.js.map
 
 /***/ })
 

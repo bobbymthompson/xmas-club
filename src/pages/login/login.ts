@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { AlertController, Loading, LoadingController, NavController } from 'ionic-angular';
+import { AlertController, App, Loading, LoadingController, NavController, NavParams } from 'ionic-angular';
 import { AngularFireAuth } from 'angularfire2/auth';
 import { AngularFireDatabase, FirebaseObjectObservable, FirebaseListObservable } from 'angularfire2/database';
 import { AuthProvider } from '../../providers/auth.provider';
@@ -16,6 +16,8 @@ export class LoginPage {
   credentials = { email: '', password: '' };
 
   constructor(private navCtrl: NavController,
+    private navParams: NavParams,
+    private _app: App,
     private authProvider: AuthProvider,
     private alertCtrl: AlertController,
     private loadingCtrl: LoadingController) { }
@@ -32,9 +34,17 @@ export class LoginPage {
 
       this.authProvider.loginUser(this.credentials.email, this.credentials.password).then(() => {
 
+        // let popToPage = this.navParams.get('popToPage');
+        // console.log('Pop to page: ', popToPage);
+        // if (popToPage) {
+        //   this.navCtrl.pop(popToPage);
+        // } else {
+        //   this._app.getRootNav().popToRoot();
+        // }
         this.navCtrl.pop();
+
       }).catch((error) => {
-        
+
         this.showError('Invalid email or password.')
       });
     }
@@ -48,6 +58,10 @@ export class LoginPage {
       this.authProvider.forgotPassword(this.credentials.email);
       this.showPopup('Forgot password email sent', 'Please check your email inbox to complete your password reset')
     }
+  }
+
+  private close() {
+    this.navCtrl.pop();
   }
 
   showLoading() {

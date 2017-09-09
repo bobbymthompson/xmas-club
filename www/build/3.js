@@ -1,6 +1,6 @@
 webpackJsonp([3],{
 
-/***/ 771:
+/***/ 772:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -14,7 +14,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 Object.defineProperty(exports, "__esModule", { value: true });
 const core_1 = __webpack_require__(0);
 const ionic_angular_1 = __webpack_require__(52);
-const scorecard_1 = __webpack_require__(778);
+const scorecard_1 = __webpack_require__(780);
 let ScorecardPageModule = class ScorecardPageModule {
 };
 ScorecardPageModule = __decorate([
@@ -35,7 +35,7 @@ exports.ScorecardPageModule = ScorecardPageModule;
 
 /***/ }),
 
-/***/ 778:
+/***/ 780:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -62,6 +62,7 @@ const scorecards_provider_1 = __webpack_require__(146);
 const core_1 = __webpack_require__(0);
 const ionic_angular_1 = __webpack_require__(52);
 const xmas_club_provider_1 = __webpack_require__(451);
+const _ = __webpack_require__(147);
 const auth_provider_1 = __webpack_require__(63);
 let ScorecardPage = class ScorecardPage {
     constructor(navCtrl, navParams, scorecardsProvider, dataProvider, authProvider, elementRef) {
@@ -72,16 +73,17 @@ let ScorecardPage = class ScorecardPage {
         this.authProvider = authProvider;
         this.elementRef = elementRef;
         this.week = this.navParams.get('week');
-        this._scorecard = this.scorecardsProvider.getScorecard(this.week, this.navParams.get('nickname'));
-        this._scorecard.subscribe((scorecard) => __awaiter(this, void 0, void 0, function* () {
+        this.scorecardsProvider.getScorecard(this.week, this.navParams.get('nickname')).first().toPromise().then((scorecard) => __awaiter(this, void 0, void 0, function* () {
             this.scorecard = scorecard;
             if (scorecard) {
                 this.tieBreakerScore = scorecard.tieBreakerScore;
                 this.dueDate = new Date((yield this.dataProvider.getWeek(this.week)).dueDate);
+                console.log(`Due Date: ${this.dueDate.toISOString()} - Current Date: ${new Date().toISOString()}`);
                 for (let pick of scorecard.picks) {
                     pick.team1Selected = (pick.selectedPick == 'Team1') ? true : false;
                     pick.team2Selected = (pick.selectedPick == 'Team2') ? true : false;
                 }
+                this.tieBreakerGame = _.last(scorecard.picks);
             }
         }));
         if (this.navParams.get('enableEditMode')) {
@@ -153,7 +155,7 @@ let ScorecardPage = class ScorecardPage {
 ScorecardPage = __decorate([
     ionic_angular_1.IonicPage(),
     core_1.Component({
-        selector: 'page-scorecard',template:/*ion-inline-start:"C:\Users\bobby\Source\xmas-club\xmas-club\src\pages\scorecard\scorecard.html"*/'<ion-header>\n\n  <ion-navbar color="header">\n    <ion-title>Week {{week}} - {{scorecard?.nickname}}</ion-title>\n\n    <ion-buttons end>\n      <button ion-button icon-only (click)="editScorecard()" *ngIf="canEditScorecard()">\n        <ion-icon name="md-create"></ion-icon>\n      </button>\n      <button ion-button icon-only (click)="saveScorecard()" *ngIf="inEditMode">\n        <ion-icon name="md-checkmark"></ion-icon>\n      </button>\n    </ion-buttons>\n  </ion-navbar>\n\n</ion-header>\n\n<ion-content>\n\n  <ion-grid *ngIf="isScorecardViewable()" no-padding>\n    <ion-row *ngFor="let pick of (scorecard)?.picks">\n      <ion-col col-1>\n        <ion-toggle class="team1Toggle" [disabled]="!inEditMode" [(ngModel)]="pick.team1Selected" (ionChange)="updateSelectedPick(pick, \'Team1\')"></ion-toggle>\n      </ion-col>\n      <ion-col col-10 style="padding:0px 18px 0px 18px;line-height:2.7;font-size:9px;">\n        <ion-row style="text-align: center; padding-bottom: 16px">\n          <ion-col col-4><span [style.font-weight]="pick.homeTeam == pick.team1 ? \'bold\' : \'\'">{{pick.team1}}</span></ion-col>\n          <ion-col col-2><span>vs.</span></ion-col>\n          <ion-col col-4><span [style.font-weight]="pick.homeTeam == pick.team2 ? \'bold\' : \'\'">{{pick.team2}}</span></ion-col>\n          <ion-col col-2><span>{{pick.spread}}</span></ion-col>\n        </ion-row>\n      </ion-col>\n      <ion-col col-1>\n        <ion-toggle [disabled]="!inEditMode" [(ngModel)]="pick.team2Selected" (ionChange)="updateSelectedPick(pick, \'Team2\')" style="float:right"></ion-toggle>\n      </ion-col>\n    </ion-row>\n    <ion-row>\n      <ion-label style="text-align: right">Total Score:</ion-label>\n      <ion-input type="number" style="border: black 1px solid;" [(ngModel)]="tieBreakerScore" [disabled]="!inEditMode"></ion-input>\n    </ion-row>\n  </ion-grid>\n  <h4 *ngIf="!isScorecardViewable()">Viewing a scorecard is disabled until after noon on Saturday</h4>\n\n</ion-content>\n'/*ion-inline-end:"C:\Users\bobby\Source\xmas-club\xmas-club\src\pages\scorecard\scorecard.html"*/,
+        selector: 'page-scorecard',template:/*ion-inline-start:"C:\Users\bobby\Source\xmas-club\xmas-club\src\pages\scorecard\scorecard.html"*/'<ion-header>\n\n  <ion-navbar color="header">\n    <ion-title>Week {{week}} - {{scorecard?.nickname}}</ion-title>\n\n    <ion-buttons end>\n      <button ion-button icon-only (click)="editScorecard()" *ngIf="canEditScorecard()">\n        <ion-icon name="md-create"></ion-icon>\n      </button>\n      <button ion-button icon-only (click)="saveScorecard()" *ngIf="inEditMode">\n        <ion-icon name="md-checkmark"></ion-icon>\n      </button>\n    </ion-buttons>\n  </ion-navbar>\n\n</ion-header>\n\n<ion-content>\n\n  <ion-grid *ngIf="isScorecardViewable()" no-padding>\n    <ion-row *ngFor="let pick of (scorecard)?.picks">\n      <ion-col col-1>\n        <ion-toggle class="team1Toggle" [disabled]="!inEditMode" [(ngModel)]="pick.team1Selected" (ionChange)="updateSelectedPick(pick, \'Team1\')"></ion-toggle>\n      </ion-col>\n      <ion-col col-10 style="padding:0px 18px 0px 18px;line-height:2.7;font-size:9px;">\n        <ion-row style="text-align: center; padding-bottom: 16px">\n          <ion-col col-4><span [style.font-weight]="pick.homeTeam == pick.team1 ? \'bold\' : \'\'">{{pick.team1}}</span></ion-col>\n          <ion-col col-2><span>vs.</span></ion-col>\n          <ion-col col-4><span [style.font-weight]="pick.homeTeam == pick.team2 ? \'bold\' : \'\'">{{pick.team2}}</span></ion-col>\n          <ion-col col-2><span>{{pick.spread}}</span></ion-col>\n        </ion-row>\n      </ion-col>\n      <ion-col col-1>\n        <ion-toggle [disabled]="!inEditMode" [(ngModel)]="pick.team2Selected" (ionChange)="updateSelectedPick(pick, \'Team2\')" style="float:right"></ion-toggle>\n      </ion-col>\n    </ion-row>\n    <ion-row>\n      <ion-item>\n        <ion-label stacked>Total Score ({{tieBreakerGame?.team1}} vs. {{tieBreakerGame?.team2}}):</ion-label>\n        <ion-input type="number" style="border: black 1px solid;" [(ngModel)]="tieBreakerScore" [disabled]="!inEditMode"></ion-input>\n      </ion-item>\n    </ion-row>\n  </ion-grid>\n  <h4 *ngIf="!isScorecardViewable()">Viewing a scorecard is disabled until after noon on Saturday</h4>\n\n</ion-content>\n'/*ion-inline-end:"C:\Users\bobby\Source\xmas-club\xmas-club\src\pages\scorecard\scorecard.html"*/,
     }),
     __metadata("design:paramtypes", [ionic_angular_1.NavController,
         ionic_angular_1.NavParams,

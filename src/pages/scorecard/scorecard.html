@@ -35,8 +35,10 @@
       </ion-col>
     </ion-row>
     <ion-row>
-      <ion-label style="text-align: right">Total Score:</ion-label>
-      <ion-input type="number" style="border: black 1px solid;" [(ngModel)]="tieBreakerScore" [disabled]="!inEditMode"></ion-input>
+      <ion-item>
+        <ion-label stacked>Total Score ({{tieBreakerGame?.team1}} vs. {{tieBreakerGame?.team2}}):</ion-label>
+        <ion-input type="number" style="border: black 1px solid;" [(ngModel)]="tieBreakerScore" [disabled]="!inEditMode"></ion-input>
+      </ion-item>
     </ion-row>
   </ion-grid>
   <h4 *ngIf="!isScorecardViewable()">Viewing a scorecard is disabled until after noon on Saturday</h4>

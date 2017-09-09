@@ -164,6 +164,20 @@ export class WeekPage {
     this.scorecards = scorecards;
   }
 
+  private canViewTieBreakerScore() : boolean {
+
+    if (this.authProvider.isAdministrator) {
+      return true;
+    }
+
+    /* Only if it is before the due date. */
+    if (new Date() >= new Date(this.week.dueDate)) {
+      return true;
+    }
+
+    return false;
+  }
+
   showLoading() {
     this.loading = this.loadingCtrl.create({
       content: 'Please wait...',

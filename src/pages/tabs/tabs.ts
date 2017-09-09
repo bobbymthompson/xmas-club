@@ -10,7 +10,8 @@ export class TabsPage {
   tab1Root: any = 'WeekPage';
   tab2Root: any = 'WeeksPage';
   tab3Root: any = 'LeaderboardPage';
-  tab4Root: any = 'AdminPage';
+  tab4Root: any = 'ProfilePage';
+  tab5Root: any = 'AdminPage';
   mySelectedIndex: number;
 
   constructor(private navParams: NavParams, private authProvider: AuthProvider) {

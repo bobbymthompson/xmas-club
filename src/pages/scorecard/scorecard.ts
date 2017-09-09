@@ -22,6 +22,7 @@ export class ScorecardPage {
   dueDate: Date;
   week: number;
   tieBreakerScore: number;
+  tieBreakerGame: Pick;
 
   constructor(public navCtrl: NavController,
     public navParams: NavParams,
@@ -31,10 +32,8 @@ export class ScorecardPage {
     private elementRef: ElementRef) {
 
     this.week = this.navParams.get('week');
-    this._scorecard = this.scorecardsProvider.getScorecard(this.week, this.navParams.get('nickname'));
+    this.scorecardsProvider.getScorecard(this.week, this.navParams.get('nickname')).first().toPromise().then(async (scorecard) => {
     
-    this._scorecard.subscribe(async scorecard => {
-
       this.scorecard = scorecard;
     
       if (scorecard) {
@@ -42,11 +41,15 @@ export class ScorecardPage {
         this.tieBreakerScore = scorecard.tieBreakerScore;
         this.dueDate = new Date((await this.dataProvider.getWeek(this.week)).dueDate);
 
+        console.log(`Due Date: ${this.dueDate.toISOString()} - Current Date: ${new Date().toISOString()}`)
+
         for (let pick of scorecard.picks) {
 
           (<EditablePick>pick).team1Selected = (pick.selectedPick == 'Team1') ? true : false;
           (<EditablePick>pick).team2Selected = (pick.selectedPick == 'Team2') ? true : false;
         }
+
+        this.tieBreakerGame = _.last(scorecard.picks);
       }
     });
 

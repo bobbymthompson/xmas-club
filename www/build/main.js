@@ -79,8 +79,19 @@ let ScorecardsProvider = class ScorecardsProvider {
             let scorecards = yield this.http.get(`http://xmasclubscorer.azurewebsites.net/api/scorecards/${week}`).map((res) => res.json()).toPromise();
             let scorecardsFb = this.getScorecards(week);
             for (let scorecard of scorecards) {
-                scorecardsFb.push(scorecard);
-                this.insertWeeklyScore(scorecard);
+                /* Determine if the user already submitted a scorecard and this should replace the old one */
+                let found = yield this.getScorecard(week, scorecard.nickname).first().toPromise();
+                if (found) {
+                    /* Hack - set the key on the new scorecard so it is updated */
+                    scorecard.$key = found.$key;
+                    this.update(scorecard);
+                    /* Hack set an asterisk to denote this scorecard was updated. */
+                    scorecard.nickname = '***' + scorecard.nickname;
+                }
+                else {
+                    scorecardsFb.push(scorecard);
+                    this.insertWeeklyScore(scorecard);
+                }
             }
             return scorecards;
         });

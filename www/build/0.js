@@ -120,12 +120,11 @@ let LeaderboardPage = class LeaderboardPage {
                     score.sortedScores.splice(0, 0, this.getCurrentWeekScore(results, score.$key));
                 }
                 /* Calculate the total score. */
-                var builder = function (acc, n) {
+                score.total = _.reduce(score.sortedScores, function (acc, n) {
                     var lastNum = acc.length > 0 ? acc[acc.length - 1] : 0;
                     acc.push(lastNum + n);
                     return acc;
-                };
-                score.total = _.reduce(score.sortedScores, builder, []);
+                }, []);
                 //score.total = _.reduce(score.sortedScores, (memo, num) => memo + num, 0);
             });
             this.scores = scores;

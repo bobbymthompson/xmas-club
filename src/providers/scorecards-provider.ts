@@ -74,19 +74,24 @@ export class ScorecardsProvider {
     let scorecardsFb = this.getScorecards(week);
     for (let scorecard of scorecards) {
 
+      console.log(`Looking for scorecard for week ${week} and user: ${scorecard.nickname}`);
+
       /* Determine if the user already submitted a scorecard and this should replace the old one */
       let found = await this.getScorecard(week, scorecard.nickname).first().toPromise();
       if (found) {
 
+        console.log('Found existing scorecard - updating');
+        
         /* Hack - set the key on the new scorecard so it is updated */
         (scorecard as any).$key = (found as any).$key;
         this.update(scorecard);
 
         /* Hack set an asterisk to denote this scorecard was updated. */
         scorecard.nickname = '***' + scorecard.nickname;
-        
+
       } else {
 
+        console.log('No scorecard found - inserting new.');
         scorecardsFb.push(scorecard);
 
         this.insertWeeklyScore(scorecard);

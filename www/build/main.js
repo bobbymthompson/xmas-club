@@ -79,9 +79,11 @@ let ScorecardsProvider = class ScorecardsProvider {
             let scorecards = yield this.http.get(`http://xmasclubscorer.azurewebsites.net/api/scorecards/${week}`).map((res) => res.json()).toPromise();
             let scorecardsFb = this.getScorecards(week);
             for (let scorecard of scorecards) {
+                console.log(`Looking for scorecard for week ${week} and user: ${scorecard.nickname}`);
                 /* Determine if the user already submitted a scorecard and this should replace the old one */
                 let found = yield this.getScorecard(week, scorecard.nickname).first().toPromise();
                 if (found) {
+                    console.log('Found existing scorecard - updating');
                     /* Hack - set the key on the new scorecard so it is updated */
                     scorecard.$key = found.$key;
                     this.update(scorecard);
@@ -89,6 +91,7 @@ let ScorecardsProvider = class ScorecardsProvider {
                     scorecard.nickname = '***' + scorecard.nickname;
                 }
                 else {
+                    console.log('No scorecard found - inserting new.');
                     scorecardsFb.push(scorecard);
                     this.insertWeeklyScore(scorecard);
                 }

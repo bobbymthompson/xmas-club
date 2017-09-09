@@ -1,6 +1,6 @@
 webpackJsonp([4],{
 
-/***/ 768:
+/***/ 770:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -14,28 +14,28 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 Object.defineProperty(exports, "__esModule", { value: true });
 const core_1 = __webpack_require__(0);
 const ionic_angular_1 = __webpack_require__(52);
-const admin_1 = __webpack_require__(773);
-let AdminPageModule = class AdminPageModule {
+const list_1 = __webpack_require__(777);
+let ListPageModule = class ListPageModule {
 };
-AdminPageModule = __decorate([
+ListPageModule = __decorate([
     core_1.NgModule({
         declarations: [
-            admin_1.AdminPage,
+            list_1.ListPage,
         ],
         imports: [
-            ionic_angular_1.IonicPageModule.forChild(admin_1.AdminPage),
+            ionic_angular_1.IonicPageModule.forChild(list_1.ListPage),
         ],
         exports: [
-            admin_1.AdminPage
+            list_1.ListPage
         ]
     })
-], AdminPageModule);
-exports.AdminPageModule = AdminPageModule;
-//# sourceMappingURL=admin.module.js.map
+], ListPageModule);
+exports.ListPageModule = ListPageModule;
+//# sourceMappingURL=list.module.js.map
 
 /***/ }),
 
-/***/ 773:
+/***/ 777:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -49,55 +49,26 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-const xmas_club_provider_1 = __webpack_require__(451);
-const scorecards_provider_1 = __webpack_require__(146);
 const core_1 = __webpack_require__(0);
 const ionic_angular_1 = __webpack_require__(52);
-let AdminPage = class AdminPage {
-    constructor(navCtrl, scorecardsProvider, dataProvider) {
+let ListPage = class ListPage {
+    constructor(navCtrl, navParams) {
         this.navCtrl = navCtrl;
-        this.scorecardsProvider = scorecardsProvider;
-        this.dataProvider = dataProvider;
-    }
-    loadScorecardsFromEmail() {
-        return __awaiter(this, void 0, void 0, function* () {
-            let currentWeek = yield this.dataProvider.currentWeek();
-            this.scorecards = yield this.scorecardsProvider.loadScorecardsFromEmail(currentWeek.week);
-        });
-    }
-    populateScoresFromScorecards() {
-        return __awaiter(this, void 0, void 0, function* () {
-            let currentWeek = yield this.dataProvider.currentWeek();
-            let scorecards = yield this.dataProvider.getScorecardResults(currentWeek.week);
-            scorecards.forEach(scorecard => {
-                this.scorecardsProvider.insertWeeklyScore(scorecard);
-            });
-        });
-    }
-    addNewWeek() {
-        return __awaiter(this, void 0, void 0, function* () {
-            this.dataProvider.addWeek();
-        });
+        this.navParams = navParams;
+        this.list = this.navParams.get('list');
+        this.title = this.navParams.get('title');
     }
 };
-AdminPage = __decorate([
+ListPage = __decorate([
     ionic_angular_1.IonicPage(),
     core_1.Component({
-        selector: 'page-admin',template:/*ion-inline-start:"C:\Users\bobby\Source\xmas-club\xmas-club\src\pages\admin\admin.html"*/'<ion-header>\n\n  <ion-navbar color="header">\n    <ion-title>Administration</ion-title>\n  </ion-navbar>\n\n</ion-header>\n\n<ion-content padding>\n  \n  <button ion-button outline (click)="addNewWeek()">Add new week</button>  \n\n  <button ion-button outline (click)="populateScoresFromScorecards()">Populate scores</button>  \n\n  <button ion-button outline (click)="loadScorecardsFromEmail()">Load from email</button>  \n  \n  <h1 *ngIf="scorecards">Loaded scorecards for:</h1>\n  <ion-list *ngIf="scorecards">\n    <ion-item *ngFor="let scorecard of scorecards">\n      <h3>{{scorecard.nickname}}</h3>\n    </ion-item>\n  </ion-list>\n\n</ion-content>\n'/*ion-inline-end:"C:\Users\bobby\Source\xmas-club\xmas-club\src\pages\admin\admin.html"*/,
+        selector: 'page-list',template:/*ion-inline-start:"C:\Users\bobby\Source\xmas-club\xmas-club\src\pages\list\list.html"*/'<ion-header>\n\n  <ion-navbar>\n    <ion-title>{{title}}</ion-title>\n  </ion-navbar>\n\n</ion-header>\n\n\n<ion-content>\n\n  <ion-list>\n    <ion-item no-lines class="bottom-border" *ngFor="let item of list">\n      <h2>{{item}}</h2>\n    </ion-item>\n  </ion-list>\n\n</ion-content>\n'/*ion-inline-end:"C:\Users\bobby\Source\xmas-club\xmas-club\src\pages\list\list.html"*/,
     }),
-    __metadata("design:paramtypes", [ionic_angular_1.NavController, scorecards_provider_1.ScorecardsProvider, xmas_club_provider_1.XmasClubDataProvider])
-], AdminPage);
-exports.AdminPage = AdminPage;
-//# sourceMappingURL=admin.js.map
+    __metadata("design:paramtypes", [ionic_angular_1.NavController, ionic_angular_1.NavParams])
+], ListPage);
+exports.ListPage = ListPage;
+//# sourceMappingURL=list.js.map
 
 /***/ })
 

@@ -6,19 +6,14 @@
 
 </ion-header>
 
-<ion-content padding>
+<ion-content>
   
-  <button ion-button outline (click)="addNewWeek()">Add new week</button>  
+  <button ion-button full outline (click)="addNewWeek()">Add new week</button>  
 
-  <button ion-button outline (click)="populateScoresFromScorecards()">Populate scores</button>  
+  <button ion-button full outline (click)="populateScoresFromScorecards()">Populate scores</button>  
 
-  <button ion-button outline (click)="loadScorecardsFromEmail()">Load from email</button>  
+  <button ion-button full outline (click)="loadScorecardsFromEmail()">Load from email</button>  
   
-  <h1 *ngIf="scorecards">Loaded scorecards for:</h1>
-  <ion-list *ngIf="scorecards">
-    <ion-item *ngFor="let scorecard of scorecards">
-      <h3>{{scorecard.nickname}}</h3>
-    </ion-item>
-  </ion-list>
+  <button ion-button full outline (click)="showUnsubmittedPicks()">View unsubmitted pics for week {{currentWeek?.week}}</button>
 
 </ion-content>

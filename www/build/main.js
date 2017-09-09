@@ -1,4 +1,4 @@
-webpackJsonp([5],{
+webpackJsonp([6],{
 
 /***/ 146:
 /***/ (function(module, exports, __webpack_require__) {
@@ -133,22 +133,26 @@ webpackEmptyAsyncContext.id = 156;
 var map = {
 	"../pages/admin/admin.module": [
 		768,
-		4
+		5
 	],
 	"../pages/leaderboard/leaderboard.module": [
 		769,
 		0
 	],
-	"../pages/scorecard/scorecard.module": [
+	"../pages/list/list.module": [
 		770,
+		4
+	],
+	"../pages/scorecard/scorecard.module": [
+		771,
 		3
 	],
 	"../pages/week/week.module": [
-		771,
+		772,
 		2
 	],
 	"../pages/weeks/weeks.module": [
-		772,
+		773,
 		1
 	]
 };
@@ -469,6 +473,19 @@ let XmasClubDataProvider = class XmasClubDataProvider {
             return orderedScorecards;
         });
     }
+    getUnsubmittedUsersForWeek(week) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let scores = yield this.scores.first().toPromise();
+            let unsubmittedScorecards = [];
+            for (let score of scores) {
+                let scorecard = yield this.scorecardsProvider.getScorecard(week, score.$key).first().toPromise();
+                if (!scorecard) {
+                    unsubmittedScorecards.push(score.$key);
+                }
+            }
+            return unsubmittedScorecards;
+        });
+    }
 };
 XmasClubDataProvider = __decorate([
     core_1.Injectable(),
@@ -574,7 +591,7 @@ let LoginPage = class LoginPage {
 };
 LoginPage = __decorate([
     core_1.Component({
-        selector: 'page-login',template:/*ion-inline-start:"C:\Users\bobby\Source\xmas-club\xmas-club\src\pages\login\login.html"*/'<ion-header>\n\n  <ion-navbar color="header">\n    <ion-title>Login</ion-title>\n  </ion-navbar>\n\n</ion-header>\n\n<ion-content class="login-content">\n  <ion-row class="logo-row">\n    <ion-col>\n      <img src="../../assets/img/logo-sm.png" style="height:175px" />\n    </ion-col>\n  </ion-row>\n  <div class="login-box">\n    <form (ngSubmit)="login()" #registerForm="ngForm">\n      <ion-row>\n        <ion-col>\n          <ion-list>\n\n            <ion-item>\n              <ion-input type="text" placeholder="Email" name="email" [(ngModel)]="credentials.email" required></ion-input>\n            </ion-item>\n\n            <ion-item>\n              <ion-input type="password" placeholder="Password" name="password" [(ngModel)]="credentials.password" required></ion-input>\n            </ion-item>\n\n          </ion-list>\n        </ion-col>\n      </ion-row>\n\n      <ion-row>\n        <ion-col class="signup-col">\n          <button ion-button class="submit-btn" full type="submit" [disabled]="!registerForm.form.valid">Login</button>\n          <!-- <button ion-button class="forgot-password-btn" block clear (click)="forgotPassword()">Forgot Password</button>\n          <button ion-button class="register-btn" block clear (click)="createAccount()">Create New Account</button> -->\n        </ion-col>\n      </ion-row>\n\n    </form>\n\n    <ion-row>\n        <ion-col class="signup-col">\n          <button ion-button class="forgot-password-btn" block clear (click)="forgotPassword()">Forgot Password</button>\n          <button ion-button class="register-btn" block clear (click)="createAccount()">Create New Account</button>\n        </ion-col>\n      </ion-row>\n\n  </div>\n</ion-content>\n'/*ion-inline-end:"C:\Users\bobby\Source\xmas-club\xmas-club\src\pages\login\login.html"*/
+        selector: 'page-login',template:/*ion-inline-start:"C:\Users\bobby\Source\xmas-club\xmas-club\src\pages\login\login.html"*/'<ion-header>\n\n  <ion-navbar color="header">\n    <ion-title>Login</ion-title>\n  </ion-navbar>\n\n</ion-header>\n\n<ion-content class="login-content">\n  <ion-row class="logo-row">\n    <ion-col>\n      <img src="../../assets/img/logo-sm.png" style="height:175px" />\n    </ion-col>\n  </ion-row>\n  <div class="login-box">\n    <form (ngSubmit)="login()" #registerForm="ngForm">\n      <ion-row>\n        <ion-col>\n          <ion-list>\n\n            <ion-item>\n              <ion-input type="text" placeholder="Email" name="email" [(ngModel)]="credentials.email" required></ion-input>\n            </ion-item>\n\n            <ion-item>\n              <ion-input type="password" placeholder="Password" name="password" [(ngModel)]="credentials.password" required></ion-input>\n            </ion-item>\n\n          </ion-list>\n        </ion-col>\n      </ion-row>\n\n      <ion-row>\n        <ion-col class="signup-col">\n          <button ion-button class="submit-btn" full type="submit" [disabled]="!registerForm.form.valid">Login</button>\n        </ion-col>\n      </ion-row>\n\n    </form>\n\n    <ion-row>\n        <ion-col class="signup-col">\n          <button ion-button class="forgot-password-btn" block clear (click)="forgotPassword()">Forgot Password</button>\n          <button ion-button class="register-btn" block clear (click)="createAccount()">Create New Account</button>\n        </ion-col>\n      </ion-row>\n\n  </div>\n</ion-content>\n'/*ion-inline-end:"C:\Users\bobby\Source\xmas-club\xmas-club\src\pages\login\login.html"*/
     }),
     __metadata("design:paramtypes", [ionic_angular_1.NavController,
         auth_provider_1.AuthProvider,
@@ -726,6 +743,7 @@ XmasClubModule = __decorate([
                 links: [
                     { loadChildren: '../pages/admin/admin.module#AdminPageModule', name: 'AdminPage', segment: 'admin', priority: 'low', defaultHistory: [] },
                     { loadChildren: '../pages/leaderboard/leaderboard.module#LeaderboardModule', name: 'LeaderboardPage', segment: 'leaderboard', priority: 'low', defaultHistory: [] },
+                    { loadChildren: '../pages/list/list.module#ListPageModule', name: 'ListPage', segment: 'list', priority: 'low', defaultHistory: [] },
                     { loadChildren: '../pages/scorecard/scorecard.module#ScorecardPageModule', name: 'ScorecardPage', segment: 'scorecard', priority: 'low', defaultHistory: [] },
                     { loadChildren: '../pages/week/week.module#WeekModule', name: 'WeekPage', segment: 'week/:week', priority: 'low', defaultHistory: [] },
                     { loadChildren: '../pages/weeks/weeks.module#WeeksModule', name: 'WeeksPage', segment: 'weeks', priority: 'low', defaultHistory: [] }

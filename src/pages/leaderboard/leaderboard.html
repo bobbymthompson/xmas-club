@@ -11,19 +11,18 @@
 
   <h1>Scores through week {{currentWeek?.week}}</h1>
 
-  <ion-scroll class="leaderboard-scroll" scrollX="true" style="height:100%">
-    <ion-grid>
-      <ion-row nowrap style="text-align:center">
-        <ion-col col-6></ion-col>
-        <ion-col style="min-width:50px">Total</ion-col>
-        <ion-col *ngFor="let week of weeks" style="min-width:28px"><span>{{week.week}}</span></ion-col>
-      </ion-row>
-      <ion-row *ngFor="let score of scores | sortdesc; let i = index; odd as isOdd; even as isEven" nowrap style="text-align:center;" [class.altRowColor]="isOdd">
-        <ion-col col-6 style="text-align:left">{{i + 1}}) {{score.$key}}</ion-col>
-        <ion-col style="min-width:50px">{{score.total}}</ion-col>
-        <ion-col *ngFor="let ws of score.sortedScores" style="min-width:28px"><span>{{ws}}</span></ion-col>
-      </ion-row>
-    </ion-grid>
-  </ion-scroll>
+  <!-- <ion-scroll class="leaderboard-scroll" scrollX="true" style="height:100%"> -->
+    <ion-row nowrap style="text-align:center">
+      <ion-col col-6></ion-col>
+      <ion-col style="min-width:50px">Total</ion-col>
+      <ion-col *ngFor="let week of weeks" style="min-width:28px"><span>{{week.week}}</span></ion-col>
+    </ion-row>
+    <ion-row *ngFor="let score of scores | sortdesc; let i = index; odd as isOdd; even as isEven" nowrap style="text-align:center;"
+      [class.altRowColor]="isOdd">
+      <ion-col col-6 style="text-align:left">{{i + 1}}) {{score.$key}}</ion-col>
+      <ion-col style="min-width:50px">{{score.total}}</ion-col>
+      <ion-col *ngFor="let ws of score.sortedScores" style="min-width:28px"><span>{{ws}}</span></ion-col>
+    </ion-row>
+  <!-- </ion-scroll> -->
 
 </ion-content>

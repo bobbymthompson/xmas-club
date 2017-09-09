@@ -1,6 +1,6 @@
 webpackJsonp([3],{
 
-/***/ 770:
+/***/ 771:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -14,7 +14,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 Object.defineProperty(exports, "__esModule", { value: true });
 const core_1 = __webpack_require__(0);
 const ionic_angular_1 = __webpack_require__(52);
-const scorecard_1 = __webpack_require__(776);
+const scorecard_1 = __webpack_require__(778);
 let ScorecardPageModule = class ScorecardPageModule {
 };
 ScorecardPageModule = __decorate([
@@ -35,7 +35,7 @@ exports.ScorecardPageModule = ScorecardPageModule;
 
 /***/ }),
 
-/***/ 776:
+/***/ 778:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";

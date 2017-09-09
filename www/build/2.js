@@ -1,6 +1,6 @@
 webpackJsonp([2],{
 
-/***/ 771:
+/***/ 772:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -14,7 +14,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 Object.defineProperty(exports, "__esModule", { value: true });
 const core_1 = __webpack_require__(0);
 const ionic_angular_1 = __webpack_require__(52);
-const week_1 = __webpack_require__(777);
+const week_1 = __webpack_require__(779);
 let WeekModule = class WeekModule {
 };
 WeekModule = __decorate([
@@ -35,7 +35,7 @@ exports.WeekModule = WeekModule;
 
 /***/ }),
 
-/***/ 777:
+/***/ 779:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -181,7 +181,7 @@ WeekPage = __decorate([
         segment: 'week/:week'
     }),
     core_1.Component({
-        selector: 'page-week',template:/*ion-inline-start:"C:\Users\bobby\Source\xmas-club\xmas-club\src\pages\week\week.html"*/'<ion-header>\n\n  <ion-navbar color="header">\n    <ion-title>Week {{week?.week}}</ion-title>\n\n    <ion-buttons end>\n      <button ion-button icon-only (click)="createScorecard()" *ngIf="canCreateScorecard()">\n        <ion-icon name="md-create"></ion-icon>\n      </button>\n      <button ion-button icon-only (click)="login()" *ngIf="!authProvider.isAuthenticated">\n        <ion-icon name="person"></ion-icon>\n      </button>\n    </ion-buttons>\n\n  </ion-navbar>\n\n</ion-header>\n\n<ion-content>\n\n  <ion-card *ngIf="favorites.length > 0">\n    <ion-card-header>\n      <ion-item>\n        Favorites\n        <!-- <button ion-button icon-only item-right clear (click)="viewFavoriteScorecards()">\n          <ion-icon name="grid"></ion-icon>\n        </button> -->\n      </ion-item>\n    </ion-card-header>\n\n    <ion-list>\n      <ion-item *ngFor="let scorecard of favorites" (click)="viewScorecard(scorecard)" detail-push>\n        <ion-grid>\n          <ion-row style="text-align:center">\n            <ion-col col-6 style="text-align:left">{{scorecard.rank}}) {{scorecard.nickname}} ({{scorecard.tieBreakerScore}})</ion-col>\n            <ion-col style="min-width:50px">{{scorecard.score}} of {{week.totalNumberOfPicks}}</ion-col>\n          </ion-row>\n        </ion-grid>\n      </ion-item>\n    </ion-list>\n  </ion-card>\n\n  <ion-card>\n   <ion-card-header>\n      <ion-item>\n        Leaderboard\n        <!-- <button ion-button icon-only item-right clear (click)="viewAllScorecards()">\n          <ion-icon name="grid"></ion-icon>\n        </button> -->\n      </ion-item>\n    </ion-card-header>\n\n    <ion-list>\n      <ion-item *ngFor="let scorecard of scorecards" (click)="viewScorecard(scorecard)" detail-push>\n        <ion-grid>\n          <ion-row style="text-align:center">\n            <ion-col col-6 style="text-align:left">{{scorecard.rank}}) {{scorecard.nickname}} ({{scorecard.tieBreakerScore}})</ion-col>\n            <ion-col style="min-width:50px">{{scorecard.score}} of 24</ion-col>\n          </ion-row>\n        </ion-grid>\n      </ion-item>\n    </ion-list>\n\n  </ion-card>\n\n</ion-content>\n'/*ion-inline-end:"C:\Users\bobby\Source\xmas-club\xmas-club\src\pages\week\week.html"*/,
+        selector: 'page-week',template:/*ion-inline-start:"C:\Users\bobby\Source\xmas-club\xmas-club\src\pages\week\week.html"*/'<ion-header>\n\n  <ion-navbar color="header">\n    <ion-title>Week {{week?.week}}</ion-title>\n\n    <ion-buttons end>\n      <button ion-button icon-only (click)="createScorecard()" *ngIf="canCreateScorecard()">\n        <ion-icon name="md-create"></ion-icon>\n      </button>\n      <button ion-button icon-only (click)="login()" *ngIf="!authProvider.isAuthenticated">\n        <ion-icon name="person"></ion-icon>\n      </button>\n    </ion-buttons>\n\n  </ion-navbar>\n\n</ion-header>\n\n<ion-content>\n\n  <ion-card *ngIf="favorites.length > 0">\n    <ion-card-header>\n      <ion-item>\n        Favorites\n        <!-- <button ion-button icon-only item-right clear (click)="viewFavoriteScorecards()">\n          <ion-icon name="grid"></ion-icon>\n        </button> -->\n      </ion-item>\n    </ion-card-header>\n\n    <ion-list>\n      <ion-item *ngFor="let scorecard of favorites" (click)="viewScorecard(scorecard)" detail-push>\n        <ion-grid>\n          <ion-row style="text-align:center">\n            <ion-col col-6 style="text-align:left">{{scorecard.rank}}) {{scorecard.nickname}} ({{scorecard.tieBreakerScore}})</ion-col>\n            <ion-col style="min-width:50px">{{scorecard.score}} of {{week.totalNumberOfPicks}}</ion-col>\n          </ion-row>\n        </ion-grid>\n      </ion-item>\n    </ion-list>\n  </ion-card>\n\n  <ion-card>\n   <ion-card-header>\n      <ion-item>\n        Leaderboard\n        <!-- <button ion-button icon-only item-right clear (click)="viewAllScorecards()">\n          <ion-icon name="grid"></ion-icon>\n        </button> -->\n      </ion-item>\n    </ion-card-header>\n\n    <ion-list>\n      <ion-item *ngFor="let scorecard of scorecards" (click)="viewScorecard(scorecard)" detail-push>\n        <ion-grid>\n          <ion-row style="text-align:center">\n            <ion-col col-6 style="text-align:left">{{scorecard.rank}}) {{scorecard.nickname}} ({{scorecard.tieBreakerScore}})</ion-col>\n            <ion-col style="text-align:right;min-width:50px">{{scorecard.score}} of 24</ion-col>\n          </ion-row>\n        </ion-grid>\n      </ion-item>\n    </ion-list>\n\n  </ion-card>\n\n</ion-content>\n'/*ion-inline-end:"C:\Users\bobby\Source\xmas-club\xmas-club\src\pages\week\week.html"*/,
     }),
     __metadata("design:paramtypes", [ionic_angular_1.NavController,
         ionic_angular_1.NavParams,

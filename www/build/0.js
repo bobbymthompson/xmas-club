@@ -12,11 +12,11 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const sort_array_desc_1 = __webpack_require__(774);
+const sort_array_desc_1 = __webpack_require__(775);
 const reverse_array_1 = __webpack_require__(453);
 const core_1 = __webpack_require__(0);
 const ionic_angular_1 = __webpack_require__(52);
-const leaderboard_1 = __webpack_require__(775);
+const leaderboard_1 = __webpack_require__(776);
 let LeaderboardModule = class LeaderboardModule {
 };
 LeaderboardModule = __decorate([
@@ -39,7 +39,7 @@ exports.LeaderboardModule = LeaderboardModule;
 
 /***/ }),
 
-/***/ 774:
+/***/ 775:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -72,7 +72,7 @@ exports.SortArrayDescPipe = SortArrayDescPipe;
 
 /***/ }),
 
-/***/ 775:
+/***/ 776:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -100,28 +100,36 @@ const ionic_angular_1 = __webpack_require__(52);
 const _ = __webpack_require__(147);
 const xmas_club_provider_1 = __webpack_require__(451);
 let LeaderboardPage = class LeaderboardPage {
-    constructor(navCtrl, navParams, dataProvider) {
+    constructor(navCtrl, navParams, dataProvider, loadingCtrl) {
         this.navCtrl = navCtrl;
         this.navParams = navParams;
         this.dataProvider = dataProvider;
+        this.loadingCtrl = loadingCtrl;
     }
-    ionViewDidLoad() {
+    ionViewDidEnter() {
         return __awaiter(this, void 0, void 0, function* () {
+            this.showLoading();
             this.weeks = yield this.dataProvider.getWeeks();
             this.currentWeek = yield this.dataProvider.currentWeek();
             let results = yield this.dataProvider.getScorecardResults(this.currentWeek.week);
-            this.dataProvider.scores.subscribe(scores => {
-                scores.forEach((score, index) => {
-                    score.sortedScores = _.values(score.weeklyScores).map(ws => ws.score);
-                    /* If scores for this week haven't been pushed in, use the current weeks scores */
-                    if (score.sortedScores.length != this.currentWeek.week) {
-                        score.sortedScores.splice(0, 0, this.getCurrentWeekScore(results, score.$key));
-                    }
-                    /* Calculate the total score. */
-                    score.total = _.reduce(score.sortedScores, (memo, num) => memo + num, 0);
-                });
-                this.scores = scores;
+            let scores = yield this.dataProvider.scores.first().toPromise();
+            scores.forEach((score, index) => {
+                score.sortedScores = _.values(score.weeklyScores).map(ws => ws.score);
+                /* If scores for this week haven't been pushed in, use the current weeks scores */
+                if (score.sortedScores.length != this.currentWeek.week) {
+                    score.sortedScores.splice(0, 0, this.getCurrentWeekScore(results, score.$key));
+                }
+                /* Calculate the total score. */
+                var builder = function (acc, n) {
+                    var lastNum = acc.length > 0 ? acc[acc.length - 1] : 0;
+                    acc.push(lastNum + n);
+                    return acc;
+                };
+                score.total = _.reduce(score.sortedScores, builder, []);
+                //score.total = _.reduce(score.sortedScores, (memo, num) => memo + num, 0);
             });
+            this.scores = scores;
+            this.loading.dismiss();
         });
     }
     getCurrentWeekScore(scorecards, nickname) {
@@ -131,15 +139,23 @@ let LeaderboardPage = class LeaderboardPage {
         }
         return 0;
     }
+    showLoading() {
+        this.loading = this.loadingCtrl.create({
+            content: 'Please wait...',
+            dismissOnPageChange: true
+        });
+        this.loading.present();
+    }
 };
 LeaderboardPage = __decorate([
     ionic_angular_1.IonicPage(),
     core_1.Component({
-        selector: 'page-leaderboard',template:/*ion-inline-start:"C:\Users\bobby\Source\xmas-club\xmas-club\src\pages\leaderboard\leaderboard.html"*/'<ion-header>\n\n  <ion-navbar color="header">\n    <ion-title>Leaderboard</ion-title>\n  </ion-navbar>\n\n</ion-header>\n\n\n<ion-content padding>\n\n  <h1>Scores through week {{currentWeek?.week}}</h1>\n\n  <ion-scroll class="leaderboard-scroll" scrollX="true" style="height:100%">\n    <ion-grid>\n      <ion-row nowrap style="text-align:center">\n        <ion-col col-6></ion-col>\n        <ion-col style="min-width:50px">Total</ion-col>\n        <ion-col *ngFor="let week of weeks" style="min-width:28px"><span>{{week.week}}</span></ion-col>\n      </ion-row>\n      <ion-row *ngFor="let score of scores | sortdesc; let i = index; odd as isOdd; even as isEven" nowrap style="text-align:center;" [class.altRowColor]="isOdd">\n        <ion-col col-6 style="text-align:left">{{i + 1}}) {{score.$key}}</ion-col>\n        <ion-col style="min-width:50px">{{score.total}}</ion-col>\n        <ion-col *ngFor="let ws of score.sortedScores" style="min-width:28px"><span>{{ws}}</span></ion-col>\n      </ion-row>\n    </ion-grid>\n  </ion-scroll>\n\n</ion-content>\n'/*ion-inline-end:"C:\Users\bobby\Source\xmas-club\xmas-club\src\pages\leaderboard\leaderboard.html"*/
+        selector: 'page-leaderboard',template:/*ion-inline-start:"C:\Users\bobby\Source\xmas-club\xmas-club\src\pages\leaderboard\leaderboard.html"*/'<ion-header>\n\n  <ion-navbar color="header">\n    <ion-title>Leaderboard</ion-title>\n  </ion-navbar>\n\n</ion-header>\n\n\n<ion-content padding>\n\n  <h1>Scores through week {{currentWeek?.week}}</h1>\n\n  <!-- <ion-scroll class="leaderboard-scroll" scrollX="true" style="height:100%"> -->\n    <ion-row nowrap style="text-align:center">\n      <ion-col col-6></ion-col>\n      <ion-col style="min-width:50px">Total</ion-col>\n      <ion-col *ngFor="let week of weeks" style="min-width:28px"><span>{{week.week}}</span></ion-col>\n    </ion-row>\n    <ion-row *ngFor="let score of scores | sortdesc; let i = index; odd as isOdd; even as isEven" nowrap style="text-align:center;"\n      [class.altRowColor]="isOdd">\n      <ion-col col-6 style="text-align:left">{{i + 1}}) {{score.$key}}</ion-col>\n      <ion-col style="min-width:50px">{{score.total}}</ion-col>\n      <ion-col *ngFor="let ws of score.sortedScores" style="min-width:28px"><span>{{ws}}</span></ion-col>\n    </ion-row>\n  <!-- </ion-scroll> -->\n\n</ion-content>\n'/*ion-inline-end:"C:\Users\bobby\Source\xmas-club\xmas-club\src\pages\leaderboard\leaderboard.html"*/
     }),
     __metadata("design:paramtypes", [ionic_angular_1.NavController,
         ionic_angular_1.NavParams,
-        xmas_club_provider_1.XmasClubDataProvider])
+        xmas_club_provider_1.XmasClubDataProvider,
+        ionic_angular_1.LoadingController])
 ], LeaderboardPage);
 exports.LeaderboardPage = LeaderboardPage;
 //# sourceMappingURL=leaderboard.js.map

@@ -203,4 +203,20 @@ export class XmasClubDataProvider {
 
     return orderedScorecards;
   }
+
+  public async getUnsubmittedUsersForWeek(week: number) : Promise<string[]> {
+
+    let scores: Score[] = await this.scores.first().toPromise();
+
+    let unsubmittedScorecards: string[] = [];
+    for (let score of scores) {
+
+      let scorecard = await this.scorecardsProvider.getScorecard(week, score.$key).first().toPromise();
+      if (!scorecard) {
+        unsubmittedScorecards.push(score.$key);
+      }
+    }
+    
+    return unsubmittedScorecards;
+  }
 }

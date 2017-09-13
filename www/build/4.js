@@ -77,7 +77,7 @@ let ProfilePage = class ProfilePage {
     }
     logout() {
         this.authProvider.logoutUser();
-        this.navCtrl.parent.select(1);
+        this.navCtrl.parent.select(0);
     }
 };
 ProfilePage = __decorate([

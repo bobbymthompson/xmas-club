@@ -36,8 +36,13 @@ export class LeaderboardPage {
 
     let scores = await this.dataProvider.scores.first().toPromise();
 
-    scores.forEach((score, index) => {
-      score.sortedScores = _.values(score.weeklyScores).map(ws => ws.score);
+
+    scores.forEach((score: Score, index) => {
+      score.sortedScores = [];
+
+      _.values(score.weeklyScores).forEach((ws) => {
+        score.sortedScores.splice(0, 0, ws.score);
+      });
 
       /* If scores for this week haven't been pushed in, use the current weeks scores */
       if (score.sortedScores.length != this.currentWeek.week) {
@@ -46,13 +51,24 @@ export class LeaderboardPage {
       }
 
       /* Calculate the total score. */
-      score.total = _.reduce(score.sortedScores, function (acc, n) {
-        var lastNum = acc.length > 0 ? acc[acc.length - 1] : 0;
-        acc.push(lastNum + n);
-        return acc;
-      }, []);
+      let total: number = 0;
+      score.sortedScores.forEach((value) => {
+        total += value;
+      });
+      
+      score.total = total;
+    });
+    
+    this.scores = scores.sort((a, b) => {
+      return b.total - a.total;
+    });
 
-      //score.total = _.reduce(score.sortedScores, (memo, num) => memo + num, 0);
+    this.scores = this.scores.sort((a, b) => {
+      if (b.$key == "SUPER TD") {
+        return -1;
+      }
+
+      return 0;
     });
 
     this.scores = scores;

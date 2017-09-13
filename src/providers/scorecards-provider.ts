@@ -113,6 +113,11 @@ export class ScorecardsProvider {
         week: scorecard.week,
         score: 0
       });
+    } else {
+
+      this.firebase.list(`/scores/${scorecard.nickname}/weeklyScores`).update(foundScore.$key, {
+        score: scorecard.score
+      });
     }
   }
 }

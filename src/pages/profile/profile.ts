@@ -34,6 +34,6 @@ export class ProfilePage {
 
   private logout() {
     this.authProvider.logoutUser();
-    this.navCtrl.parent.select(1);
+    this.navCtrl.parent.select(0);
   }
 }

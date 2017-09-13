@@ -6,4 +6,5 @@ export interface Week {
   dueDate: Date;
   scorecards: Array<Scorecard>;
   totalNumberOfPicks: number;
+  winner: string;
 }

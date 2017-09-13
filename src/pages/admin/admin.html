@@ -13,7 +13,13 @@
   <button ion-button full outline (click)="populateScoresFromScorecards()">Populate scores</button>  
 
   <button ion-button full outline (click)="loadScorecardsFromEmail()">Load from email</button>  
+
+  <button ion-button full outline (click)="upperCaseNicknames()">TEMP - Uppercase nicknames</button>  
   
   <button ion-button full outline (click)="showUnsubmittedPicks()">View unsubmitted pics for week {{currentWeek?.week}}</button>
+
+  <button ion-button full outline (click)="outputWeeklyScores()">Output weekly scores`</button> 
+
+  <textarea>{{weeklyScores}}</textarea>
 
 </ion-content>

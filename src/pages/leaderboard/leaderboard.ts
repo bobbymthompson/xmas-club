@@ -63,15 +63,7 @@ export class LeaderboardPage {
       return b.total - a.total;
     });
 
-    this.scores = this.scores.sort((a, b) => {
-      if (b.$key == "SUPER TD") {
-        return -1;
-      }
-
-      return 0;
-    });
-
-    this.scores = scores;
+    
 
     this.loading.dismiss();
   }

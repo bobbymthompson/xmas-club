@@ -35,6 +35,15 @@ export class XmasClubDataProvider {
     return this.weeks;
   }
 
+  public async priorWeek(): Promise<Week> {
+
+    let currentWeek = await this.currentWeek();
+    if (currentWeek.week == 1) {
+      return currentWeek;
+    }
+
+    return await this.getWeek(currentWeek.week - 1);
+  }
   /** Returns the current week. */
   public async currentWeek(): Promise<Week> {
 
@@ -72,6 +81,23 @@ export class XmasClubDataProvider {
     });
   }
 
+  public getScoresForUser(nickname: string) {
+    return this.firebase.object(`/scores/${nickname}/`);
+  }
+
+  public insertScore(score: Score) {
+
+    let nickname = score.$key.toUpperCase();
+    for (let ws of _.values(score.weeklyScores)) {
+      this.firebase.list(`/scores/${nickname}/weeklyScores`).push(ws);
+    }
+  }
+
+  public removeScore(key: string) {
+    this.firebase.list('/scores').remove(key);
+  }
+
+
   public get users(): FirebaseListObservable<User[]> {
     return this.firebase.list('/users');
   }
@@ -82,7 +108,7 @@ export class XmasClubDataProvider {
 
     let foundScore = _.find(weeklyScores, score => score.week === week);
     if (foundScore) {
-      
+
       console.log(`${nickname} already has a score for week ${week} (Current score: ${foundScore.score} - New score: ${score}`);
       console.log('Updating score:', foundScore);
 
@@ -112,7 +138,7 @@ export class XmasClubDataProvider {
     let scorecardResults = await this.scorecardsProvider.getScorecards(week).first().toPromise();
 
     /* Ensure the scorecards are an array */
-    let scorecards = _.values(scorecardResults);
+    let scorecards: Scorecard[] = _.values(scorecardResults);
 
     for (let scorecard of scorecards) {
 
@@ -196,15 +222,39 @@ export class XmasClubDataProvider {
 
     let orderedScorecards = _.sortBy(scorecards, 'score').reverse();
 
-    let rank: number = 1;
+    let thisWeek = await this.getWeek(week);
+
+    let winnerIndex = _.findIndex(orderedScorecards, { nickname: thisWeek.winner })
+    if (winnerIndex > 0) {
+      let winner = orderedScorecards[winnerIndex];
+      orderedScorecards.splice(winnerIndex, 1);
+      orderedScorecards.splice(0, 0, winner);
+    }
+
+    let rank: number = 0;
+    let previousScore: number = 0;
     for (let scorecard of orderedScorecards) {
-      scorecard.rank = rank++;
+
+      if (rank === 0 && winnerIndex > 0) {
+        /* The week is complete and we have a winner, set it so there is only one person who won */
+        /* I am ignoring ties at the moment */
+        rank = 1;
+      } else {
+
+        if (scorecard.score !== previousScore) {
+          rank++;
+        }
+
+        previousScore = scorecard.score;
+      }
+
+      scorecard.rank = rank;
     }
 
     return orderedScorecards;
   }
 
-  public async getUnsubmittedUsersForWeek(week: number) : Promise<string[]> {
+  public async getUnsubmittedUsersForWeek(week: number): Promise<string[]> {
 
     let scores: Score[] = await this.scores.first().toPromise();
 
@@ -216,7 +266,7 @@ export class XmasClubDataProvider {
         unsubmittedScorecards.push(score.$key);
       }
     }
-    
+
     return unsubmittedScorecards;
   }
 }

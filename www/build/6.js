@@ -100,11 +100,6 @@ let AdminPage = class AdminPage {
             this.dataProvider.addWeek();
         });
     }
-    upperCaseNicknames() {
-        return __awaiter(this, void 0, void 0, function* () {
-            //this.dataProvider.upperCaseNicknames();
-        });
-    }
     showUnsubmittedPicks() {
         return __awaiter(this, void 0, void 0, function* () {
             this.showLoading();
@@ -121,7 +116,7 @@ let AdminPage = class AdminPage {
             let currentWeek = yield this.dataProvider.currentWeek();
             let scorecards = yield this.dataProvider.getScorecardResults(currentWeek.week);
             scorecards.forEach(scorecard => {
-                this.weeklyScores += scorecard.nickname + '\t' + scorecard.score + '\n';
+                this.weeklyScoresOutput += scorecard.nickname + '\t' + scorecard.score + '\n';
             });
         });
     }
@@ -136,7 +131,7 @@ let AdminPage = class AdminPage {
 AdminPage = __decorate([
     ionic_angular_1.IonicPage(),
     core_1.Component({
-        selector: 'page-admin',template:/*ion-inline-start:"C:\Users\bobby\Source\xmas-club\xmas-club\src\pages\admin\admin.html"*/'<ion-header>\n\n  <ion-navbar color="header">\n    <ion-title>Administration</ion-title>\n  </ion-navbar>\n\n</ion-header>\n\n<ion-content>\n  \n  <button ion-button full outline (click)="addNewWeek()">Add new week</button>  \n\n  <button ion-button full outline (click)="populateScoresFromScorecards()">Populate scores</button>  \n\n  <button ion-button full outline (click)="loadScorecardsFromEmail()">Load from email</button>  \n\n  <button ion-button full outline (click)="upperCaseNicknames()">TEMP - Uppercase nicknames</button>  \n  \n  <button ion-button full outline (click)="showUnsubmittedPicks()">View unsubmitted pics for week {{currentWeek?.week}}</button>\n\n  <button ion-button full outline (click)="outputWeeklyScores()">Output weekly scores`</button> \n\n  <textarea>{{weeklyScores}}</textarea>\n\n</ion-content>\n'/*ion-inline-end:"C:\Users\bobby\Source\xmas-club\xmas-club\src\pages\admin\admin.html"*/,
+        selector: 'page-admin',template:/*ion-inline-start:"C:\Users\bobby\Source\xmas-club\xmas-club\src\pages\admin\admin.html"*/'<ion-header>\n\n  <ion-navbar color="header">\n    <ion-title>Administration</ion-title>\n  </ion-navbar>\n\n</ion-header>\n\n<ion-content>\n  \n  <button ion-button full outline (click)="addNewWeek()">Add new week</button>  \n\n  <button ion-button full outline (click)="populateScoresFromScorecards()">Populate scores</button>  \n\n  <button ion-button full outline (click)="loadScorecardsFromEmail()">Load from email</button>  \n\n  <button ion-button full outline (click)="showUnsubmittedPicks()">View unsubmitted pics for week {{currentWeek?.week}}</button>\n\n  <button ion-button full outline (click)="outputWeeklyScores()">Output weekly scores</button> \n\n  <textarea *ngIf="weeklyScoresOutput" style="width:100%;margin-top:25px">{{weeklyScoresOutput}}</textarea>\n\n</ion-content>\n'/*ion-inline-end:"C:\Users\bobby\Source\xmas-club\xmas-club\src\pages\admin\admin.html"*/,
     }),
     __metadata("design:paramtypes", [ionic_angular_1.NavController, scorecards_provider_1.ScorecardsProvider, xmas_club_provider_1.XmasClubDataProvider, ionic_angular_1.LoadingController])
 ], AdminPage);

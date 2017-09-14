@@ -51484,6 +51484,12 @@ ion-navbar.toolbar {
   color: #319F8A;
 }
 
+.ios page-leaderboard .weeklyWinner,
+.md page-leaderboard .weeklyWinner {
+  font-weight: bold;
+  color: red;
+}
+
 page-login .login-content {
   background: #329F8A !important;
 }

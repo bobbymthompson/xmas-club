@@ -20,7 +20,7 @@ export class AuthProvider {
   }
 
   public get isAdministrator(): boolean {
-    return this.user != null && this.user.nickname == "Striker";
+    return this.user != null && this.user.nickname == "STRIKER";
   }
 
   public onAuthStateChanged(): Observable<User> {
@@ -55,7 +55,8 @@ export class AuthProvider {
 
       this.firebase.object(`/users/${newUser.uid}/`).set({
         favorites: [],
-        nickname: nickname
+        /* Force upper case for all nicknames. */
+        nickname: nickname.toUpperCase()
       });
 
       let user = await this.firebaseAuth.auth.signInWithEmailAndPassword(email, password);
@@ -94,37 +95,5 @@ export class AuthProvider {
 
   public forgotPassword(email: any) {
     this.firebaseAuth.auth.sendPasswordResetEmail(email);
-  }
-
-  public async loginUserUsingGoogle() {
-
-    // var provider = new firebase.auth.GoogleAuthProvider();
-    // provider.addScope('https://www.googleapis.com/auth/plus.login');
-
-    // var that = this;
-
-    // return firebase.auth().signInWithPopup(provider).then(function (result) {
-
-    //   if (result.user) {
-
-    //     var user = result.user;
-
-    //     var res = result.user.displayName.split(" ");
-
-    //     // that.userProfile.child(user.uid).set({
-    //     //   email: user.email,
-    //     //   photo: user.photoURL,
-    //     //   username: user.displayName,
-    //     //   name: {
-    //     //     first: res[0],
-    //     //     middle: res[1],
-    //     //     last: res[2],
-    //     //   },
-    //     // });
-    //   }
-
-    // }).catch(function (error) {
-    //   console.log(error);
-    // });
   }
 }

@@ -111,15 +111,13 @@ export class WeekPage {
 
   public async createScorecard() {
 
-    console.log('Creating scorecard');
-    
     /* Create a new scorecard. */
     if (this.authProvider.isAuthenticated && this.authProvider.user != null) {
 
       this.showLoading();
 
       let scorecard = await this.scorecardsProvider.createScorecard(this.week.week, this.authProvider.user.nickname);
-      console.log('Scorecard created.');
+
       this.navCtrl.push('ScorecardPage', { enableEditMode: true, week: this.week.week, nickname: this.authProvider.user.nickname });
     }
   }
@@ -158,8 +156,7 @@ export class WeekPage {
 
     });
 
-    /* Uncomment to enable viewing of favorites. */
-    //this.favorites = _.sortBy(favorites, 'score').reverse();
+    this.favorites = favorites; // _.sortBy(favorites, 'score').reverse();
 
     this.scorecards = scorecards;
   }

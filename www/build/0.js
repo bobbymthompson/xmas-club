@@ -110,7 +110,9 @@ let LeaderboardPage = class LeaderboardPage {
         return __awaiter(this, void 0, void 0, function* () {
             this.showLoading();
             this.weeks = yield this.dataProvider.getWeeks();
+            this.priorWeek = yield this.dataProvider.priorWeek();
             this.currentWeek = yield this.dataProvider.currentWeek();
+            console.log('Prior week: ', this.priorWeek);
             let results = yield this.dataProvider.getScorecardResults(this.currentWeek.week);
             let scores = yield this.dataProvider.scores.first().toPromise();
             scores.forEach((score, index) => {
@@ -118,9 +120,13 @@ let LeaderboardPage = class LeaderboardPage {
                 _.values(score.weeklyScores).forEach((ws) => {
                     score.sortedScores.splice(0, 0, ws.score);
                 });
-                /* If scores for this week haven't been pushed in, use the current weeks scores */
+                /* If the scores don't match the week count, then the user hasn't submitted a sheet yet. */
                 if (score.sortedScores.length != this.currentWeek.week) {
+                    /* To be safe, calculate the current weeks score. */
                     score.sortedScores.splice(0, 0, this.getCurrentWeekScore(results, score.$key));
+                }
+                else if (score.sortedScores.length > 0 && score.sortedScores[0] == 0) {
+                    score.sortedScores.splice(0, 1, this.getCurrentWeekScore(results, score.$key));
                 }
                 /* Calculate the total score. */
                 let total = 0;
@@ -142,6 +148,9 @@ let LeaderboardPage = class LeaderboardPage {
         }
         return 0;
     }
+    isWeeklyWinner(score) {
+        return score.$key === this.priorWeek.winner;
+    }
     showLoading() {
         this.loading = this.loadingCtrl.create({
             content: 'Please wait...',
@@ -153,7 +162,7 @@ let LeaderboardPage = class LeaderboardPage {
 LeaderboardPage = __decorate([
     ionic_angular_1.IonicPage(),
     core_1.Component({
-        selector: 'page-leaderboard',template:/*ion-inline-start:"C:\Users\bobby\Source\xmas-club\xmas-club\src\pages\leaderboard\leaderboard.html"*/'<ion-header>\n\n  <ion-navbar color="header">\n    <ion-title>Leaderboard</ion-title>\n  </ion-navbar>\n\n</ion-header>\n\n\n<ion-content padding>\n\n  <h1>Scores through week {{currentWeek?.week}}</h1>\n\n  <!-- <ion-scroll class="leaderboard-scroll" scrollX="true" style="height:100%"> -->\n    <ion-row nowrap style="text-align:center">\n      <ion-col col-6></ion-col>\n      <ion-col style="min-width:50px">Total</ion-col>\n      <ion-col *ngFor="let week of weeks" style="min-width:28px"><span>{{week.week}}</span></ion-col>\n    </ion-row>\n    <ion-row *ngFor="let score of scores; let i = index; odd as isOdd; even as isEven" nowrap style="text-align:center;"\n      [class.altRowColor]="isOdd">\n      <ion-col col-6 style="text-align:left">{{i + 1}}) {{score.$key}}</ion-col>\n      <ion-col style="min-width:50px">{{score.total}}</ion-col>\n      <ion-col *ngFor="let ws of score.sortedScores" style="min-width:28px"><span>{{ws}}</span></ion-col>\n    </ion-row>\n  <!-- </ion-scroll> -->\n\n</ion-content>\n'/*ion-inline-end:"C:\Users\bobby\Source\xmas-club\xmas-club\src\pages\leaderboard\leaderboard.html"*/
+        selector: 'page-leaderboard',template:/*ion-inline-start:"C:\Users\bobby\Source\xmas-club\xmas-club\src\pages\leaderboard\leaderboard.html"*/'<ion-header>\n\n  <ion-navbar color="header">\n    <ion-title>Leaderboard</ion-title>\n  </ion-navbar>\n\n</ion-header>\n\n\n<ion-content padding>\n\n    <ion-row nowrap style="text-align:center">\n      <ion-col col-6></ion-col>\n      <ion-col style="min-width:50px">Total</ion-col>\n      <ion-col *ngFor="let week of weeks" style="min-width:28px"><span>{{week.week}}</span></ion-col>\n    </ion-row>\n    <ion-row *ngFor="let score of scores; let i = index; odd as isOdd; even as isEven" nowrap style="text-align:center;" [class.altRowColor]="isOdd" [class.weeklyWinner]="isWeeklyWinner(score)">\n      <ion-col col-6 style="text-align:left">{{i + 1}}) {{score.$key}}</ion-col>\n      <ion-col style="min-width:50px">{{score.total}}</ion-col>\n      <ion-col *ngFor="let ws of score.sortedScores" style="min-width:28px"><span>{{ws}}</span></ion-col>\n    </ion-row>\n\n</ion-content>\n'/*ion-inline-end:"C:\Users\bobby\Source\xmas-club\xmas-club\src\pages\leaderboard\leaderboard.html"*/
     }),
     __metadata("design:paramtypes", [ionic_angular_1.NavController,
         ionic_angular_1.NavParams,

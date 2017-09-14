@@ -11,5 +11,10 @@
     .altRowColor {
       color: color($colors, primary);
     }
+
+    .weeklyWinner {
+      font-weight: bold;
+      color: red;
+    }
   }
 }

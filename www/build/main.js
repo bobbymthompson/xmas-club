@@ -79,6 +79,8 @@ let ScorecardsProvider = class ScorecardsProvider {
             let scorecards = yield this.http.get(`http://xmasclubscorer.azurewebsites.net/api/scorecards/${week}`).map((res) => res.json()).toPromise();
             let scorecardsFb = this.getScorecards(week);
             for (let scorecard of scorecards) {
+                /* Standardize on all nicknames being upper case. */
+                scorecard.nickname = scorecard.nickname.toUpperCase();
                 console.log(`Looking for scorecard for week ${week} and user: ${scorecard.nickname}`);
                 /* Determine if the user already submitted a scorecard and this should replace the old one */
                 let found = yield this.getScorecard(week, scorecard.nickname).first().toPromise();
@@ -88,11 +90,17 @@ let ScorecardsProvider = class ScorecardsProvider {
                     scorecard.$key = found.$key;
                     this.update(scorecard);
                     /* Hack set an asterisk to denote this scorecard was updated. */
-                    scorecard.nickname = '***' + scorecard.nickname;
+                    scorecard.nickname = scorecard.nickname + ' (updated)';
                 }
                 else {
-                    console.log('No scorecard found - inserting new.');
+                    /* Push the scorecard in. */
                     scorecardsFb.push(scorecard);
+                    /* Determine if the specified nickname exists as a known user */
+                    let scores = yield this.firebase.object(`/scores/${scorecard.nickname}/`).first().toPromise();
+                    if (!scores.$exists()) {
+                        /* This scorecard has a nickname that isn't recognized. It is likely misspelled. Allow it to go in but denote it. */
+                        scorecard.nickname = scorecard.nickname + ' (unrecognized)';
+                    }
                     this.insertWeeklyScore(scorecard);
                 }
             }
@@ -107,7 +115,7 @@ let ScorecardsProvider = class ScorecardsProvider {
                 /* Insert a record into the scores array for this user. */
                 this.firebase.list(`/scores/${scorecard.nickname}/weeklyScores`).push({
                     week: scorecard.week,
-                    score: 0
+                    score: scorecard.score
                 });
             }
             else {
@@ -359,6 +367,15 @@ let XmasClubDataProvider = class XmasClubDataProvider {
             return this.weeks;
         });
     }
+    priorWeek() {
+        return __awaiter(this, void 0, void 0, function* () {
+            let currentWeek = yield this.currentWeek();
+            if (currentWeek.week == 1) {
+                return currentWeek;
+            }
+            return yield this.getWeek(currentWeek.week - 1);
+        });
+    }
     /** Returns the current week. */
     currentWeek() {
         return __awaiter(this, void 0, void 0, function* () {
@@ -391,6 +408,18 @@ let XmasClubDataProvider = class XmasClubDataProvider {
                 orderByChild: 'total',
             }
         });
+    }
+    getScoresForUser(nickname) {
+        return this.firebase.object(`/scores/${nickname}/`);
+    }
+    insertScore(score) {
+        let nickname = score.$key.toUpperCase();
+        for (let ws of _.values(score.weeklyScores)) {
+            this.firebase.list(`/scores/${nickname}/weeklyScores`).push(ws);
+        }
+    }
+    removeScore(key) {
+        this.firebase.list('/scores').remove(key);
     }
     get users() {
         return this.firebase.list('/users');
@@ -490,9 +519,28 @@ let XmasClubDataProvider = class XmasClubDataProvider {
                 }
             }
             let orderedScorecards = _.sortBy(scorecards, 'score').reverse();
-            let rank = 1;
+            let thisWeek = yield this.getWeek(week);
+            let winnerIndex = _.findIndex(orderedScorecards, { nickname: thisWeek.winner });
+            if (winnerIndex > 0) {
+                let winner = orderedScorecards[winnerIndex];
+                orderedScorecards.splice(winnerIndex, 1);
+                orderedScorecards.splice(0, 0, winner);
+            }
+            let rank = 0;
+            let previousScore = 0;
             for (let scorecard of orderedScorecards) {
-                scorecard.rank = rank++;
+                if (rank === 0 && winnerIndex > 0) {
+                    /* The week is complete and we have a winner, set it so there is only one person who won */
+                    /* I am ignoring ties at the moment */
+                    rank = 1;
+                }
+                else {
+                    if (scorecard.score !== previousScore) {
+                        rank++;
+                    }
+                    previousScore = scorecard.score;
+                }
+                scorecard.rank = rank;
             }
             return orderedScorecards;
         });
@@ -842,7 +890,7 @@ let AuthProvider = class AuthProvider {
         return this.user != null;
     }
     get isAdministrator() {
-        return this.user != null && this.user.nickname == "Striker";
+        return this.user != null && this.user.nickname == "STRIKER";
     }
     onAuthStateChanged() {
         let that = this;
@@ -867,7 +915,8 @@ let AuthProvider = class AuthProvider {
                 let newUser = yield this.firebaseAuth.auth.createUserWithEmailAndPassword(email, password);
                 this.firebase.object(`/users/${newUser.uid}/`).set({
                     favorites: [],
-                    nickname: nickname
+                    /* Force upper case for all nicknames. */
+                    nickname: nickname.toUpperCase()
                 });
                 let user = yield this.firebaseAuth.auth.signInWithEmailAndPassword(email, password);
                 return new Promise((resolve, reject) => {
@@ -897,31 +946,6 @@ let AuthProvider = class AuthProvider {
     }
     forgotPassword(email) {
         this.firebaseAuth.auth.sendPasswordResetEmail(email);
-    }
-    loginUserUsingGoogle() {
-        return __awaiter(this, void 0, void 0, function* () {
-            // var provider = new firebase.auth.GoogleAuthProvider();
-            // provider.addScope('https://www.googleapis.com/auth/plus.login');
-            // var that = this;
-            // return firebase.auth().signInWithPopup(provider).then(function (result) {
-            //   if (result.user) {
-            //     var user = result.user;
-            //     var res = result.user.displayName.split(" ");
-            //     // that.userProfile.child(user.uid).set({
-            //     //   email: user.email,
-            //     //   photo: user.photoURL,
-            //     //   username: user.displayName,
-            //     //   name: {
-            //     //     first: res[0],
-            //     //     middle: res[1],
-            //     //     last: res[2],
-            //     //   },
-            //     // });
-            //   }
-            // }).catch(function (error) {
-            //   console.log(error);
-            // });
-        });
     }
 };
 AuthProvider = __decorate([

@@ -7,4 +7,5 @@ export interface Week {
   scorecards: Array<Scorecard>;
   totalNumberOfPicks: number;
   winner: string;
+  tieBreakerTotalScore: number;
 }

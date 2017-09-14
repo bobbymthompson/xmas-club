@@ -74,6 +74,9 @@ export class ScorecardsProvider {
     let scorecardsFb = this.getScorecards(week);
     for (let scorecard of scorecards) {
 
+      /* Standardize on all nicknames being upper case. */
+      scorecard.nickname = scorecard.nickname.toUpperCase();
+
       console.log(`Looking for scorecard for week ${week} and user: ${scorecard.nickname}`);
 
       /* Determine if the user already submitted a scorecard and this should replace the old one */
@@ -87,12 +90,20 @@ export class ScorecardsProvider {
         this.update(scorecard);
 
         /* Hack set an asterisk to denote this scorecard was updated. */
-        scorecard.nickname = '***' + scorecard.nickname;
+        scorecard.nickname = scorecard.nickname + ' (updated)';
 
       } else {
 
-        console.log('No scorecard found - inserting new.');
+        /* Push the scorecard in. */
         scorecardsFb.push(scorecard);
+
+        /* Determine if the specified nickname exists as a known user */
+        let scores = await this.firebase.object(`/scores/${scorecard.nickname}/`).first().toPromise();
+        if (!scores.$exists()) {
+
+          /* This scorecard has a nickname that isn't recognized. It is likely misspelled. Allow it to go in but denote it. */
+          scorecard.nickname = scorecard.nickname + ' (unrecognized)'
+        }
 
         this.insertWeeklyScore(scorecard);
       }
@@ -111,7 +122,7 @@ export class ScorecardsProvider {
       /* Insert a record into the scores array for this user. */
       this.firebase.list(`/scores/${scorecard.nickname}/weeklyScores`).push({
         week: scorecard.week,
-        score: 0
+        score: scorecard.score
       });
     } else {
 

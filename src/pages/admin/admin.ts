@@ -17,10 +17,10 @@ export class AdminPage {
   scorecards: Scorecard[];
   currentWeek: Week;
   loading: Loading;
-  weeklyScores: string;
-  
+  weeklyScoresOutput: string;
+
   constructor(public navCtrl: NavController, private scorecardsProvider: ScorecardsProvider, private dataProvider: XmasClubDataProvider, private loadingCtrl: LoadingController) {
-    
+
     this.dataProvider.currentWeek().then((week) => {
       this.currentWeek = week;
     });
@@ -61,11 +61,6 @@ export class AdminPage {
     this.dataProvider.addWeek();
   }
 
-  private async upperCaseNicknames() {
-
-    //this.dataProvider.upperCaseNicknames();
-  }
-
   private async showUnsubmittedPicks() {
 
     this.showLoading();
@@ -86,10 +81,9 @@ export class AdminPage {
 
     let scorecards = await this.dataProvider.getScorecardResults(currentWeek.week);
 
-
     scorecards.forEach(scorecard => {
 
-      this.weeklyScores += scorecard.nickname + '\t' + scorecard.score + '\n';
+      this.weeklyScoresOutput += scorecard.nickname + '\t' + scorecard.score + '\n';
     });
 
   }

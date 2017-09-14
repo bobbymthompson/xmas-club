@@ -1,7 +1,6 @@
 
 export interface Score {
   $key: string;
-  user: string;
   total: number;
   weeklyScores: WeeklyScore[];
   sortedScores: number[]

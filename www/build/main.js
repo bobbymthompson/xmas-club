@@ -890,7 +890,7 @@ let AuthProvider = class AuthProvider {
         return this.user != null;
     }
     get isAdministrator() {
-        return this.user != null && this.user.nickname == "STRIKER";
+        return this.user != null && (this.user.nickname === "STRIKER" || this.user.nickname === "SUPER TD");
     }
     onAuthStateChanged() {
         let that = this;

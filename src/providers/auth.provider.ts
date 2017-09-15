@@ -20,7 +20,7 @@ export class AuthProvider {
   }
 
   public get isAdministrator(): boolean {
-    return this.user != null && this.user.nickname == "STRIKER";
+    return this.user != null && (this.user.nickname === "STRIKER" || this.user.nickname === "SUPER TD");
   }
 
   public onAuthStateChanged(): Observable<User> {

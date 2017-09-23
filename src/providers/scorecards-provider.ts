@@ -119,6 +119,8 @@ export class ScorecardsProvider {
     let foundScore = _.find(weeklyScores, score => score.week === scorecard.week);
     if (!foundScore) {
 
+      console.log(`Inserting into scores - Week: ${scorecard.week} Score: ${scorecard.score}`);
+      
       /* Insert a record into the scores array for this user. */
       this.firebase.list(`/scores/${scorecard.nickname}/weeklyScores`).push({
         week: scorecard.week,

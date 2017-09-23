@@ -112,15 +112,17 @@ let ScorecardsProvider = class ScorecardsProvider {
             let weeklyScores = yield this.firebase.list(`/scores/${scorecard.nickname}/weeklyScores`).first().toPromise();
             let foundScore = _.find(weeklyScores, score => score.week === scorecard.week);
             if (!foundScore) {
+                console.log(`Inserting into scores - Week: ${scorecard.week} Score: ${scorecard.score}`);
                 /* Insert a record into the scores array for this user. */
                 this.firebase.list(`/scores/${scorecard.nickname}/weeklyScores`).push({
                     week: scorecard.week,
-                    score: scorecard.score
+                    score: scorecard.score ? scorecard.score : 0
                 });
             }
             else {
+                console.log(`Updating scores - Week: ${scorecard.week} Score: ${scorecard.score}`);
                 this.firebase.list(`/scores/${scorecard.nickname}/weeklyScores`).update(foundScore.$key, {
-                    score: scorecard.score
+                    score: scorecard.score ? scorecard.score : 0
                 });
             }
         });

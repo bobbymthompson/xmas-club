@@ -122,7 +122,7 @@ export class ScorecardsProvider {
       /* Insert a record into the scores array for this user. */
       this.firebase.list(`/scores/${scorecard.nickname}/weeklyScores`).push({
         week: scorecard.week,
-        score: scorecard.score
+        score: scorecard.score ? scorecard.score : 0
       });
     } else {
 

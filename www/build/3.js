@@ -1,6 +1,6 @@
 webpackJsonp([3],{
 
-/***/ 772:
+/***/ 773:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -14,28 +14,28 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 Object.defineProperty(exports, "__esModule", { value: true });
 const core_1 = __webpack_require__(0);
 const ionic_angular_1 = __webpack_require__(52);
-const scorecard_1 = __webpack_require__(780);
-let ScorecardPageModule = class ScorecardPageModule {
+const week_1 = __webpack_require__(782);
+let WeekModule = class WeekModule {
 };
-ScorecardPageModule = __decorate([
+WeekModule = __decorate([
     core_1.NgModule({
         declarations: [
-            scorecard_1.ScorecardPage,
+            week_1.WeekPage,
         ],
         imports: [
-            ionic_angular_1.IonicPageModule.forChild(scorecard_1.ScorecardPage),
+            ionic_angular_1.IonicPageModule.forChild(week_1.WeekPage),
         ],
         exports: [
-            scorecard_1.ScorecardPage
+            week_1.WeekPage
         ]
     })
-], ScorecardPageModule);
-exports.ScorecardPageModule = ScorecardPageModule;
-//# sourceMappingURL=scorecard.module.js.map
+], WeekModule);
+exports.WeekModule = WeekModule;
+//# sourceMappingURL=week.module.js.map
 
 /***/ }),
 
-/***/ 780:
+/***/ 782:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -58,114 +58,189 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const scorecards_provider_1 = __webpack_require__(146);
+const xmas_club_provider_1 = __webpack_require__(451);
 const core_1 = __webpack_require__(0);
 const ionic_angular_1 = __webpack_require__(52);
-const xmas_club_provider_1 = __webpack_require__(451);
-const _ = __webpack_require__(147);
+const scorecards_provider_1 = __webpack_require__(147);
+const _ = __webpack_require__(146);
+const login_1 = __webpack_require__(452);
 const auth_provider_1 = __webpack_require__(63);
-let ScorecardPage = class ScorecardPage {
-    constructor(navCtrl, navParams, scorecardsProvider, dataProvider, authProvider, elementRef) {
+let WeekPage = class WeekPage {
+    constructor(navCtrl, navParams, authProvider, scorecardsProvider, dataProvider, loadingCtrl) {
         this.navCtrl = navCtrl;
         this.navParams = navParams;
+        this.authProvider = authProvider;
         this.scorecardsProvider = scorecardsProvider;
         this.dataProvider = dataProvider;
-        this.authProvider = authProvider;
-        this.elementRef = elementRef;
-        this.week = this.navParams.get('week');
-        this.scorecardsProvider.getScorecard(this.week, this.navParams.get('nickname')).first().toPromise().then((scorecard) => __awaiter(this, void 0, void 0, function* () {
-            this.scorecard = scorecard;
-            if (scorecard) {
-                this.tieBreakerScore = scorecard.tieBreakerScore;
-                this.dueDate = new Date((yield this.dataProvider.getWeek(this.week)).dueDate);
-                console.log(`Due Date: ${this.dueDate.toISOString()} - Current Date: ${new Date().toISOString()}`);
-                for (let pick of scorecard.picks) {
-                    pick.team1Selected = (pick.selectedPick == 'Team1') ? true : false;
-                    pick.team2Selected = (pick.selectedPick == 'Team2') ? true : false;
-                }
-                this.tieBreakerGame = _.last(scorecard.picks);
+        this.loadingCtrl = loadingCtrl;
+        this.favorites = [];
+    }
+    ionViewDidEnter() {
+        return __awaiter(this, void 0, void 0, function* () {
+            this.showLoading();
+            if (this.navParams.get('week')) {
+                this.week = yield this.dataProvider.getWeek(parseInt(this.navParams.get('week')));
             }
-        }));
-        if (this.navParams.get('enableEditMode')) {
-            this.inEditMode = true;
-        }
+            else {
+                this.week = yield this.dataProvider.currentWeek();
+            }
+            this.loadWeeklyScores();
+            this.loading.dismiss();
+        });
     }
-    isScorecardViewable() {
-        if (this.inEditMode)
-            return true;
-        /* Only allow the user to view this scorecard if it is after the due date */
-        if (new Date() >= this.dueDate) {
-            return true;
-        }
-        if (this.scorecard && this.scorecard.nickname === this.authProvider.user.nickname) {
-            return true;
-        }
-        if (this.authProvider.isAdministrator) {
-            return true;
-        }
-        return false;
+    login() {
+        this.navCtrl.push(login_1.LoginPage);
     }
-    canEditScorecard() {
-        if (this.inEditMode)
-            return false;
-        if (!this.scorecard)
+    viewScorecard(scorecard) {
+        this.navCtrl.push('ScorecardPage', { week: this.week.week, nickname: scorecard.nickname });
+    }
+    canCreateScorecard() {
+        if (!this.week)
             return false;
         /* Only if the current user is authenticated */
         if (!this.authProvider.isAuthenticated)
             return false;
-        /* Only if this is the current users scorecard */
-        if (!this.scorecard || this.authProvider.user.nickname != this.scorecard.nickname)
+        /* Only if this is the current users doesn't already have a scorecard for this week */
+        if (this.doesCurrentUserHaveScorecardAlready())
             return false;
         /* Only if it is before the due date. */
-        if (!this.dueDate || new Date() >= this.dueDate)
+        if (new Date() >= new Date(this.week.dueDate))
             return false;
         return true;
     }
-    updateSelectedPick(pick, selectedTeam) {
-        if (selectedTeam == 'Team1') {
-            if (pick.team1Selected) {
-                pick.team2Selected = false;
-                pick.selectedPick = 'Team1';
-            }
-            else {
-                pick.team2Selected = true;
-                pick.selectedPick = 'Team2';
-            }
-        }
-        else if (selectedTeam == 'Team2') {
-            if (pick.team2Selected) {
-                pick.team1Selected = false;
-                pick.selectedPick = 'Team2';
-            }
-            else {
-                pick.team1Selected = true;
-                pick.selectedPick = 'Team1';
+    doesCurrentUserHaveScorecardAlready() {
+        if (!this.currentUserScorecard) {
+            if (this.authProvider.isAuthenticated) {
+                if (!this.queriedForScorecard) {
+                    this.queriedForScorecard = true;
+                    this.scorecardsProvider.getScorecard(this.week.week, this.authProvider.user.nickname).first().toPromise().then(scorecard => {
+                        if (scorecard) {
+                            this.currentUserScorecard = scorecard;
+                        }
+                        else {
+                            console.log('No scorecard exists for user');
+                        }
+                    });
+                }
             }
         }
+        else {
+            return true;
+        }
+        return false;
     }
-    editScorecard() {
-        this.inEditMode = true;
+    createScorecard() {
+        return __awaiter(this, void 0, void 0, function* () {
+            /* Create a new scorecard. */
+            if (this.authProvider.isAuthenticated && this.authProvider.user != null) {
+                this.showLoading();
+                if (!this.currentUserScorecard) {
+                    this.currentUserScorecard = yield this.scorecardsProvider.createScorecard(this.week.week, this.authProvider.user.nickname);
+                }
+                this.navCtrl.push('ScorecardPage', { enableEditMode: true, week: this.week.week, nickname: this.authProvider.user.nickname });
+            }
+        });
     }
-    saveScorecard() {
-        this.scorecard.tieBreakerScore = this.tieBreakerScore;
-        this.scorecardsProvider.update(this.scorecard);
-        this.inEditMode = false;
+    viewFavoriteScorecards() {
+        this.navCtrl.push('WeeklyLeaderboardPage', { week: this.week.week, favoritesOnly: true });
+    }
+    viewAllScorecards() {
+        this.navCtrl.push('WeeklyLeaderboardPage', { week: this.week.week });
+    }
+    loadWeeklyScores() {
+        return __awaiter(this, void 0, void 0, function* () {
+            let favorites = new Array();
+            let scorecards = new Array();
+            let scores = yield this.dataProvider.scores.first().toPromise();
+            scores.forEach((score) => {
+                let total = 0;
+                let submitted = false;
+                let weeklyScore = _.find(score.weeklyScores, (ws) => ws.week === this.week.week);
+                if (weeklyScore) {
+                    submitted = (weeklyScore.total != null) || (this.week.winner && this.week.winner.length > 0);
+                    total = weeklyScore.total ? weeklyScore.total : (weeklyScore.score ? weeklyScore.score : 0);
+                }
+                let scorecard = {
+                    nickname: score.$key,
+                    score: total,
+                    rank: 0
+                };
+                if (submitted) {
+                    if (this.authProvider.isAuthenticated) {
+                        /* Populate the current user into the favorites list. */
+                        if (scorecard.nickname == this.authProvider.user.nickname) {
+                            favorites.push(scorecard);
+                        }
+                        /* Populate any favorites for this user. */
+                        if (this.authProvider.user.favorites) {
+                            if (_.some(this.authProvider.user.favorites, nickname => nickname == scorecard.nickname)) {
+                                favorites.push(scorecard);
+                            }
+                        }
+                    }
+                    scorecards.push(scorecard);
+                }
+            });
+            let orderedScorecards = _.sortBy(scorecards, 'score').reverse();
+            let winnerIndex = _.findIndex(orderedScorecards, { nickname: this.week.winner });
+            if (winnerIndex > 0) {
+                let winner = orderedScorecards[winnerIndex];
+                orderedScorecards.splice(winnerIndex, 1);
+                orderedScorecards.splice(0, 0, winner);
+            }
+            let rank = 0;
+            let previousScore = 0;
+            for (let scorecard of orderedScorecards) {
+                if (rank === 0 && winnerIndex > 0) {
+                    /* The week is complete and we have a winner, set it so there is only one person who won */
+                    /* I am ignoring ties at the moment */
+                    rank = 1;
+                }
+                else {
+                    if (scorecard.score !== previousScore) {
+                        rank++;
+                    }
+                    previousScore = scorecard.score;
+                }
+                scorecard.rank = rank;
+            }
+            this.favorites = _.sortBy(favorites, 'rank');
+            this.scorecards = orderedScorecards;
+        });
+    }
+    canViewDetailedScorecardView() {
+        if (this.authProvider.isAdministrator) {
+            return true;
+        }
+        if (this.week && new Date() >= new Date(this.week.dueDate)) {
+            return true;
+        }
+        return false;
+    }
+    showLoading() {
+        this.loading = this.loadingCtrl.create({
+            content: 'Please wait...',
+            dismissOnPageChange: true
+        });
+        this.loading.present();
     }
 };
-ScorecardPage = __decorate([
-    ionic_angular_1.IonicPage(),
+WeekPage = __decorate([
+    ionic_angular_1.IonicPage({
+        segment: 'week/:week'
+    }),
     core_1.Component({
-        selector: 'page-scorecard',template:/*ion-inline-start:"C:\Users\bobby\Source\xmas-club\xmas-club\src\pages\scorecard\scorecard.html"*/'<ion-header>\n\n  <ion-navbar color="header">\n    <ion-title>Week {{week}} - {{scorecard?.nickname}}</ion-title>\n\n    <ion-buttons end>\n      <button ion-button icon-only (click)="editScorecard()" *ngIf="canEditScorecard()">\n        <ion-icon name="md-create"></ion-icon>\n      </button>\n      <button ion-button icon-only (click)="saveScorecard()" *ngIf="inEditMode">\n        <ion-icon name="md-checkmark"></ion-icon>\n      </button>\n    </ion-buttons>\n  </ion-navbar>\n\n</ion-header>\n\n<ion-content>\n\n  <ion-grid *ngIf="isScorecardViewable()" no-padding>\n    <ion-row *ngFor="let pick of (scorecard)?.picks">\n      <ion-col col-1>\n        <ion-toggle class="team1Toggle" [disabled]="!inEditMode" [(ngModel)]="pick.team1Selected" (ionChange)="updateSelectedPick(pick, \'Team1\')"></ion-toggle>\n      </ion-col>\n      <ion-col col-10 style="padding:0px 18px 0px 18px;line-height:2.7;font-size:9px;">\n        <ion-row style="text-align: center; padding-bottom: 16px">\n          <ion-col col-4><span [style.font-weight]="pick.homeTeam == pick.team1 ? \'bold\' : \'\'">{{pick.team1}}</span></ion-col>\n          <ion-col col-2><span>vs.</span></ion-col>\n          <ion-col col-4><span [style.font-weight]="pick.homeTeam == pick.team2 ? \'bold\' : \'\'">{{pick.team2}}</span></ion-col>\n          <ion-col col-2><span>{{pick.spread}}</span></ion-col>\n        </ion-row>\n      </ion-col>\n      <ion-col col-1>\n        <ion-toggle [disabled]="!inEditMode" [(ngModel)]="pick.team2Selected" (ionChange)="updateSelectedPick(pick, \'Team2\')" style="float:right"></ion-toggle>\n      </ion-col>\n    </ion-row>\n    <ion-row>\n      <ion-item>\n        <ion-label stacked>Total Score ({{tieBreakerGame?.team1}} vs. {{tieBreakerGame?.team2}}):</ion-label>\n        <ion-input type="number" style="border: black 1px solid;" [(ngModel)]="tieBreakerScore" [disabled]="!inEditMode"></ion-input>\n      </ion-item>\n    </ion-row>\n  </ion-grid>\n  <h4 *ngIf="!isScorecardViewable()">Viewing a scorecard is disabled until after noon on Saturday</h4>\n\n</ion-content>\n'/*ion-inline-end:"C:\Users\bobby\Source\xmas-club\xmas-club\src\pages\scorecard\scorecard.html"*/,
+        selector: 'page-week',template:/*ion-inline-start:"C:\Users\bobby\Source\xmas-club\xmas-club\src\pages\week\week.html"*/'<ion-header>\n\n  <ion-navbar color="header">\n    <ion-title>Week {{week?.week}}</ion-title>\n\n    <ion-buttons end>\n      <button ion-button icon-only (click)="createScorecard()" *ngIf="canCreateScorecard()">\n        <ion-icon name="md-create"></ion-icon>\n      </button>\n      <button ion-button icon-only (click)="login()" *ngIf="!authProvider.isAuthenticated">\n        <ion-icon name="person"></ion-icon>\n      </button>\n    </ion-buttons>\n\n  </ion-navbar>\n\n</ion-header>\n\n<ion-content>\n\n  <ion-card *ngIf="favorites.length > 0">\n    <ion-card-header>\n      <ion-item>\n        Favorites\n         <button *ngIf="canViewDetailedScorecardView()" ion-button icon-only item-right (click)="viewFavoriteScorecards()">\n          <ion-icon name="grid"></ion-icon>\n        </button> \n      </ion-item>\n    </ion-card-header>\n\n    <ion-list>\n      <ion-item *ngFor="let scorecard of favorites" (click)="viewScorecard(scorecard)" detail-push>\n        <ion-grid>\n          <ion-row style="text-align:center">\n            <ion-col col-6 style="text-align:left">{{scorecard.rank}}) {{scorecard.nickname}}</ion-col>\n            <ion-col style="text-align:right;min-width:50px">{{scorecard.score}} of {{week.totalNumberOfPicks}}</ion-col>\n          </ion-row>\n        </ion-grid>\n      </ion-item>\n    </ion-list>\n  </ion-card>\n\n  <ion-card>\n   <ion-card-header>\n      <ion-item>\n        Leaderboard\n         <button *ngIf="canViewDetailedScorecardView()" ion-button icon-only item-right (click)="viewAllScorecards()">\n          <ion-icon name="grid"></ion-icon>\n        </button> \n      </ion-item>\n    </ion-card-header>\n\n    <ion-list>\n      <ion-item *ngFor="let scorecard of scorecards" (click)="viewScorecard(scorecard)" detail-push>\n        <ion-grid>\n          <ion-row style="text-align:center">\n            <ion-col col-6 style="text-align:left">{{scorecard.rank}}) {{scorecard.nickname}}</ion-col>\n            <ion-col style="text-align:right;min-width:50px">{{scorecard.score}} of {{week?.totalNumberOfPicks}}</ion-col>\n          </ion-row>\n        </ion-grid>\n      </ion-item>\n    </ion-list>\n\n  </ion-card>\n\n</ion-content>\n'/*ion-inline-end:"C:\Users\bobby\Source\xmas-club\xmas-club\src\pages\week\week.html"*/,
     }),
     __metadata("design:paramtypes", [ionic_angular_1.NavController,
         ionic_angular_1.NavParams,
+        auth_provider_1.AuthProvider,
         scorecards_provider_1.ScorecardsProvider,
         xmas_club_provider_1.XmasClubDataProvider,
-        auth_provider_1.AuthProvider,
-        core_1.ElementRef])
-], ScorecardPage);
-exports.ScorecardPage = ScorecardPage;
-//# sourceMappingURL=scorecard.js.map
+        ionic_angular_1.LoadingController])
+], WeekPage);
+exports.WeekPage = WeekPage;
+//# sourceMappingURL=week.js.map
 
 /***/ })
 

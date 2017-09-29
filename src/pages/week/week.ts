@@ -2,7 +2,7 @@ import { WeeksProvider } from '../../providers/weeks-provider';
 import { XmasClubDataProvider } from '../../providers/xmas-club.provider';
 import { cordovaWarn } from 'ionic-native/dist/esm';
 import { GameResult } from '../../models/game-result';
-import { Scorecard, Pick } from '../../models/scorecard';
+import { Scorecard, Pick, WeeklyScorecard } from '../../models/scorecard';
 import { Component } from '@angular/core';
 import { IonicPage, Loading, LoadingController, NavController, NavParams } from 'ionic-angular';
 import { ScorecardsProvider } from '../../providers/scorecards-provider';
@@ -13,6 +13,7 @@ import { LoginPage } from "../login/login";
 import { Observable } from 'rxjs/Observable';
 import { FirebaseObjectObservable, FirebaseListObservable } from 'angularfire2/database';
 import { AuthProvider } from "../../providers/auth.provider";
+import { Score } from "../../models/score";
 
 @IonicPage({
   segment: 'week/:week'
@@ -24,8 +25,8 @@ import { AuthProvider } from "../../providers/auth.provider";
 export class WeekPage {
 
   week: Week;
-  scorecards: Scorecard[];
-  favorites: Scorecard[];
+  scorecards: WeeklyScorecard[];
+  favorites: WeeklyScorecard[];
   currentUserScorecard: Scorecard;
   loading: Loading;
 
@@ -50,7 +51,7 @@ export class WeekPage {
       this.week = await this.dataProvider.currentWeek();
     }
 
-    this.loadScorecards();
+    this.loadWeeklyScores();
 
     this.loading.dismiss();
   }
@@ -59,7 +60,7 @@ export class WeekPage {
     this.navCtrl.push(LoginPage);
   }
 
-  public viewScorecard(scorecard: Scorecard) {
+  public viewScorecard(scorecard: WeeklyScorecard) {
 
     this.navCtrl.push('ScorecardPage', { week: this.week.week, nickname: scorecard.nickname });
   }
@@ -116,66 +117,116 @@ export class WeekPage {
 
       this.showLoading();
 
-      let scorecard = await this.scorecardsProvider.createScorecard(this.week.week, this.authProvider.user.nickname);
+      if (!this.currentUserScorecard) {
+
+        this.currentUserScorecard = await this.scorecardsProvider.createScorecard(this.week.week, this.authProvider.user.nickname);
+      }
 
       this.navCtrl.push('ScorecardPage', { enableEditMode: true, week: this.week.week, nickname: this.authProvider.user.nickname });
     }
   }
 
   public viewFavoriteScorecards() {
-
+    this.navCtrl.push('WeeklyLeaderboardPage', { week: this.week.week, favoritesOnly: true });
   }
 
   public viewAllScorecards() {
-
+    this.navCtrl.push('WeeklyLeaderboardPage', { week: this.week.week });
   }
 
-  private async loadScorecards() {
+  private async loadWeeklyScores() {
 
-    let favorites: Array<Scorecard> = new Array<Scorecard>();
+    let favorites: Array<WeeklyScorecard> = new Array<WeeklyScorecard>();
+    let scorecards: Array<WeeklyScorecard> = new Array<WeeklyScorecard>();
 
-    let scorecards = await this.dataProvider.getScorecardResults(this.week.week);
+    let scores = await this.dataProvider.scores.first().toPromise();
+    scores.forEach((score: Score) => {
 
-    scorecards.forEach(scorecard => {
+      let total = 0;
+      let submitted = false;
+      let weeklyScore = _.find(score.weeklyScores, (ws) => ws.week === this.week.week);
+      if (weeklyScore) {
 
-      if (this.authProvider.isAuthenticated) {
-
-        /* Populate the current user into the favorites list. */
-        if (scorecard.nickname == this.authProvider.user.nickname) {
-          favorites.push(scorecard);
-        }
-
-        /* Populate any favorites for this user. */
-        if (this.authProvider.user.favorites) {
-
-          if (_.some<string>(this.authProvider.user.favorites, nickname => nickname == scorecard.nickname)) {
-            favorites.push(scorecard);
-          }
-        }
+        submitted = (weeklyScore.total != null) || (this.week.winner && this.week.winner.length > 0);
+        total = weeklyScore.total ? weeklyScore.total : (weeklyScore.score ? weeklyScore.score : 0);
       }
 
+      let scorecard = {
+        nickname: score.$key,
+        score: total,
+        rank: 0
+      };
+
+      if (submitted) {
+
+        if (this.authProvider.isAuthenticated) {
+
+          /* Populate the current user into the favorites list. */
+          if (scorecard.nickname == this.authProvider.user.nickname) {
+            favorites.push(scorecard);
+          }
+
+          /* Populate any favorites for this user. */
+          if (this.authProvider.user.favorites) {
+
+            if (_.some<string>(this.authProvider.user.favorites, nickname => nickname == scorecard.nickname)) {
+              favorites.push(scorecard);
+            }
+          }
+        }
+
+        scorecards.push(scorecard);
+      }
     });
 
-    this.favorites = favorites; // _.sortBy(favorites, 'score').reverse();
+    let orderedScorecards = _.sortBy(scorecards, 'score').reverse();
 
-    this.scorecards = scorecards;
+    let winnerIndex = _.findIndex(orderedScorecards, { nickname: this.week.winner })
+    if (winnerIndex > 0) {
+      let winner = orderedScorecards[winnerIndex];
+      orderedScorecards.splice(winnerIndex, 1);
+      orderedScorecards.splice(0, 0, winner);
+    }
+
+    let rank: number = 0;
+    let previousScore: number = 0;
+    for (let scorecard of orderedScorecards) {
+
+      if (rank === 0 && winnerIndex > 0) {
+        /* The week is complete and we have a winner, set it so there is only one person who won */
+        /* I am ignoring ties at the moment */
+        rank = 1;
+      } else {
+
+        if (scorecard.score !== previousScore) {
+          rank++;
+        }
+
+        previousScore = scorecard.score;
+      }
+
+      scorecard.rank = rank;
+    }
+
+    this.favorites = _.sortBy(favorites, 'rank');
+
+    this.scorecards = orderedScorecards;
   }
 
-  private canViewTieBreakerScore() : boolean {
+  private canViewDetailedScorecardView() {
 
     if (this.authProvider.isAdministrator) {
       return true;
     }
 
-    /* Only if it is before the due date. */
-    if (new Date() >= new Date(this.week.dueDate)) {
+    if (this.week && new Date() >= new Date(this.week.dueDate)) {
       return true;
     }
 
     return false;
   }
 
-  showLoading() {
+  private showLoading() {
     this.loading = this.loadingCtrl.create({
       content: 'Please wait...',
       dismissOnPageChange: true

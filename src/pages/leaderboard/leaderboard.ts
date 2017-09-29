@@ -41,9 +41,10 @@ export class LeaderboardPage {
 
     scores.forEach((score: Score, index) => {
       score.sortedScores = [];
-
-      _.values(score.weeklyScores).forEach((ws) => {
-        score.sortedScores.splice(0, 0, ws.score);
+      
+      _.values(_.sortBy(score.weeklyScores, 'week')).forEach((ws) => {
+        let total = ws.total ? ws.total : ws.score;
+        score.sortedScores.splice(0, 0, total);
       });
 
       /* If the scores don't match the week count, then the user hasn't submitted a sheet yet. */

@@ -13,7 +13,7 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/first';
 import 'rxjs/add/operator/toPromise';
 import { ScorecardsProvider } from "./scorecards-provider";
-import { Scorecard } from "../models/scorecard";
+import { Scorecard, Pick } from "../models/scorecard";
 
 @Injectable()
 export class XmasClubDataProvider {
@@ -81,48 +81,8 @@ export class XmasClubDataProvider {
     });
   }
 
-  public getScoresForUser(nickname: string) {
-    return this.firebase.object(`/scores/${nickname}/`);
-  }
-
-  public insertScore(score: Score) {
-
-    let nickname = score.$key.toUpperCase();
-    for (let ws of _.values(score.weeklyScores)) {
-      this.firebase.list(`/scores/${nickname}/weeklyScores`).push(ws);
-    }
-  }
-
-  public removeScore(key: string) {
-    this.firebase.list('/scores').remove(key);
-  }
-
-
   public get users(): FirebaseListObservable<User[]> {
     return this.firebase.list('/users');
-  }
-
-  public async addScoreForUser(nickname: string, week: number, score: number) {
-
-    let weeklyScores: WeeklyScore[] = await this.firebase.list(`/scores/${nickname}/weeklyScores`).first().toPromise();
-
-    let foundScore = _.find(weeklyScores, score => score.week === week);
-    if (foundScore) {
-
-      console.log(`${nickname} already has a score for week ${week} (Current score: ${foundScore.score} - New score: ${score}`);
-      console.log('Updating score:', foundScore);
-
-      this.firebase.object(`/scores/${nickname}/weeklyScores/${foundScore.$key}`).update({
-        score: score
-      });
-    } else {
-
-      console.log('Inserting score to the weekly scores');
-      this.firebase.list(`/scores/${nickname}/weeklyScores`).push({
-        week: week,
-        score: score
-      });
-    }
   }
 
   /** Returns the score cards for the specified week. */
@@ -132,6 +92,8 @@ export class XmasClubDataProvider {
   }
 
   public async getScorecardResults(week: number): Promise<Scorecard[]> {
+
+    let theWeek = await this.getWeek(week);
 
     let gameResults = await this.getGameResults(week);
 
@@ -146,76 +108,12 @@ export class XmasClubDataProvider {
 
       for (let pick of scorecard.picks) {
 
-        let game = _.find(gameResults, (game) => {
-          return (game.team1.name.toLowerCase() == pick.team1.toLowerCase()) && (game.team2.name.toLowerCase() == pick.team2.toLowerCase())
-        });
+        let result = this.calculatePickResult(theWeek, pick, gameResults);
 
-        if (!game) {
-          console.log(`Unable to find a game for teams. Team1: '${pick.team1}' - Team2: '${pick.team2}' - Spread: '${pick.spread}' - Type: '${pick.pickType}'`);
-        } else {
-
-          /* Set the home team on this pick. */
-          pick.homeTeam = game.homeTeam;
-
-          if (game.status == "Complete") {
-
-            let correct: boolean = false;
-
-            let spread = parseFloat(pick.spread);
-            if (isNaN(spread)) {
-              /* The spread is a 'PICK' */
-              spread = 0;
-            }
-
-            if (pick.isOverUnder) {
-
-              let totalScore = game.team1.score + game.team2.score;
-
-              if (spread) {
-
-                if (pick.selectedPick == "Team1") {
-                  if (totalScore >= spread) {
-                    correct = true;
-                  }
-                } else if (pick.selectedPick == "Team2") {
-                  if (totalScore <= spread) {
-                    correct = true;
-                  }
-                }
-              }
-
-            }
-            else {
-
-              if (pick.selectedPick == "Team1") {
-
-                if (game.winner == "Team1") {
-
-                  if (game.team1.score >= (game.team2.score + spread)) {
-                    correct = true;
-                  }
-                }
-
-              } else if (pick.selectedPick == "Team2") {
-
-                if (game.winner == "Team2") {
-                  /* The underdog was picked and they won. */
-                  correct = true;
-                }
-                else {
-
-                  /* The underdog lost, check the spread. */
-                  if ((game.team2.score + spread) >= game.team1.score) {
-                    correct = true;
-                  }
-                }
-              }
-
-              if (correct) {
-                scorecard.score++;
-              }
-            }
-          }
+        pick.homeTeam = result.homeTeam;
+        
+        if (result.correct) {
+          scorecard.score++;
         }
       }
     }
@@ -268,5 +166,87 @@ export class XmasClubDataProvider {
     }
 
     return unsubmittedScorecards;
+  }
+
+  public calculatePickResult(week: Week, pick: Pick, gameResults: GameResult[]): { complete: boolean, correct: boolean, homeTeam: string } {
+
+    let result = {
+      complete: false,
+      correct: false,
+      homeTeam: ''
+    };
+
+    if (new Date() >= new Date(week.dueDate)) {
+
+      let game = _.find(gameResults, (game) => {
+        return (game.team1.name.toLowerCase() == pick.team1.toLowerCase()) && (game.team2.name.toLowerCase() == pick.team2.toLowerCase())
+      });
+
+      if (!game) {
+        console.log(`Unable to find a game for teams. Team1: '${pick.team1}' - Team2: '${pick.team2}' - Spread: '${pick.spread}' - Type: '${pick.pickType}'`);
+      } else {
+
+        /* Set the home team on this pick. */
+        result.homeTeam = game.homeTeam;
+
+        if (game.status == "Complete") {
+
+          result.complete = true;
+
+          let spread = parseFloat(pick.spread);
+          if (isNaN(spread)) {
+            /* The spread is a 'PICK' */
+            spread = 0;
+          }
+
+          if (pick.isOverUnder) {
+
+            let totalScore = game.team1.score + game.team2.score;
+
+            if (spread) {
+
+              if (pick.selectedPick == "Team1") {
+                if (totalScore >= spread) {
+                  result.correct = true;
+                }
+              } else if (pick.selectedPick == "Team2") {
+                if (totalScore <= spread) {
+                  result.correct = true;
+                }
+              }
+            }
+
+          }
+          else {
+
+            if (pick.selectedPick == "Team1") {
+
+              if (game.winner == "Team1") {
+
+                if (game.team1.score >= (game.team2.score + spread)) {
+                  result.correct = true;
+                }
+              }
+
+            } else if (pick.selectedPick == "Team2") {
+
+              if (game.winner == "Team2") {
+                /* The underdog was picked and they won. */
+                result.correct = true;
+              }
+              else {
+
+                /* The underdog lost, check the spread. */
+                if ((game.team2.score + spread) >= game.team1.score) {
+                  result.correct = true;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+
+    return result;
   }
 }

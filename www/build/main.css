@@ -51601,6 +51601,39 @@ page-scorecard ion-content .scroll-content {
   padding: 8px;
 }
 
+page-scorecard .notCompletedPick {
+  color: orange;
+}
+
+page-scorecard .notCompletedPickToggle {
+  background-color: orange;
+  border-color: orange;
+}
+
+page-scorecard .correctPick {
+  color: #7ad6c4;
+}
+
+page-scorecard .correctPick .toggle-icon {
+  background-color: #7ad6c4;
+}
+
+page-scorecard .correctPick .toggle-icon .toggle-inner {
+  background-color: #7ad6c4;
+}
+
+page-scorecard .incorrectPick {
+  color: red;
+}
+
+page-scorecard .incorrectPick .toggle-icon {
+  background-color: red;
+}
+
+page-scorecard .incorrectPick .toggle-icon .toggle-inner {
+  background-color: red;
+}
+
 .tabbar {
   -webkit-box-pack: center;
   -webkit-justify-content: center;
@@ -51632,6 +51665,32 @@ page-scorecard ion-content .scroll-content {
 .ios page-week ion-content,
 .md page-week ion-content {
   background-color: #EEEEEE;
+}
+
+.ios page-weekly-leaderboard .leaderboard-scroll .scroll-content,
+.md page-weekly-leaderboard .leaderboard-scroll .scroll-content {
+  padding: 0px !important;
+}
+
+.ios page-weekly-leaderboard ion-content,
+.md page-weekly-leaderboard ion-content {
+  background-color: #EEEEEE;
+}
+
+.ios page-weekly-leaderboard .altRow,
+.md page-weekly-leaderboard .altRow {
+  border-top: black 1px solid;
+}
+
+.ios page-weekly-leaderboard .isCorrect,
+.md page-weekly-leaderboard .isCorrect {
+  font-weight: bold;
+  background-color: #75da75;
+}
+
+.ios page-weekly-leaderboard .inCorrect,
+.md page-weekly-leaderboard .inCorrect {
+  background-color: #d46e6e;
 }
 
 .ios page-weeks .item[no-lines].bottom-border,

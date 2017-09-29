@@ -10,4 +10,5 @@ export interface WeeklyScore {
   $key: string;
   week: number;
   score: number;
+  total: number;
 }

@@ -20,10 +20,12 @@
   <ion-grid *ngIf="isScorecardViewable()" no-padding>
     <ion-row *ngFor="let pick of (scorecard)?.picks">
       <ion-col col-1>
-        <ion-toggle class="team1Toggle" [disabled]="!inEditMode" [(ngModel)]="pick.team1Selected" (ionChange)="updateSelectedPick(pick, 'Team1')"></ion-toggle>
+        <ion-toggle *ngIf="!pick.complete" [disabled]="!inEditMode" [(ngModel)]="pick.team1Selected" (ionChange)="updateSelectedPick(pick, 'Team1')"></ion-toggle>
+        <ion-toggle *ngIf="pick.complete && pick.correct" [class.correctPick]="pick.correct" [disabled]="!inEditMode" [(ngModel)]="pick.team1Selected" (ionChange)="updateSelectedPick(pick, 'Team1')"></ion-toggle>
+        <ion-toggle *ngIf="pick.complete && pick.incorrect" [class.incorrectPick]="pick.incorrect" [disabled]="!inEditMode" [(ngModel)]="pick.team1Selected" (ionChange)="updateSelectedPick(pick, 'Team1')"></ion-toggle>
       </ion-col>
       <ion-col col-10 style="padding:0px 18px 0px 18px;line-height:2.7;font-size:9px;">
-        <ion-row style="text-align: center; padding-bottom: 16px">
+        <ion-row style="text-align: center; padding-bottom: 16px" [class.incorrectPick]="pick.incorrect" [class.correctPick]="pick.correct">
           <ion-col col-4><span [style.font-weight]="pick.homeTeam == pick.team1 ? 'bold' : ''">{{pick.team1}}</span></ion-col>
           <ion-col col-2><span>vs.</span></ion-col>
           <ion-col col-4><span [style.font-weight]="pick.homeTeam == pick.team2 ? 'bold' : ''">{{pick.team2}}</span></ion-col>
@@ -31,7 +33,9 @@
         </ion-row>
       </ion-col>
       <ion-col col-1>
-        <ion-toggle [disabled]="!inEditMode" [(ngModel)]="pick.team2Selected" (ionChange)="updateSelectedPick(pick, 'Team2')" style="float:right"></ion-toggle>
+        <ion-toggle *ngIf="!pick.complete" [disabled]="!inEditMode" [(ngModel)]="pick.team2Selected" (ionChange)="updateSelectedPick(pick, 'Team2')" style="float:right"></ion-toggle>
+        <ion-toggle *ngIf="pick.complete && pick.correct" [class.correctPick]="pick.correct" [disabled]="!inEditMode" [(ngModel)]="pick.team2Selected" (ionChange)="updateSelectedPick(pick, 'Team2')" style="float:right"></ion-toggle>
+        <ion-toggle *ngIf="pick.complete && pick.incorrect" [class.incorrectPick]="pick.incorrect" [disabled]="!inEditMode" [(ngModel)]="pick.team2Selected" (ionChange)="updateSelectedPick(pick, 'Team2')" style="float:right"></ion-toggle>
       </ion-col>
     </ion-row>
     <ion-row>

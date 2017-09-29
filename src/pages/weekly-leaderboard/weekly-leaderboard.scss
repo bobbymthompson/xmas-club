@@ -1,0 +1,24 @@
+.ios,
+.md {
+  page-weekly-leaderboard {
+    .leaderboard-scroll .scroll-content {
+      padding: 0px !important;
+    }
+    ion-content {
+      background-color: color($colors, background);
+    }
+
+    .altRow {
+      border-top: black 1px solid;
+    }
+
+    .isCorrect {
+      font-weight: bold;
+      background-color: #75da75;
+    }
+
+    .inCorrect {
+      background-color: #d46e6e;
+    }
+  }
+}

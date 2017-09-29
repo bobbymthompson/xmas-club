@@ -1,6 +1,6 @@
 webpackJsonp([1],{
 
-/***/ 774:
+/***/ 775:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -14,7 +14,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 Object.defineProperty(exports, "__esModule", { value: true });
 const core_1 = __webpack_require__(0);
 const ionic_angular_1 = __webpack_require__(52);
-const weeks_1 = __webpack_require__(782);
+const weeks_1 = __webpack_require__(784);
 let WeeksModule = class WeeksModule {
 };
 WeeksModule = __decorate([
@@ -35,7 +35,7 @@ exports.WeeksModule = WeeksModule;
 
 /***/ }),
 
-/***/ 782:
+/***/ 784:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";

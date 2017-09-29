@@ -1,6 +1,6 @@
-webpackJsonp([7],{
+webpackJsonp([8],{
 
-/***/ 146:
+/***/ 147:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -27,7 +27,7 @@ const core_1 = __webpack_require__(0);
 const http_1 = __webpack_require__(99);
 __webpack_require__(103);
 __webpack_require__(186);
-const _ = __webpack_require__(147);
+const _ = __webpack_require__(146);
 const auth_1 = __webpack_require__(73);
 const database_1 = __webpack_require__(76);
 let ScorecardsProvider = class ScorecardsProvider {
@@ -116,13 +116,15 @@ let ScorecardsProvider = class ScorecardsProvider {
                 /* Insert a record into the scores array for this user. */
                 this.firebase.list(`/scores/${scorecard.nickname}/weeklyScores`).push({
                     week: scorecard.week,
-                    score: scorecard.score ? scorecard.score : 0
+                    score: scorecard.score ? scorecard.score : 0,
+                    total: scorecard.score ? scorecard.score : 0
                 });
             }
             else {
                 console.log(`Updating scores - Week: ${scorecard.week} Score: ${scorecard.score}`);
                 this.firebase.list(`/scores/${scorecard.nickname}/weeklyScores`).update(foundScore.$key, {
-                    score: scorecard.score ? scorecard.score : 0
+                    score: scorecard.score ? scorecard.score : 0,
+                    total: scorecard.score ? scorecard.score : 0
                 });
             }
         });
@@ -162,7 +164,7 @@ webpackEmptyAsyncContext.id = 156;
 var map = {
 	"../pages/admin/admin.module": [
 		768,
-		6
+		7
 	],
 	"../pages/leaderboard/leaderboard.module": [
 		769,
@@ -170,22 +172,26 @@ var map = {
 	],
 	"../pages/list/list.module": [
 		770,
-		5
+		6
 	],
 	"../pages/profile/profile.module": [
 		771,
-		4
+		5
 	],
 	"../pages/scorecard/scorecard.module": [
 		772,
-		3
+		4
 	],
 	"../pages/week/week.module": [
 		773,
+		3
+	],
+	"../pages/weekly-leaderboard/weekly-leaderboard.module": [
+		774,
 		2
 	],
 	"../pages/weeks/weeks.module": [
-		774,
+		775,
 		1
 	]
 };
@@ -348,11 +354,11 @@ const core_1 = __webpack_require__(0);
 const http_1 = __webpack_require__(99);
 const auth_1 = __webpack_require__(73);
 const database_1 = __webpack_require__(76);
-const _ = __webpack_require__(147);
+const _ = __webpack_require__(146);
 __webpack_require__(103);
 __webpack_require__(184);
 __webpack_require__(185);
-const scorecards_provider_1 = __webpack_require__(146);
+const scorecards_provider_1 = __webpack_require__(147);
 let XmasClubDataProvider = class XmasClubDataProvider {
     constructor(http, firebase, firebaseAuth, scorecardsProvider) {
         this.http = http;
@@ -411,40 +417,8 @@ let XmasClubDataProvider = class XmasClubDataProvider {
             }
         });
     }
-    getScoresForUser(nickname) {
-        return this.firebase.object(`/scores/${nickname}/`);
-    }
-    insertScore(score) {
-        let nickname = score.$key.toUpperCase();
-        for (let ws of _.values(score.weeklyScores)) {
-            this.firebase.list(`/scores/${nickname}/weeklyScores`).push(ws);
-        }
-    }
-    removeScore(key) {
-        this.firebase.list('/scores').remove(key);
-    }
     get users() {
         return this.firebase.list('/users');
-    }
-    addScoreForUser(nickname, week, score) {
-        return __awaiter(this, void 0, void 0, function* () {
-            let weeklyScores = yield this.firebase.list(`/scores/${nickname}/weeklyScores`).first().toPromise();
-            let foundScore = _.find(weeklyScores, score => score.week === week);
-            if (foundScore) {
-                console.log(`${nickname} already has a score for week ${week} (Current score: ${foundScore.score} - New score: ${score}`);
-                console.log('Updating score:', foundScore);
-                this.firebase.object(`/scores/${nickname}/weeklyScores/${foundScore.$key}`).update({
-                    score: score
-                });
-            }
-            else {
-                console.log('Inserting score to the weekly scores');
-                this.firebase.list(`/scores/${nickname}/weeklyScores`).push({
-                    week: week,
-                    score: score
-                });
-            }
-        });
     }
     /** Returns the score cards for the specified week. */
     getGameResults(week) {
@@ -454,6 +428,7 @@ let XmasClubDataProvider = class XmasClubDataProvider {
     }
     getScorecardResults(week) {
         return __awaiter(this, void 0, void 0, function* () {
+            let theWeek = yield this.getWeek(week);
             let gameResults = yield this.getGameResults(week);
             let scorecardResults = yield this.scorecardsProvider.getScorecards(week).first().toPromise();
             /* Ensure the scorecards are an array */
@@ -461,62 +436,10 @@ let XmasClubDataProvider = class XmasClubDataProvider {
             for (let scorecard of scorecards) {
                 scorecard.score = 0;
                 for (let pick of scorecard.picks) {
-                    let game = _.find(gameResults, (game) => {
-                        return (game.team1.name.toLowerCase() == pick.team1.toLowerCase()) && (game.team2.name.toLowerCase() == pick.team2.toLowerCase());
-                    });
-                    if (!game) {
-                        console.log(`Unable to find a game for teams. Team1: '${pick.team1}' - Team2: '${pick.team2}' - Spread: '${pick.spread}' - Type: '${pick.pickType}'`);
-                    }
-                    else {
-                        /* Set the home team on this pick. */
-                        pick.homeTeam = game.homeTeam;
-                        if (game.status == "Complete") {
-                            let correct = false;
-                            let spread = parseFloat(pick.spread);
-                            if (isNaN(spread)) {
-                                /* The spread is a 'PICK' */
-                                spread = 0;
-                            }
-                            if (pick.isOverUnder) {
-                                let totalScore = game.team1.score + game.team2.score;
-                                if (spread) {
-                                    if (pick.selectedPick == "Team1") {
-                                        if (totalScore >= spread) {
-                                            correct = true;
-                                        }
-                                    }
-                                    else if (pick.selectedPick == "Team2") {
-                                        if (totalScore <= spread) {
-                                            correct = true;
-                                        }
-                                    }
-                                }
-                            }
-                            else {
-                                if (pick.selectedPick == "Team1") {
-                                    if (game.winner == "Team1") {
-                                        if (game.team1.score >= (game.team2.score + spread)) {
-                                            correct = true;
-                                        }
-                                    }
-                                }
-                                else if (pick.selectedPick == "Team2") {
-                                    if (game.winner == "Team2") {
-                                        /* The underdog was picked and they won. */
-                                        correct = true;
-                                    }
-                                    else {
-                                        /* The underdog lost, check the spread. */
-                                        if ((game.team2.score + spread) >= game.team1.score) {
-                                            correct = true;
-                                        }
-                                    }
-                                }
-                                if (correct) {
-                                    scorecard.score++;
-                                }
-                            }
-                        }
+                    let result = this.calculatePickResult(theWeek, pick, gameResults);
+                    pick.homeTeam = result.homeTeam;
+                    if (result.correct) {
+                        scorecard.score++;
                     }
                 }
             }
@@ -559,6 +482,70 @@ let XmasClubDataProvider = class XmasClubDataProvider {
             }
             return unsubmittedScorecards;
         });
+    }
+    calculatePickResult(week, pick, gameResults) {
+        let result = {
+            complete: false,
+            correct: false,
+            homeTeam: ''
+        };
+        if (new Date() >= new Date(week.dueDate)) {
+            let game = _.find(gameResults, (game) => {
+                return (game.team1.name.toLowerCase() == pick.team1.toLowerCase()) && (game.team2.name.toLowerCase() == pick.team2.toLowerCase());
+            });
+            if (!game) {
+                console.log(`Unable to find a game for teams. Team1: '${pick.team1}' - Team2: '${pick.team2}' - Spread: '${pick.spread}' - Type: '${pick.pickType}'`);
+            }
+            else {
+                /* Set the home team on this pick. */
+                result.homeTeam = game.homeTeam;
+                if (game.status == "Complete") {
+                    result.complete = true;
+                    let spread = parseFloat(pick.spread);
+                    if (isNaN(spread)) {
+                        /* The spread is a 'PICK' */
+                        spread = 0;
+                    }
+                    if (pick.isOverUnder) {
+                        let totalScore = game.team1.score + game.team2.score;
+                        if (spread) {
+                            if (pick.selectedPick == "Team1") {
+                                if (totalScore >= spread) {
+                                    result.correct = true;
+                                }
+                            }
+                            else if (pick.selectedPick == "Team2") {
+                                if (totalScore <= spread) {
+                                    result.correct = true;
+                                }
+                            }
+                        }
+                    }
+                    else {
+                        if (pick.selectedPick == "Team1") {
+                            if (game.winner == "Team1") {
+                                if (game.team1.score >= (game.team2.score + spread)) {
+                                    result.correct = true;
+                                }
+                            }
+                        }
+                        else if (pick.selectedPick == "Team2") {
+                            if (game.winner == "Team2") {
+                                /* The underdog was picked and they won. */
+                                result.correct = true;
+                            }
+                            else {
+                                /* The underdog lost, check the spread. */
+                                if ((game.team2.score + spread) >= game.team1.score) {
+                                    result.correct = true;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return result;
     }
 };
 XmasClubDataProvider = __decorate([
@@ -758,7 +745,7 @@ const settings_1 = __webpack_require__(762);
 const app_component_1 = __webpack_require__(763);
 const tabs_1 = __webpack_require__(450);
 const xmas_club_provider_1 = __webpack_require__(451);
-const scorecards_provider_1 = __webpack_require__(146);
+const scorecards_provider_1 = __webpack_require__(147);
 const angularfire2_1 = __webpack_require__(767);
 const database_1 = __webpack_require__(76);
 const auth_1 = __webpack_require__(73);
@@ -835,6 +822,7 @@ XmasClubModule = __decorate([
                     { loadChildren: '../pages/profile/profile.module#ProfilePageModule', name: 'ProfilePage', segment: 'profile', priority: 'low', defaultHistory: [] },
                     { loadChildren: '../pages/scorecard/scorecard.module#ScorecardPageModule', name: 'ScorecardPage', segment: 'scorecard', priority: 'low', defaultHistory: [] },
                     { loadChildren: '../pages/week/week.module#WeekModule', name: 'WeekPage', segment: 'week/:week', priority: 'low', defaultHistory: [] },
+                    { loadChildren: '../pages/weekly-leaderboard/weekly-leaderboard.module#WeeklyLeaderboardPageModule', name: 'WeeklyLeaderboardPage', segment: 'weekly-leaderboard', priority: 'low', defaultHistory: [] },
                     { loadChildren: '../pages/weeks/weeks.module#WeeksModule', name: 'WeeksPage', segment: 'weeks', priority: 'low', defaultHistory: [] }
                 ]
             }),

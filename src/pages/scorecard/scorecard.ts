@@ -9,6 +9,7 @@ import { Week } from "../../models/week";
 import { FirebaseObjectObservable } from "angularfire2/database";
 import { AuthProvider } from "../../providers/auth.provider";
 import { Observable } from "rxjs/Rx";
+import { GameResult } from "../../models/game-result";
 
 @IonicPage()
 @Component({
@@ -33,20 +34,39 @@ export class ScorecardPage {
 
     this.week = this.navParams.get('week');
     this.scorecardsProvider.getScorecard(this.week, this.navParams.get('nickname')).first().toPromise().then(async (scorecard) => {
-    
+
       this.scorecard = scorecard;
-    
+
       if (scorecard) {
 
-        this.tieBreakerScore = scorecard.tieBreakerScore;
-        this.dueDate = new Date((await this.dataProvider.getWeek(this.week)).dueDate);
+        let theWeek = await this.dataProvider.getWeek(this.week);
 
-        console.log(`Due Date: ${this.dueDate.toISOString()} - Current Date: ${new Date().toISOString()}`)
+        this.tieBreakerScore = scorecard.tieBreakerScore;
+        this.dueDate = new Date(theWeek.dueDate);
+
+        let gameResults: GameResult[];
+        if (new Date() >= this.dueDate) {
+          gameResults = await this.dataProvider.getGameResults(this.week);
+        } else {
+          gameResults = [];
+        }
+
+        console.log(`Due Date: ${this.dueDate.toISOString()} - Current Date: ${new Date().toISOString()}`);
 
         for (let pick of scorecard.picks) {
 
           (<EditablePick>pick).team1Selected = (pick.selectedPick == 'Team1') ? true : false;
           (<EditablePick>pick).team2Selected = (pick.selectedPick == 'Team2') ? true : false;
+
+          let result = this.dataProvider.calculatePickResult(theWeek, pick, gameResults);
+
+          pick.homeTeam = result.homeTeam;
+          pick.complete = result.complete;
+
+          if (pick.complete) {
+            pick.correct = result.correct;
+            pick.incorrect = !result.correct;
+          }
         }
 
         this.tieBreakerGame = _.last(scorecard.picks);
@@ -70,7 +90,7 @@ export class ScorecardPage {
     if (this.scorecard && this.scorecard.nickname === this.authProvider.user.nickname) {
       return true;
     }
-    
+
     if (this.authProvider.isAdministrator) {
       return true;
     }

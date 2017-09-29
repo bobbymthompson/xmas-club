@@ -124,14 +124,16 @@ export class ScorecardsProvider {
       /* Insert a record into the scores array for this user. */
       this.firebase.list(`/scores/${scorecard.nickname}/weeklyScores`).push({
         week: scorecard.week,
-        score: scorecard.score ? scorecard.score : 0
+        score: scorecard.score ? scorecard.score : 0,
+        total: scorecard.score ? scorecard.score : 0
       });
     } else {
 
       console.log(`Updating scores - Week: ${scorecard.week} Score: ${scorecard.score}`);
 
       this.firebase.list(`/scores/${scorecard.nickname}/weeklyScores`).update(foundScore.$key, {
-        score: scorecard.score ? scorecard.score : 0
+        score: scorecard.score ? scorecard.score : 0,
+        total: scorecard.score ? scorecard.score : 0
       });
     }
   }

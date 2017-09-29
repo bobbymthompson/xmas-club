@@ -12,11 +12,11 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const sort_array_desc_1 = __webpack_require__(776);
+const sort_array_desc_1 = __webpack_require__(777);
 const reverse_array_1 = __webpack_require__(453);
 const core_1 = __webpack_require__(0);
 const ionic_angular_1 = __webpack_require__(52);
-const leaderboard_1 = __webpack_require__(777);
+const leaderboard_1 = __webpack_require__(778);
 let LeaderboardModule = class LeaderboardModule {
 };
 LeaderboardModule = __decorate([
@@ -39,7 +39,7 @@ exports.LeaderboardModule = LeaderboardModule;
 
 /***/ }),
 
-/***/ 776:
+/***/ 777:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -72,7 +72,7 @@ exports.SortArrayDescPipe = SortArrayDescPipe;
 
 /***/ }),
 
-/***/ 777:
+/***/ 778:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -97,7 +97,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 const core_1 = __webpack_require__(0);
 const ionic_angular_1 = __webpack_require__(52);
-const _ = __webpack_require__(147);
+const _ = __webpack_require__(146);
 const xmas_club_provider_1 = __webpack_require__(451);
 let LeaderboardPage = class LeaderboardPage {
     constructor(navCtrl, navParams, dataProvider, loadingCtrl) {
@@ -117,8 +117,9 @@ let LeaderboardPage = class LeaderboardPage {
             let scores = yield this.dataProvider.scores.first().toPromise();
             scores.forEach((score, index) => {
                 score.sortedScores = [];
-                _.values(score.weeklyScores).forEach((ws) => {
-                    score.sortedScores.splice(0, 0, ws.score);
+                _.values(_.sortBy(score.weeklyScores, 'week')).forEach((ws) => {
+                    let total = ws.total ? ws.total : ws.score;
+                    score.sortedScores.splice(0, 0, total);
                 });
                 /* If the scores don't match the week count, then the user hasn't submitted a sheet yet. */
                 if (score.sortedScores.length != this.currentWeek.week) {

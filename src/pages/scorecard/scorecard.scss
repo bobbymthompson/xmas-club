@@ -2,4 +2,29 @@ page-scorecard {
   ion-content .scroll-content {
     padding: 8px;
   }
+  .notCompletedPick {
+    color: orange;
+  }
+  .notCompletedPickToggle {
+    background-color: orange;
+    border-color: orange;
+  }
+  .correctPick {
+    color: #7ad6c4;
+  }
+  .correctPick .toggle-icon {
+    background-color: #7ad6c4;
+    .toggle-inner {
+      background-color: #7ad6c4;
+    }
+  }
+  .incorrectPick {
+    color: red;
+  }
+  .incorrectPick .toggle-icon {
+    background-color: red;
+    .toggle-inner {
+      background-color: red;
+    }
+  }
 }

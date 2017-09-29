@@ -1,4 +1,10 @@
 
+export interface WeeklyScorecard {
+  nickname: string;
+  score: number;
+  rank: number;
+}
+
 export interface Scorecard {
   uid: string;
   week: number;
@@ -17,4 +23,7 @@ export interface Pick {
   pickType: string;
   isOverUnder: boolean;
   homeTeam: string;
+  complete: boolean;
+  correct: boolean;
+  incorrect: boolean;
 }

@@ -249,4 +249,10 @@ export class XmasClubDataProvider {
 
     return result;
   }
+
+  public async forceUpdateOfScores() {
+
+    var results = await this.http.get(`https://xmas-club-api.herokuapp.com/calculate-scores`).map((res: Response) => res.json()).toPromise();
+    console.log(results);
+  }
 }

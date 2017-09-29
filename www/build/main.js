@@ -547,15 +547,19 @@ let XmasClubDataProvider = class XmasClubDataProvider {
         }
         return result;
     }
+    forceUpdateOfScores() {
+        return __awaiter(this, void 0, void 0, function* () {
+            var results = yield this.http.get(`https://xmas-club-api.herokuapp.com/calculate-scores`).map((res) => res.json()).toPromise();
+            console.log(results);
+        });
+    }
 };
 XmasClubDataProvider = __decorate([
     core_1.Injectable(),
-    __metadata("design:paramtypes", [http_1.Http,
-        database_1.AngularFireDatabase,
-        auth_1.AngularFireAuth,
-        scorecards_provider_1.ScorecardsProvider])
+    __metadata("design:paramtypes", [typeof (_a = typeof http_1.Http !== "undefined" && http_1.Http) === "function" && _a || Object, typeof (_b = typeof database_1.AngularFireDatabase !== "undefined" && database_1.AngularFireDatabase) === "function" && _b || Object, typeof (_c = typeof auth_1.AngularFireAuth !== "undefined" && auth_1.AngularFireAuth) === "function" && _c || Object, typeof (_d = typeof scorecards_provider_1.ScorecardsProvider !== "undefined" && scorecards_provider_1.ScorecardsProvider) === "function" && _d || Object])
 ], XmasClubDataProvider);
 exports.XmasClubDataProvider = XmasClubDataProvider;
+var _a, _b, _c, _d;
 //# sourceMappingURL=xmas-club.provider.js.map
 
 /***/ }),

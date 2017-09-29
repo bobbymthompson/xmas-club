@@ -64,6 +64,10 @@ export class AdminPage {
     this.loading.dismiss();
   }
 
+  private async forceUpdateOfScores() {
+    this.dataProvider.forceUpdateOfScores();
+  }
+
   private async addNewWeek() {
 
 

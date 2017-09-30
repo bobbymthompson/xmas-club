@@ -44,12 +44,7 @@ export class ScorecardPage {
         this.tieBreakerScore = scorecard.tieBreakerScore;
         this.dueDate = new Date(theWeek.dueDate);
 
-        let gameResults: GameResult[];
-        if (new Date() >= this.dueDate) {
-          gameResults = await this.dataProvider.getGameResults(this.week);
-        } else {
-          gameResults = [];
-        }
+        let gameResults = await this.dataProvider.getGameResults(this.week);
 
         console.log(`Due Date: ${this.dueDate.toISOString()} - Current Date: ${new Date().toISOString()}`);
 

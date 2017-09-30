@@ -79,13 +79,7 @@ let ScorecardPage = class ScorecardPage {
                 let theWeek = yield this.dataProvider.getWeek(this.week);
                 this.tieBreakerScore = scorecard.tieBreakerScore;
                 this.dueDate = new Date(theWeek.dueDate);
-                let gameResults;
-                if (new Date() >= this.dueDate) {
-                    gameResults = yield this.dataProvider.getGameResults(this.week);
-                }
-                else {
-                    gameResults = [];
-                }
+                let gameResults = yield this.dataProvider.getGameResults(this.week);
                 console.log(`Due Date: ${this.dueDate.toISOString()} - Current Date: ${new Date().toISOString()}`);
                 for (let pick of scorecard.picks) {
                     pick.team1Selected = (pick.selectedPick == 'Team1') ? true : false;

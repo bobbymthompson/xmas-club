@@ -55,6 +55,7 @@ let ScorecardsProvider = class ScorecardsProvider {
         return __awaiter(this, void 0, void 0, function* () {
             let scorecard = yield this.getScorecardTemplate(week);
             scorecard.nickname = nickname;
+            this.insertWeeklyScore(scorecard);
             return this.firebase.list(this.SCORECARD_PATH(week)).push(scorecard);
         });
     }
@@ -90,7 +91,7 @@ let ScorecardsProvider = class ScorecardsProvider {
                     scorecard.$key = found.$key;
                     this.update(scorecard);
                     /* Hack set an asterisk to denote this scorecard was updated. */
-                    scorecard.nickname = scorecard.nickname + ' (updated)';
+                    scorecard.nickname = scorecard.nickname;
                 }
                 else {
                     /* Push the scorecard in. */

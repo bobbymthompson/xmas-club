@@ -96,7 +96,9 @@ let WeeklyLeaderboardPage = class WeeklyLeaderboardPage {
                 let processScorecard = true;
                 if (favoritesOnly) {
                     if (this.authProvider.isAuthenticated && this.authProvider.user.favorites) {
-                        if (!_.some(this.authProvider.user.favorites, nickname => nickname == score.$key)) {
+                        if (this.authProvider.user.nickname === score.$key) {
+                        }
+                        else if (!_.some(this.authProvider.user.favorites, nickname => nickname == score.$key)) {
                             processScorecard = false;
                         }
                     }

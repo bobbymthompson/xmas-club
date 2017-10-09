@@ -46,6 +46,8 @@ export class ScorecardsProvider {
 
     scorecard.nickname = nickname;
 
+    this.insertWeeklyScore(scorecard);
+    
     return this.firebase.list(this.SCORECARD_PATH(week)).push(scorecard);
   }
 
@@ -90,7 +92,7 @@ export class ScorecardsProvider {
         this.update(scorecard);
 
         /* Hack set an asterisk to denote this scorecard was updated. */
-        scorecard.nickname = scorecard.nickname + ' (updated)';
+        scorecard.nickname = scorecard.nickname;
 
       } else {
 

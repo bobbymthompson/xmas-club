@@ -60,7 +60,10 @@ export class WeeklyLeaderboardPage {
 
         if (this.authProvider.isAuthenticated && this.authProvider.user.favorites) {
 
-          if (!_.some<string>(this.authProvider.user.favorites, nickname => nickname == score.$key)) {
+          if (this.authProvider.user.nickname === score.$key) {
+
+          }
+          else if (!_.some<string>(this.authProvider.user.favorites, nickname => nickname == score.$key)) {
             processScorecard = false;
           }
         } else {

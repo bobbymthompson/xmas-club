@@ -97,11 +97,12 @@ export class WeeklyLeaderboardPage {
           scorecard.picks.forEach((pick) => {
 
             let team;
-
-            if (pick.selectedPick) {
+            if (pick.selectedPick === 'None') {
+              team = '';
+            } else {
               team = (pick.selectedPick === "Team1") ? pick.team1 : pick.team2;
             }
-            
+
             let result = this.dataProvider.calculatePickResult(this.week, pick, this.games);
 
             scorecardWithPicks.picks.push({ team: team, complete: result.complete, correct: result.correct });

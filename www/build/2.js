@@ -124,7 +124,10 @@ let WeeklyLeaderboardPage = class WeeklyLeaderboardPage {
                     if (scorecard) {
                         scorecardWithPicks.tieBreakerScore = scorecard.tieBreakerScore;
                         scorecard.picks.forEach((pick) => {
-                            let team = (pick.selectedPick === "Team1") ? pick.team1 : pick.team2;
+                            let team;
+                            if (pick.selectedPick) {
+                                team = (pick.selectedPick === "Team1") ? pick.team1 : pick.team2;
+                            }
                             let result = this.dataProvider.calculatePickResult(this.week, pick, this.games);
                             scorecardWithPicks.picks.push({ team: team, complete: result.complete, correct: result.correct });
                         });

@@ -81,20 +81,24 @@ let ScorecardPage = class ScorecardPage {
                 this.dueDate = new Date(theWeek.dueDate);
                 let gameResults = yield this.dataProvider.getGameResults(this.week);
                 console.log(`Due Date: ${this.dueDate.toISOString()} - Current Date: ${new Date().toISOString()}`);
+                /* Keep track of the previous pick for use in over/unders. */
+                let previousPick = null;
                 for (let pick of scorecard.picks) {
                     pick.team1Selected = (pick.selectedPick == 'Team1') ? true : false;
                     pick.team2Selected = (pick.selectedPick == 'Team2') ? true : false;
-                    let result = this.dataProvider.calculatePickResult(theWeek, pick, gameResults);
+                    /* Use the previous picks teams when it is an over/under. */
                     if (pick.isOverUnder) {
-                        pick.team1 = 'Over';
-                        pick.team2 = 'Under';
+                        pick.team1 = previousPick.team1;
+                        pick.team2 = previousPick.team2;
                     }
+                    let result = this.dataProvider.calculatePickResult(theWeek, pick, gameResults);
                     pick.homeTeam = result.homeTeam;
                     pick.complete = result.complete;
                     if (pick.complete) {
                         pick.correct = result.correct;
                         pick.incorrect = !result.correct;
                     }
+                    previousPick = pick;
                 }
                 this.tieBreakerGame = _.last(scorecard.picks);
             }
@@ -170,14 +174,10 @@ ScorecardPage = __decorate([
     core_1.Component({
         selector: 'page-scorecard',template:/*ion-inline-start:"C:\Users\bobby\Source\xmas-club\xmas-club\src\pages\scorecard\scorecard.html"*/'<ion-header>\n\n  <ion-navbar color="header">\n    <ion-title>Week {{week}} - {{scorecard?.nickname}}</ion-title>\n\n    <ion-buttons end>\n      <button ion-button icon-only (click)="editScorecard()" *ngIf="canEditScorecard()">\n        <ion-icon name="md-create"></ion-icon>\n      </button>\n      <button ion-button icon-only (click)="saveScorecard()" *ngIf="inEditMode">\n        <ion-icon name="md-checkmark"></ion-icon>\n      </button>\n    </ion-buttons>\n  </ion-navbar>\n\n</ion-header>\n\n<ion-content>\n\n  <ion-grid *ngIf="isScorecardViewable()" no-padding>\n    <ion-row *ngFor="let pick of (scorecard)?.picks">\n      <ion-col col-1>\n        <ion-toggle *ngIf="!pick.complete" [disabled]="!inEditMode" [(ngModel)]="pick.team1Selected" (ionChange)="updateSelectedPick(pick, \'Team1\')"></ion-toggle>\n        <ion-toggle *ngIf="pick.complete && pick.correct" [class.correctPick]="pick.correct" [disabled]="!inEditMode" [(ngModel)]="pick.team1Selected" (ionChange)="updateSelectedPick(pick, \'Team1\')"></ion-toggle>\n        <ion-toggle *ngIf="pick.complete && pick.incorrect" [class.incorrectPick]="pick.incorrect" [disabled]="!inEditMode" [(ngModel)]="pick.team1Selected" (ionChange)="updateSelectedPick(pick, \'Team1\')"></ion-toggle>\n      </ion-col>\n      <ion-col col-10 style="padding:0px 18px 0px 18px;line-height:2.7;font-size:9px;">\n        <ion-row style="text-align: center; padding-bottom: 16px" [class.incorrectPick]="pick.incorrect" [class.correctPick]="pick.correct">\n          <ion-col col-4><span [style.font-weight]="pick.homeTeam == pick.team1 ? \'bold\' : \'\'">{{pick.team1}}</span></ion-col>\n          <ion-col col-2><span>vs.</span></ion-col>\n          <ion-col col-4><span [style.font-weight]="pick.homeTeam == pick.team2 ? \'bold\' : \'\'">{{pick.team2}}</span></ion-col>\n          <ion-col col-2><span>{{pick.spread}}</span></ion-col>\n        </ion-row>\n      </ion-col>\n      <ion-col col-1>\n        <ion-toggle *ngIf="!pick.complete" [disabled]="!inEditMode" [(ngModel)]="pick.team2Selected" (ionChange)="updateSelectedPick(pick, \'Team2\')" style="float:right"></ion-toggle>\n        <ion-toggle *ngIf="pick.complete && pick.correct" [class.correctPick]="pick.correct" [disabled]="!inEditMode" [(ngModel)]="pick.team2Selected" (ionChange)="updateSelectedPick(pick, \'Team2\')" style="float:right"></ion-toggle>\n        <ion-toggle *ngIf="pick.complete && pick.incorrect" [class.incorrectPick]="pick.incorrect" [disabled]="!inEditMode" [(ngModel)]="pick.team2Selected" (ionChange)="updateSelectedPick(pick, \'Team2\')" style="float:right"></ion-toggle>\n      </ion-col>\n    </ion-row>\n    <ion-row>\n      <ion-item>\n        <ion-label stacked>Total Score ({{tieBreakerGame?.team1}} vs. {{tieBreakerGame?.team2}}):</ion-label>\n        <ion-input type="number" style="border: black 1px solid;" [(ngModel)]="tieBreakerScore" [disabled]="!inEditMode"></ion-input>\n      </ion-item>\n    </ion-row>\n  </ion-grid>\n  <h4 *ngIf="!isScorecardViewable()">Viewing a scorecard is disabled until after noon on Saturday</h4>\n\n</ion-content>\n'/*ion-inline-end:"C:\Users\bobby\Source\xmas-club\xmas-club\src\pages\scorecard\scorecard.html"*/,
     }),
-    __metadata("design:paramtypes", [ionic_angular_1.NavController,
-        ionic_angular_1.NavParams,
-        scorecards_provider_1.ScorecardsProvider,
-        xmas_club_provider_1.XmasClubDataProvider,
-        auth_provider_1.AuthProvider,
-        core_1.ElementRef])
+    __metadata("design:paramtypes", [typeof (_a = typeof ionic_angular_1.NavController !== "undefined" && ionic_angular_1.NavController) === "function" && _a || Object, typeof (_b = typeof ionic_angular_1.NavParams !== "undefined" && ionic_angular_1.NavParams) === "function" && _b || Object, typeof (_c = typeof scorecards_provider_1.ScorecardsProvider !== "undefined" && scorecards_provider_1.ScorecardsProvider) === "function" && _c || Object, typeof (_d = typeof xmas_club_provider_1.XmasClubDataProvider !== "undefined" && xmas_club_provider_1.XmasClubDataProvider) === "function" && _d || Object, typeof (_e = typeof auth_provider_1.AuthProvider !== "undefined" && auth_provider_1.AuthProvider) === "function" && _e || Object, typeof (_f = typeof core_1.ElementRef !== "undefined" && core_1.ElementRef) === "function" && _f || Object])
 ], ScorecardPage);
 exports.ScorecardPage = ScorecardPage;
+var _a, _b, _c, _d, _e, _f;
 //# sourceMappingURL=scorecard.js.map
 
 /***/ })

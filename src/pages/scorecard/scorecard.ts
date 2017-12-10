@@ -48,18 +48,20 @@ export class ScorecardPage {
 
         console.log(`Due Date: ${this.dueDate.toISOString()} - Current Date: ${new Date().toISOString()}`);
 
+        /* Keep track of the previous pick for use in over/unders. */
+        let previousPick = null;
         for (let pick of scorecard.picks) {
 
           (<EditablePick>pick).team1Selected = (pick.selectedPick == 'Team1') ? true : false;
           (<EditablePick>pick).team2Selected = (pick.selectedPick == 'Team2') ? true : false;
 
-          let result = this.dataProvider.calculatePickResult(theWeek, pick, gameResults);
-
+          /* Use the previous picks teams when it is an over/under. */
           if (pick.isOverUnder) {
-
-            pick.team1 = 'Over';
-            pick.team2 = 'Under';
+            pick.team1 = previousPick.team1;
+            pick.team2 = previousPick.team2;
           }
+
+          let result = this.dataProvider.calculatePickResult(theWeek, pick, gameResults);
 
           pick.homeTeam = result.homeTeam;
           pick.complete = result.complete;
@@ -68,6 +70,8 @@ export class ScorecardPage {
             pick.correct = result.correct;
             pick.incorrect = !result.correct;
           }
+
+          previousPick = pick;
         }
 
         this.tieBreakerGame = _.last(scorecard.picks);

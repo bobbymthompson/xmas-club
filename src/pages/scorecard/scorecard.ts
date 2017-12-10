@@ -53,13 +53,13 @@ export class ScorecardPage {
           (<EditablePick>pick).team1Selected = (pick.selectedPick == 'Team1') ? true : false;
           (<EditablePick>pick).team2Selected = (pick.selectedPick == 'Team2') ? true : false;
 
+          let result = this.dataProvider.calculatePickResult(theWeek, pick, gameResults);
+
           if (pick.isOverUnder) {
 
             pick.team1 = 'Over';
             pick.team2 = 'Under';
           }
-
-          let result = this.dataProvider.calculatePickResult(theWeek, pick, gameResults);
 
           pick.homeTeam = result.homeTeam;
           pick.complete = result.complete;

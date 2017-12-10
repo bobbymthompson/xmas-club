@@ -106,7 +106,16 @@ export class XmasClubDataProvider {
 
       scorecard.score = 0;
 
+      /* Keep track of the previous pick for use in over/unders. */
+      let previousPick = null;
+      
       for (let pick of scorecard.picks) {
+
+        /* Use the previous picks teams when it is an over/under. */
+        if (pick.isOverUnder && pick.team1.toLowerCase() == 'over' && pick.team2.toLowerCase() == 'under') {
+          pick.team1 = previousPick.team1;
+          pick.team2 = previousPick.team2;
+        }
 
         let result = this.calculatePickResult(theWeek, pick, gameResults);
 
@@ -115,6 +124,8 @@ export class XmasClubDataProvider {
         if (result.correct) {
           scorecard.score++;
         }
+
+        previousPick = pick;
       }
     }
 

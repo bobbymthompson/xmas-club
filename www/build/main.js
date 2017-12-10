@@ -436,12 +436,20 @@ let XmasClubDataProvider = class XmasClubDataProvider {
             let scorecards = _.values(scorecardResults);
             for (let scorecard of scorecards) {
                 scorecard.score = 0;
+                /* Keep track of the previous pick for use in over/unders. */
+                let previousPick = null;
                 for (let pick of scorecard.picks) {
+                    /* Use the previous picks teams when it is an over/under. */
+                    if (pick.isOverUnder && pick.team1.toLowerCase() == 'over' && pick.team2.toLowerCase() == 'under') {
+                        pick.team1 = previousPick.team1;
+                        pick.team2 = previousPick.team2;
+                    }
                     let result = this.calculatePickResult(theWeek, pick, gameResults);
                     pick.homeTeam = result.homeTeam;
                     if (result.correct) {
                         scorecard.score++;
                     }
+                    previousPick = pick;
                 }
             }
             let orderedScorecards = _.sortBy(scorecards, 'score').reverse();
@@ -555,12 +563,10 @@ let XmasClubDataProvider = class XmasClubDataProvider {
 };
 XmasClubDataProvider = __decorate([
     core_1.Injectable(),
-    __metadata("design:paramtypes", [http_1.Http,
-        database_1.AngularFireDatabase,
-        auth_1.AngularFireAuth,
-        scorecards_provider_1.ScorecardsProvider])
+    __metadata("design:paramtypes", [typeof (_a = typeof http_1.Http !== "undefined" && http_1.Http) === "function" && _a || Object, typeof (_b = typeof database_1.AngularFireDatabase !== "undefined" && database_1.AngularFireDatabase) === "function" && _b || Object, typeof (_c = typeof auth_1.AngularFireAuth !== "undefined" && auth_1.AngularFireAuth) === "function" && _c || Object, typeof (_d = typeof scorecards_provider_1.ScorecardsProvider !== "undefined" && scorecards_provider_1.ScorecardsProvider) === "function" && _d || Object])
 ], XmasClubDataProvider);
 exports.XmasClubDataProvider = XmasClubDataProvider;
+var _a, _b, _c, _d;
 //# sourceMappingURL=xmas-club.provider.js.map
 
 /***/ }),

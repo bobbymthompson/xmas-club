@@ -123,6 +123,8 @@ let WeeklyLeaderboardPage = class WeeklyLeaderboardPage {
                     let scorecard = _.find(scorecards, (sc) => sc.nickname === score.$key);
                     if (scorecard) {
                         scorecardWithPicks.tieBreakerScore = scorecard.tieBreakerScore;
+                        /* Keep track of the previous pick for use in over/unders. */
+                        let previousPick = null;
                         scorecard.picks.forEach((pick) => {
                             let team;
                             if (pick.selectedPick === 'None') {
@@ -131,8 +133,14 @@ let WeeklyLeaderboardPage = class WeeklyLeaderboardPage {
                             else {
                                 team = (pick.selectedPick === "Team1") ? pick.team1 : pick.team2;
                             }
+                            /* Use the previous picks teams when it is an over/under. */
+                            if (pick.isOverUnder && pick.team1.toLowerCase() == 'over' && pick.team2.toLowerCase() == 'under') {
+                                pick.team1 = previousPick.team1;
+                                pick.team2 = previousPick.team2;
+                            }
                             let result = this.dataProvider.calculatePickResult(this.week, pick, this.games);
                             scorecardWithPicks.picks.push({ team: team, complete: result.complete, correct: result.correct });
+                            previousPick = pick;
                         });
                     }
                     else {
@@ -182,14 +190,10 @@ WeeklyLeaderboardPage = __decorate([
     core_1.Component({
         selector: 'page-weekly-leaderboard',template:/*ion-inline-start:"C:\Users\bobby\Source\xmas-club\xmas-club\src\pages\weekly-leaderboard\weekly-leaderboard.html"*/'<ion-header>\n\n  <ion-navbar color="header">\n    <ion-title>Week #{{week?.week}} Leaderboard</ion-title>\n  </ion-navbar>\n\n</ion-header>\n\n<ion-content>\n  <ion-scroll scrollX="true" scrollY="true" style="height: 100%;">\n    <ion-row nowrap style="text-align:center">\n      <ion-col col-6 style=""></ion-col>\n      <ion-col *ngFor="let game of games" style="min-width:150px;"><span>{{game.team1.name}} vs. {{game.team2.name}}</span></ion-col>\n    </ion-row>\n    <ion-row *ngFor="let scorecard of scorecards; odd as isOdd" nowrap style="text-align:center;min-height:50px">\n      <ion-col col-6 style="text-align:left;padding-top:20px;padding-bottom:20px;border-top:black 1px solid;" >{{scorecard.score}} - {{scorecard.nickname}} ({{scorecard.tieBreakerScore}})</ion-col>\n      <ng-container *ngIf="isOdd">\n        <ion-col *ngFor="let pick of scorecard.picks" class="altRow" [class.isCorrect]="pick.complete && pick.correct" [class.inCorrect]="pick.complete && !pick.correct" style="min-width:150px;padding-top:20px;padding-bottom:20px;border-left:black 1px solid;">\n          <ng-container>\n            {{pick.team}}\n          </ng-container>\n        </ion-col>\n      </ng-container>\n      <ng-container *ngIf="!isOdd">\n        <ion-col *ngFor="let pick of scorecard.picks" class="altRow" [class.isCorrect]="pick.complete && pick.correct" [class.inCorrect]="pick.complete && !pick.correct" style="min-width:150px;padding-top:20px;padding-bottom:20px;border-left:black 1px solid;">{{pick.team}}</ion-col>\n      </ng-container>\n    </ion-row>\n  </ion-scroll>\n</ion-content>\n'/*ion-inline-end:"C:\Users\bobby\Source\xmas-club\xmas-club\src\pages\weekly-leaderboard\weekly-leaderboard.html"*/,
     }),
-    __metadata("design:paramtypes", [ionic_angular_1.NavController,
-        ionic_angular_1.NavParams,
-        auth_provider_1.AuthProvider,
-        scorecards_provider_1.ScorecardsProvider,
-        xmas_club_provider_1.XmasClubDataProvider,
-        ionic_angular_1.LoadingController])
+    __metadata("design:paramtypes", [typeof (_a = typeof ionic_angular_1.NavController !== "undefined" && ionic_angular_1.NavController) === "function" && _a || Object, typeof (_b = typeof ionic_angular_1.NavParams !== "undefined" && ionic_angular_1.NavParams) === "function" && _b || Object, typeof (_c = typeof auth_provider_1.AuthProvider !== "undefined" && auth_provider_1.AuthProvider) === "function" && _c || Object, typeof (_d = typeof scorecards_provider_1.ScorecardsProvider !== "undefined" && scorecards_provider_1.ScorecardsProvider) === "function" && _d || Object, typeof (_e = typeof xmas_club_provider_1.XmasClubDataProvider !== "undefined" && xmas_club_provider_1.XmasClubDataProvider) === "function" && _e || Object, typeof (_f = typeof ionic_angular_1.LoadingController !== "undefined" && ionic_angular_1.LoadingController) === "function" && _f || Object])
 ], WeeklyLeaderboardPage);
 exports.WeeklyLeaderboardPage = WeeklyLeaderboardPage;
+var _a, _b, _c, _d, _e, _f;
 //# sourceMappingURL=weekly-leaderboard.js.map
 
 /***/ })

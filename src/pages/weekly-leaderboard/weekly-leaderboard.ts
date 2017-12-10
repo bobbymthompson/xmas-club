@@ -94,6 +94,9 @@ export class WeeklyLeaderboardPage {
 
           scorecardWithPicks.tieBreakerScore = scorecard.tieBreakerScore;
 
+          /* Keep track of the previous pick for use in over/unders. */
+          let previousPick = null;
+
           scorecard.picks.forEach((pick) => {
 
             let team;
@@ -103,10 +106,17 @@ export class WeeklyLeaderboardPage {
               team = (pick.selectedPick === "Team1") ? pick.team1 : pick.team2;
             }
 
+            /* Use the previous picks teams when it is an over/under. */
+            if (pick.isOverUnder && pick.team1.toLowerCase() == 'over' && pick.team2.toLowerCase() == 'under') {
+              pick.team1 = previousPick.team1;
+              pick.team2 = previousPick.team2;
+            }
+
             let result = this.dataProvider.calculatePickResult(this.week, pick, this.games);
 
             scorecardWithPicks.picks.push({ team: team, complete: result.complete, correct: result.correct });
 
+            previousPick = pick;
           });
         } else {
           this.games.forEach((game) => {

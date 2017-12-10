@@ -87,7 +87,7 @@ let ScorecardPage = class ScorecardPage {
                     pick.team1Selected = (pick.selectedPick == 'Team1') ? true : false;
                     pick.team2Selected = (pick.selectedPick == 'Team2') ? true : false;
                     /* Use the previous picks teams when it is an over/under. */
-                    if (pick.isOverUnder) {
+                    if (pick.isOverUnder && pick.team1.toLowerCase() == 'over' && pick.team2.toLowerCase() == 'under') {
                         pick.team1 = previousPick.team1;
                         pick.team2 = previousPick.team2;
                     }

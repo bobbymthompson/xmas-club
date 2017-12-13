@@ -63,6 +63,12 @@ export class ScorecardPage {
 
           let result = this.dataProvider.calculatePickResult(theWeek, pick, gameResults);
 
+          if (pick.isOverUnder) {
+           
+            pick.team1 = 'Over';
+            pick.team2 = 'Under';
+          }
+
           pick.homeTeam = result.homeTeam;
           pick.complete = result.complete;
 

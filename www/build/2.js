@@ -134,7 +134,8 @@ let WeeklyLeaderboardPage = class WeeklyLeaderboardPage {
                                 team = (pick.selectedPick === "Team1") ? pick.team1 : pick.team2;
                             }
                             /* Use the previous picks teams when it is an over/under. */
-                            if (pick.isOverUnder && pick.team1.toLowerCase() == 'over' && pick.team2.toLowerCase() == 'under') {
+                            //&& pick.team1.toLowerCase() == 'over' && pick.team2.toLowerCase() == 'under'
+                            if (pick.isOverUnder) {
                                 pick.team1 = previousPick.team1;
                                 pick.team2 = previousPick.team2;
                             }

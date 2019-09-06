@@ -164,9 +164,33 @@ export class XmasClubDataProvider {
     return orderedScorecards;
   }
 
+  public async checkForScorecardsWithoutPicks(week: number): Promise<string[]> {
+    let scores: Score[] = await this.scores.first().toPromise() as Score[];
+
+    let users: string[] = [];
+    for (let score of scores) {
+
+      let scorecard = await this.scorecardsProvider.getScorecard(week, score.$key).first().toPromise();
+      if (scorecard) {
+        let containsAtLeastOnePick = false;
+        scorecard.picks.forEach(pick => {
+          if (pick.selectedPick !== 'None') {
+            containsAtLeastOnePick = true;
+          }
+        });
+
+        if (!containsAtLeastOnePick) {
+          users.push(score.$key);
+        }
+      }
+    }
+
+    return users;
+  }
+
   public async getUnsubmittedUsersForWeek(week: number): Promise<string[]> {
 
-    let scores: Score[] = await this.scores.first().toPromise();
+    let scores: Score[] = await this.scores.first().toPromise() as Score[];
 
     let unsubmittedScorecards: string[] = [];
     for (let score of scores) {

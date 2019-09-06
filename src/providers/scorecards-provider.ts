@@ -6,7 +6,7 @@ import { Observable } from 'rxjs/Observable';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/observable/of';
-import { Scorecard } from '../models/scorecard';
+import { Scorecard, DownloadedScorecardResults, QueuedEmailInfo } from '../models/scorecard';
 import * as _ from 'underscore';
 
 import { AngularFireAuth } from 'angularfire2/auth';
@@ -69,9 +69,11 @@ export class ScorecardsProvider {
   }
 
   /** Loads all scorecards that have been submitted via email. */
-  public async loadScorecardsFromEmail(week: number): Promise<Scorecard[]> {
+  public async loadScorecardsFromEmail(week: number): Promise<DownloadedScorecardResults> {
 
-    let scorecards: Array<Scorecard> = await this.http.get(`http://xmasclubscorer.azurewebsites.net/api/scorecards/${week}`).map((res: Response) => res.json()).toPromise();
+    let result = await this.http.get(`http://xmasclubscorer.azurewebsites.net/api/scorecards/${week}`).map((res: Response) => res.json()).toPromise();
+
+    let scorecards: Array<Scorecard> = result.Results;
 
     let scorecardsFb = this.getScorecards(week);
     for (let scorecard of scorecards) {
@@ -101,17 +103,19 @@ export class ScorecardsProvider {
 
         /* Determine if the specified nickname exists as a known user */
         let scores = await this.firebase.object(`/scores/${scorecard.nickname}/`).first().toPromise();
-        if (!scores.$exists()) {
-
-          /* This scorecard has a nickname that isn't recognized. It is likely misspelled. Allow it to go in but denote it. */
-          scorecard.nickname = scorecard.nickname + ' (unrecognized)'
-        }
 
         this.insertWeeklyScore(scorecard);
       }
     }
 
-    return scorecards;
+    return result;
+  }
+
+  public async showEmailsInInbox(week: number): Promise<QueuedEmailInfo[]> {
+
+    let result: QueuedEmailInfo[] = await this.http.get(`http://xmasclubscorer.azurewebsites.net/api/queued-emails/${week}`).map((res: Response) => res.json()).toPromise();
+
+    return result;
   }
 
   public async insertWeeklyScore(scorecard: Scorecard) {

@@ -10,13 +10,17 @@
   
   <button ion-button full outline (click)="addNewWeek()">Add new week</button>  
 
-  <button ion-button full outline (click)="populateScoresFromScorecards()">Populate scores</button>  
+  <!-- <button ion-button full outline (click)="populateScoresFromScorecards()">Populate scores</button>   -->
+
+  <button ion-button full outline (click)="previewEmailInbox()">Preview email inbox</button>
 
   <button ion-button full outline (click)="loadScorecardsFromEmail()">Load from email</button>  
 
-  <button ion-button full outline (click)="showUnsubmittedPicks()">View unsubmitted pics for week {{currentWeek?.week}}</button>
+  <button ion-button full outline (click)="checkForScorecardsWithoutPicks()">Check for scorecards without picks</button>  
 
-  <button ion-button full outline (click)="outputWeeklyScores()">Output weekly scores</button> 
+  <button ion-button full outline (click)="showUnsubmittedPicks()">View unsubmitted picks</button>
+
+  <!-- <button ion-button full outline (click)="outputWeeklyScores()">Output weekly scores</button>  -->
 
   <button ion-button full outline (click)="forceUpdateOfScores()">Force update of scores</button> 
 

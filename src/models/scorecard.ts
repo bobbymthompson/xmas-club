@@ -5,6 +5,11 @@ export interface WeeklyScorecard {
   rank: number;
 }
 
+export interface DownloadedScorecardResults {
+  Errors: string[];
+  Results: Scorecard[];
+}
+
 export interface Scorecard {
   uid: string;
   week: number;
@@ -26,4 +31,16 @@ export interface Pick {
   complete: boolean;
   correct: boolean;
   incorrect: boolean;
+}
+
+export interface QueuedEmailInfo {
+  FromEmail: string
+  User: string
+  Attachments: Attachment[]
+}
+
+export interface Attachment {
+  Name: string;
+  IsValid: boolean;
+  InvalidDetails: string;
 }

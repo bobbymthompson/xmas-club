@@ -6,7 +6,6 @@ import { Observable } from 'rxjs/Observable';
 import * as _ from 'underscore';
 import { Week } from "../../models/week";
 import { XmasClubDataProvider } from "../../providers/xmas-club.provider";
-import { ReverseArrayPipe } from '../../pipes/reverse-array';
 import { Scorecard } from "../../models/scorecard";
 
 @IonicPage()
@@ -36,7 +35,7 @@ export class LeaderboardPage {
     console.log('Prior week: ', this.priorWeek);
     let results = await this.dataProvider.getScorecardResults(this.currentWeek.week);
 
-    let scores = await this.dataProvider.scores.first().toPromise();
+    let scores = await this.dataProvider.scores.first().toPromise() as Score[];
 
 
     scores.forEach((score: Score, index) => {

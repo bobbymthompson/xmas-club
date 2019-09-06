@@ -15,7 +15,6 @@ import { AngularFireModule } from 'angularfire2';
 import { AngularFireDatabaseModule } from 'angularfire2/database';
 import { AngularFireAuthModule } from 'angularfire2/auth';
 import { AuthProvider } from '../providers/auth.provider';
-import { ReverseArrayPipe } from "../pipes/reverse-array/reverse-array";
 import { RegisterPage } from "../pages/register/register";
 
 export const firebaseConfig = {
@@ -51,13 +50,8 @@ let pages = [
   RegisterPage
 ];
 
-let pipes = [
-  ReverseArrayPipe
-];
-
 export function declarations() {
   return pages;
-  //return [].concat(pipes).concat(pages);
 }
 
 export function entryComponents() {
@@ -91,5 +85,5 @@ export function providers() {
   entryComponents: entryComponents(),
   providers: providers()
 })
-export class XmasClubModule { }
+export class AppModule { }
 

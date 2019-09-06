@@ -30,15 +30,62 @@ export class AdminPage {
     });
   }
 
-  private async loadScorecardsFromEmail() {
+  public async loadScorecardsFromEmail() {
 
     this.showLoading();
+
     let currentWeek = await this.dataProvider.currentWeek();
-    this.scorecards = await this.scorecardsProvider.loadScorecardsFromEmail(currentWeek.week);
+    
+    let result = await this.scorecardsProvider.loadScorecardsFromEmail(currentWeek.week);
+
+    this.scorecards = result.Results;
+
+    let list = this.scorecards.map(sc => sc.nickname);
+
+    if (result.Errors && result.Errors.length > 0) {
+
+      list.push(`***ERRORS***`);
+
+      result.Errors.forEach(error => {
+        list.push(error)
+      });
+    }
 
     this.navCtrl.push('ListPage', {
       title: 'Loaded scorecards',
-      list: this.scorecards.map(sc => sc.nickname)
+      list: list
+    });
+
+    this.loading.dismiss();
+  }
+
+  public async previewEmailInbox() {
+    this.showLoading();
+
+    let currentWeek = await this.dataProvider.currentWeek();
+    
+    let results = await this.scorecardsProvider.showEmailsInInbox(currentWeek.week);
+
+    let list: string[] = [];
+
+    results.forEach(result => {
+
+      let user = result.User ? result.User : 'NO NAME';
+      list.push(`${user} (${result.FromEmail})`);
+
+      if (result.Attachments) {
+        result.Attachments.forEach(attachment => {
+          list.push(`-----${attachment.Name} (Valid: ${attachment.IsValid ? 'Yes' : 'No'})`);
+          if (!attachment.IsValid) {
+            list.push(`-----${attachment.InvalidDetails}`);
+          }
+        })
+      }
+    });
+
+    this.navCtrl.push('ListPage', {
+      title: 'Emails',
+      list: list
     });
 
     this.loading.dismiss();
@@ -94,6 +141,20 @@ export class AdminPage {
     alert.present();
   }
 
+  private async checkForScorecardsWithoutPicks() {
+
+    this.showLoading();
+
+    let users = await this.dataProvider.checkForScorecardsWithoutPicks(this.currentWeek.week);
+
+    this.navCtrl.push('ListPage', {
+      title: 'Blank Scorecards',
+      list: users
+    });
+
+    this.loading.dismiss();
+  }
+
   private async showUnsubmittedPicks() {
 
     this.showLoading();
@@ -119,6 +180,41 @@ export class AdminPage {
       this.weeklyScoresOutput += scorecard.nickname + '\t' + scorecard.score + '\n';
     });
 
+  }
+
+  public async showEmailsInInbox() {
+    
+    this.showLoading();
+
+    let currentWeek = await this.dataProvider.currentWeek();
+
+    let emails = await this.scorecardsProvider.showEmailsInInbox(currentWeek.week);
+
+    let list = [];
+
+    emails.forEach(email => {
+
+      let item = `${email.User} (${email.FromEmail})`;
+
+      email.Attachments.forEach(attachment => {
+        item += '\n';
+        item += `${attachment.Name}`;
+        if (!attachment.IsValid) {
+          item += '\n';
+          item += '\n';
+          item += `${attachment.InvalidDetails}`;
+        }
+      });
+
+      list.push(item);
+    });
+
+    this.navCtrl.push('ListPage', {
+      title: 'Loaded scorecards',
+      list: list
+    });
+
+    this.loading.dismiss();
   }
 
   showLoading() {

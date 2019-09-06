@@ -24,6 +24,7 @@ export class ScorecardPage {
   week: number;
   tieBreakerScore: number;
   tieBreakerGame: Pick;
+  initializing: boolean;
 
   constructor(public navCtrl: NavController,
     public navParams: NavParams,
@@ -31,6 +32,8 @@ export class ScorecardPage {
     private dataProvider: XmasClubDataProvider,
     private authProvider: AuthProvider,
     private elementRef: ElementRef) {
+
+    this.initializing = true;
 
     this.week = this.navParams.get('week');
     this.scorecardsProvider.getScorecard(this.week, this.navParams.get('nickname')).first().toPromise().then(async (scorecard) => {
@@ -65,7 +68,7 @@ export class ScorecardPage {
           let result = this.dataProvider.calculatePickResult(theWeek, pick, gameResults);
 
           if (pick.isOverUnder) {
-           
+
             pick.team1 = 'Over';
             pick.team2 = 'Under';
           }
@@ -83,6 +86,8 @@ export class ScorecardPage {
 
         this.tieBreakerGame = _.last(scorecard.picks);
       }
+
+      this.initializing = false;
     });
 
     if (this.navParams.get('enableEditMode')) {
@@ -150,19 +155,29 @@ export class ScorecardPage {
         pick.selectedPick = 'Team1';
       }
     }
+
+    if (this.authProvider.isAuthenticated &&
+      this.authProvider.user.nickname === this.scorecard.nickname &&
+      new Date() < this.dueDate) {
+
+      if (!this.initializing) {
+        console.log('Saving scorecard');
+        this.saveScorecard(true);
+      }
+    }
   }
 
   public editScorecard() {
     this.inEditMode = true;
   }
 
-  public saveScorecard() {
+  public saveScorecard(inEditMode = false) {
 
     this.scorecard.tieBreakerScore = this.tieBreakerScore;
 
     this.scorecardsProvider.update(this.scorecard);
 
-    this.inEditMode = false;
+    this.inEditMode = inEditMode;
   }
 }
 

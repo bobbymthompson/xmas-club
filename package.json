@@ -13,7 +13,7 @@
   "scripts": {
     "start": "node server.js",
     "dev": "nodemon -i \"*.test.js\" server.js",
-    "build": "ionic build --aot --minifycss --optimizejs",
+    "build": "ionic-app-scripts build --aot --minifycss --optimizejs",
     "ionic:serve": "ionic-app-scripts serve",
     "ionic:watch": "ionic-app-scripts watch"
   },

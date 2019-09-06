@@ -7,6 +7,9 @@
     "type": "git",
     "url": "https://github.com/striker8118/xmas-club.git"
   },
+  "engines": {
+    "node": "8.11.3"
+  },
   "scripts": {
     "start": "node server.js",
     "dev": "nodemon -i \"*.test.js\" server.js",

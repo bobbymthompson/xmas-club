@@ -119,20 +119,7 @@ export class ScorecardPage {
 
 return false;
 
-    if (this.inEditMode) return false;
-
-    if (!this.scorecard) return false;
-
-    /* Only if the current user is authenticated */
-    if (!this.authProvider.isAuthenticated) return false;
-
-    /* Only if this is the current users scorecard */
-    if (!this.scorecard || this.authProvider.user.nickname != this.scorecard.nickname) return false;
-
-    /* Only if it is before the due date. */
-    if (!this.dueDate || new Date() >= this.dueDate) return false;
-
-    return true;
+    
   }
 
   public updateSelectedPick(pick: EditablePick, selectedTeam: string) {

@@ -149,10 +149,10 @@ return false;
       this.authProvider.user.nickname === this.scorecard.nickname &&
       new Date() < this.dueDate) {
 
-      if (!this.initializing) {
-        console.log('Saving scorecard');
-        this.saveScorecard(true);
-      }
+      //if (!this.initializing) {
+        //console.log('Saving scorecard');
+        //this.saveScorecard(true);
+      //}
     }
   }
 

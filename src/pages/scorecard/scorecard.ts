@@ -162,11 +162,11 @@ return false;
 
   public saveScorecard(inEditMode = false) {
 
-    this.scorecard.tieBreakerScore = this.tieBreakerScore;
+    //this.scorecard.tieBreakerScore = this.tieBreakerScore;
 
-    this.scorecardsProvider.update(this.scorecard);
+    //this.scorecardsProvider.update(this.scorecard);
 
-    this.inEditMode = inEditMode;
+    //this.inEditMode = inEditMode;
   }
 }
 

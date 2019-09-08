@@ -117,6 +117,8 @@ export class ScorecardPage {
 
   public canEditScorecard(): boolean {
 
+return false;
+
     if (this.inEditMode) return false;
 
     if (!this.scorecard) return false;

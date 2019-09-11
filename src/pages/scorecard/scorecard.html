@@ -17,10 +17,10 @@
 
 <ion-content>
 
-  <ion-grid *ngIf="isScorecardViewable()" no-padding>
+  <ion-grid *ngIf="isScorecardViewable()" no-padding [style.pointerEvents]="inEditMode ? 'auto' : 'none'">
     <ion-row *ngFor="let pick of (scorecard)?.picks">
       <ion-col col-1>
-        <ion-toggle *ngIf="!pick.complete" [disabled]="!inEditMode" [(ngModel)]="pick.team1Selected" (ionChange)="updateSelectedPick(pick, 'Team1')"></ion-toggle>
+        <ion-toggle *ngIf="!pick.complete" disabled="{!inEditMode}" [(ngModel)]="pick.team1Selected" (ionChange)="updateSelectedPick(pick, 'Team1')"></ion-toggle>
         <ion-toggle *ngIf="pick.complete && pick.correct" [class.correctPick]="pick.correct" [disabled]="!inEditMode" [(ngModel)]="pick.team1Selected" (ionChange)="updateSelectedPick(pick, 'Team1')"></ion-toggle>
         <ion-toggle *ngIf="pick.complete && pick.incorrect" [class.incorrectPick]="pick.incorrect" [disabled]="!inEditMode" [(ngModel)]="pick.team1Selected" (ionChange)="updateSelectedPick(pick, 'Team1')"></ion-toggle>
       </ion-col>

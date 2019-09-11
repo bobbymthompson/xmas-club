@@ -117,56 +117,62 @@ export class ScorecardPage {
 
   public canEditScorecard(): boolean {
 
-    if (this.inEditMode) return false;	
+    if (this.inEditMode) return false;
 
-    if (!this.scorecard) return false;	
+    if (!this.scorecard) return false;
 
-    /* Only if the current user is authenticated */	
-    if (!this.authProvider.isAuthenticated) return false;	
+    /* Only if the current user is authenticated */
+    if (!this.authProvider.isAuthenticated) return false;
 
-    /* Only if this is the current users scorecard */	
-    if (!this.scorecard || this.authProvider.user.nickname != this.scorecard.nickname) return false;	
+    /* Only if this is the current users scorecard */
+    if (!this.scorecard || this.authProvider.user.nickname != this.scorecard.nickname) return false;
 
-    /* Only if it is before the due date. */	
-    if (!this.dueDate || new Date() >= this.dueDate) return false;	
+    /* Only if it is before the due date. */
+    if (!this.dueDate || new Date() >= this.dueDate) return false;
 
     return true;
   }
 
   public updateSelectedPick(pick: EditablePick, selectedTeam: string) {
 
-    if (selectedTeam == 'Team1') {
+    if (this.inEditMode) {
 
-      if (pick.team1Selected) {
-        pick.team2Selected = false;
-        pick.selectedPick = 'Team1';
-      } else {
-        pick.team2Selected = true;
-        pick.selectedPick = 'Team2';
+      if (selectedTeam == 'Team1') {
+
+        if (pick.team1Selected) {
+          pick.team2Selected = false;
+          pick.selectedPick = 'Team1';
+        } else {
+          pick.team2Selected = true;
+          pick.selectedPick = 'Team2';
+        }
+
+      } else if (selectedTeam == 'Team2') {
+
+        if (pick.team2Selected) {
+          pick.team1Selected = false;
+          pick.selectedPick = 'Team2';
+        } else {
+          pick.team1Selected = true;
+          pick.selectedPick = 'Team1';
+        }
       }
 
-    } else if (selectedTeam == 'Team2') {
+      if (this.authProvider.isAuthenticated &&
+        this.authProvider.user.nickname === this.scorecard.nickname &&
+        new Date() < this.dueDate) {
 
-      if (pick.team2Selected) {
-        pick.team1Selected = false;
-        pick.selectedPick = 'Team2';
+        if (!this.initializing) {
+          console.log('Saving scorecard');
+          this.saveScorecard(true);
+        }
       } else {
-        pick.team1Selected = true;
-        pick.selectedPick = 'Team1';
-      }
-    }
-
-    if (this.authProvider.isAuthenticated &&
-      this.authProvider.user.nickname === this.scorecard.nickname &&
-      new Date() < this.dueDate) {
-
-      if (!this.initializing) {
-        console.log('Saving scorecard');
-        this.saveScorecard(true);
+        console.log('Unable to save scorecard as it is past its due date');
       }
     } else {
-      console.log('Unable to save scorecard as it is past its due date');
+      console.log('Editing is not enabled');
     }
+
   }
 
   public editScorecard() {

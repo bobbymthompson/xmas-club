@@ -117,9 +117,20 @@ export class ScorecardPage {
 
   public canEditScorecard(): boolean {
 
-return false;
+    if (this.inEditMode) return false;	
 
-    
+    if (!this.scorecard) return false;	
+
+    /* Only if the current user is authenticated */	
+    if (!this.authProvider.isAuthenticated) return false;	
+
+    /* Only if this is the current users scorecard */	
+    if (!this.scorecard || this.authProvider.user.nickname != this.scorecard.nickname) return false;	
+
+    /* Only if it is before the due date. */	
+    if (!this.dueDate || new Date() >= this.dueDate) return false;	
+
+    return true;
   }
 
   public updateSelectedPick(pick: EditablePick, selectedTeam: string) {
@@ -149,10 +160,12 @@ return false;
       this.authProvider.user.nickname === this.scorecard.nickname &&
       new Date() < this.dueDate) {
 
-      //if (!this.initializing) {
-        //console.log('Saving scorecard');
-        //this.saveScorecard(true);
-      //}
+      if (!this.initializing) {
+        console.log('Saving scorecard');
+        this.saveScorecard(true);
+      }
+    } else {
+      console.log('Unable to save scorecard as it is past its due date');
     }
   }
 
@@ -162,11 +175,11 @@ return false;
 
   public saveScorecard(inEditMode = false) {
 
-    //this.scorecard.tieBreakerScore = this.tieBreakerScore;
+    this.scorecard.tieBreakerScore = this.tieBreakerScore;
 
-    //this.scorecardsProvider.update(this.scorecard);
+    this.scorecardsProvider.update(this.scorecard);
 
-    //this.inEditMode = inEditMode;
+    this.inEditMode = inEditMode;
   }
 }
 

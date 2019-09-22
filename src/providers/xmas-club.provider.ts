@@ -204,12 +204,14 @@ export class XmasClubDataProvider {
     return unsubmittedScorecards;
   }
 
-  public calculatePickResult(week: Week, pick: Pick, gameResults: GameResult[]): { complete: boolean, correct: boolean, homeTeam: string } {
+  public calculatePickResult(week: Week, pick: Pick, gameResults: GameResult[]): { complete: boolean, correct: boolean, homeTeam: string, homeTeamScore: number, awayTeamScore: number } {
 
     let result = {
       complete: false,
       correct: false,
-      homeTeam: ''
+      homeTeam: '',
+      homeTeamScore: 0,
+      awayTeamScore: 0
     };
 
     let game = _.find(gameResults, (game) => {
@@ -222,6 +224,14 @@ export class XmasClubDataProvider {
 
       /* Set the home team on this pick. */
       result.homeTeam = game.homeTeam;
+
+      if (game.homeTeam === game.team1.name) {
+        result.homeTeamScore = game.team1.score;
+        result.awayTeamScore = game.team2.score;
+      } else {
+        result.homeTeamScore = game.team2.score;
+        result.awayTeamScore = game.team1.score;
+      }
 
       if (game.status == "Complete") {
 

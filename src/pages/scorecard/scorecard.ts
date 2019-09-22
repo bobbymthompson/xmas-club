@@ -76,6 +76,9 @@ export class ScorecardPage {
           pick.homeTeam = result.homeTeam;
           pick.complete = result.complete;
 
+          pick.homeTeamScore = result.homeTeamScore;
+          pick.awayTeamScore = result.awayTeamScore;
+
           if (pick.complete) {
             pick.correct = result.correct;
             pick.incorrect = !result.correct;
@@ -186,6 +189,47 @@ export class ScorecardPage {
     this.scorecardsProvider.update(this.scorecard);
 
     this.inEditMode = inEditMode;
+  }
+
+  public allowExportToCsv() {
+    if (!this.inEditMode) {
+      if (this.authProvider.user) {
+        switch (this.authProvider.user.nickname) {
+          case 'STRIKER':
+          case 'ZILLION':
+          case 'PHILBY':
+          case 'DPIZZLES':
+            return true;
+        }
+      }
+    }
+
+    return false;
+  }
+
+  public exportToCsv() {
+
+    /* Get the text field */
+    let copyText: HTMLTextAreaElement = document.getElementById("scorecardJson") as HTMLTextAreaElement;
+
+    let picks: string;
+
+    picks = `Home Team, Home Team Score, Away Team, Away Team Score, Complete?, IsOverUnder, Spread, Correct, Selected Team`;
+    picks += `\n`;
+
+    this.scorecard.picks.forEach(pick => {
+      picks += `${pick.homeTeam},${pick.homeTeamScore},${pick.team1 === pick.homeTeam ? pick.team2 : pick.team1},${pick.awayTeamScore},${pick.complete},${pick.isOverUnder},${pick.spread},${pick.complete ? pick.correct : ''},${pick.selectedPick === 'Team1' ? pick.team1 : pick.team2}`;
+      picks += `\n`;
+    });
+
+    copyText.value = picks;
+
+    /* Select the text field */
+    copyText.select();
+    copyText.setSelectionRange(0, 99999); /*For mobile devices*/
+
+    /* Copy the text inside the text field */
+    document.execCommand("copy");
   }
 }
 

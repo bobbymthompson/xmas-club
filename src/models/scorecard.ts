@@ -31,6 +31,8 @@ export interface Pick {
   complete: boolean;
   correct: boolean;
   incorrect: boolean;
+  homeTeamScore: number;
+  awayTeamScore: number;
 }
 
 export interface QueuedEmailInfo {
